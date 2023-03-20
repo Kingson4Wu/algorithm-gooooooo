@@ -1,6 +1,7 @@
 package sort
 
 import (
+	"algorithm-gooooooo/sort"
 	"fmt"
 	"testing"
 )
@@ -31,4 +32,11 @@ func TestSort(t *testing.T) {
 	arr := []int{43, 7, 1, 6, 98, 1, 0, 35, 8, 3, 76, 98, 243, 572, 234, 2, 6, 9, 1, 4, 9, 6}
 	bubbleSort(arr)
 	fmt.Println(arr)
+
+	sort.IsAscending(arr)
+
+	a := sort.GetArray(100)
+	sort.Shuffle(a)
+	bubbleSort(a)
+	sort.IsAscending(a)
 }

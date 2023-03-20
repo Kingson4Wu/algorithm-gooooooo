@@ -16,14 +16,23 @@ func quickSortTopk(nums []int, start, end int, k int) {
 
 	mid := partition2(nums, start, end)
 
-	if (mid + 1) > k {
-		quickSortTopk(nums, start, mid, k)
+	//top 3
+	//5 2 8 3 1 6 4 9 7
 
-	} else if (mid + 1) == k {
-		return
+	//5
+	//4 2 8 3 1 6 4 9 7
+	//4 2 8 3 1 6 8 9 7
+	//4 2 5 3 1 6 8 9 7
+	//mid = 2
 
-	} else {
+	// 2+1 == 3
+
+	if mid+1 < k {
+		//右边已经不可能出现比左边小的了，只需继续排右边的，
 		quickSortTopk(nums, mid+1, end, k)
+	} else if (mid + 1) > k {
+		//说明左边的超过k个，还需要继续排一下，而且因为左边的都小于mid的
+		quickSortTopk(nums, start, mid, k)
 	}
 
 }
