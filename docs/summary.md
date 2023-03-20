@@ -48,4 +48,9 @@
 
 + https://github.com/Kingson4Wu/algorithm-gooooooo/blob/c5b9fc92e401878f7949771979816b3c78077885/Algorithm/interview/100billion/%E5%A6%82%E4%BD%95%E4%BB%8E%20100%20%E4%BA%BF%20URL%20%E4%B8%AD%E6%89%BE%E5%87%BA%E7%9B%B8%E5%90%8C%E7%9A%84%20URL.go
 
+----
+
+# 常见题目系列
+
+## 丑数
 
