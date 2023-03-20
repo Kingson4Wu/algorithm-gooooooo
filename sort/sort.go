@@ -47,3 +47,7 @@ func IsDescending(arr []int) bool {
 	}
 	return true
 }
+
+func IsSort(arr []int) bool {
+	return IsDescending(arr) || IsAscending(arr)
+}

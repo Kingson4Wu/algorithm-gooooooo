@@ -30,3 +30,29 @@ func TestQuickSortTopk_1(t *testing.T) {
 	rr := QuickSortTopk_1(aa, 6)
 	fmt.Println(rr)
 }
+
+func TestHeadSort(t *testing.T) {
+	a := GetArray(100)
+	Shuffle(a)
+
+	if IsSort(a) {
+		t.Fatal("数组已经有序")
+	}
+
+	HeadSort(a)
+
+	if !IsSort(a) {
+		t.Fatal("数组排序失败")
+	}
+}
+
+func TestHeadSort2(t *testing.T) {
+	a := []int{7, 3, 4, 9, 2, 8, 1, 5, 6}
+	//{0, 1, 2, 3, 4, 5, 6, 7, 8}
+
+	HeadSort(a)
+
+	if !IsSort(a) {
+		t.Fatal("数组排序失败")
+	}
+}
