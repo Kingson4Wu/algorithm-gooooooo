@@ -54,3 +54,97 @@
 
 ## 丑数
 
++ Algorithm/interview/ugly
+
+### 263. 丑数（简单）
++ 输入一个数字n，请你判断n是否为「丑数」。所谓「丑数」，就是只包含质因数2、3和5的正整数。
+```go
+var factors = []int{2, 3, 5}
+
+func isUgly(n int) bool {
+if n <= 0 {
+return false
+}
+for _, f := range factors {
+for n%f == 0 {
+n /= f
+}
+}
+return n == 1
+} 
+```
+### 264. 丑数 II（中等）
++ 给你一个整数 n ，请你找出并返回第 n 个 丑数 。
++ 动态规划: 定义数组 dp，其中 dp[i]表示第 i个丑数，第 n个丑数即为 dp[n]。
+    - 定义三个指针 p2,p3,p5，表示下一个丑数是当前指针指向的丑数乘以对应的质因数。初始时，三个指针的值都是 1
+    - 当 2≤i≤n 时，令 dp[i]=min(dp[p2]×2,dp[p3]×3,dp[p5]×5)，然后分别比较 dp[i]和 dp[p2]×2,dp[p3]×3,dp[p5]×5 是否相等，如果相等则将对应的指针加 1
+```go
+func nthUglyNumber(n int) int {
+    dp := make([]int, n+1)
+    dp[1] = 1
+    p2, p3, p5 := 1, 1, 1
+    for i := 2; i <= n; i++ {
+        x2, x3, x5 := dp[p2]*2, dp[p3]*3, dp[p5]*5
+        dp[i] = min(min(x2, x3), x5)
+        if dp[i] == x2 {
+            p2++
+        }
+        if dp[i] == x3 {
+            p3++
+        }
+        if dp[i] == x5 {
+            p5++
+        }
+    }
+    return dp[n]
+}
+
+func min(a, b int) int {
+    if a < b {
+        return a
+    }
+    return b
+}
+```
+
+### 1201. 丑数 III（中等）
++ 给你四个整数：n 、a 、b 、c ，请你设计一个算法来找出第 n 个丑数。
+丑数是可以被 a 或 b 或 c 整除的 正整数 。
+
+### 313. 超级丑数（中等）
++ 这道题和「264. 丑数 II」相似，区别在于，第 264 题规定丑数是只包含质因数 2、3 和 5 的正整数，这道题规定超级丑数是只包含数组 primes 中的质因数的正整数。
+
+```go
+func nthSuperUglyNumber(n int, primes []int) int {
+    dp := make([]int, n+1)
+    m := len(primes)
+    pointers := make([]int, m)
+    nums := make([]int, m)
+    for i := range nums {
+        nums[i] = 1
+    }
+    for i := 1; i <= n; i++ {
+        minNum := math.MaxInt64
+        for j := range pointers {
+            minNum = min(minNum, nums[j])
+        }
+        dp[i] = minNum
+        for j := range nums {
+            if nums[j] == minNum {
+                pointers[j]++
+                nums[j] = dp[pointers[j]] * primes[j]
+            }
+        }
+    }
+    return dp[n]
+}
+
+func min(a, b int) int {
+    if a < b {
+        return a
+    }
+    return b
+}
+
+```
+
