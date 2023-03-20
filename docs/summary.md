@@ -39,4 +39,13 @@
 
 ----
 
+# 大文件
+
+## 如何从 100 亿 URL 中找出相同的 URL
+1. 分而治之，进行哈希取余，分开存文件；
+2. 对每个子文件进行 HashSet 统计；
+3. 如果分完还有很大的文件，那就文件再继续分，一直递归到文件符合设置的最大大小即可
+
++ https://github.com/Kingson4Wu/algorithm-gooooooo/blob/c5b9fc92e401878f7949771979816b3c78077885/Algorithm/interview/100billion/%E5%A6%82%E4%BD%95%E4%BB%8E%20100%20%E4%BA%BF%20URL%20%E4%B8%AD%E6%89%BE%E5%87%BA%E7%9B%B8%E5%90%8C%E7%9A%84%20URL.go
+
 
