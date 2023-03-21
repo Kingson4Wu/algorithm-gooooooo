@@ -2,6 +2,7 @@ package sort
 
 import (
 	"algorithm-gooooooo/sort"
+	"fmt"
 	"testing"
 )
 
@@ -48,6 +49,23 @@ func heapSort(nums []int) {
 
 }
 
+/** 最大堆， TopK， 取前K个最大值， 且有序 */
+func heapSortTopK(nums []int, k int) []int {
+
+	//init
+	for i := len(nums) / 2; i >= 0; i-- {
+		adjust(nums, i, len(nums))
+	}
+
+	//sort
+	for i := len(nums) - 1; i > len(nums)-1-k; i-- {
+		nums[i], nums[0] = nums[0], nums[i]
+		adjust(nums, 0, i)
+	}
+
+	return nums[len(nums)-k:]
+}
+
 func TestHeapSort(t *testing.T) {
 
 	a := sort.GetArray(100)
@@ -57,9 +75,9 @@ func TestHeapSort(t *testing.T) {
 		t.Fatal("排序错误")
 	}
 
-	/*b := sort.GetArray(100)
+	b := sort.GetArray(100)
 	sort.Shuffle(b)
-	quickSortTopK(b, 10)
-	fmt.Println(b)*/
+	c := heapSortTopK(b, 10)
+	fmt.Println(c)
 
 }
