@@ -16,3 +16,11 @@ math.MinInt32
 ```
 
 + 排序 ： `sort.Ints`
++ 逆序：
+```go
+sort.Slice(nums, func(i, j int) bool {
+return i < j
+})
+```
+
+
