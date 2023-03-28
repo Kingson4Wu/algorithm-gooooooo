@@ -8,6 +8,8 @@ import (
 /**
 好像不困难？错觉？
 
+改了两次没好。。
+
 */
 
 /**
@@ -52,6 +54,7 @@ func longestValidParentheses(s string) int {
 
 	leftNum := 0
 	currentLength := 0
+	preLength := 0
 	longest := 0
 	for _, c := range s {
 		if c == '(' {
@@ -60,14 +63,28 @@ func longestValidParentheses(s string) int {
 		}
 		if c == ')' {
 			if leftNum > 0 {
-				leftNum--
 				currentLength++
 				if currentLength > longest {
 					longest = currentLength
 				}
+				leftNum--
+				if leftNum == 0 {
+					if preLength > 0 {
+						totalLength := currentLength + preLength
+						if totalLength > longest {
+							longest = totalLength
+						}
+						preLength = totalLength
+						currentLength = 0
+					} else {
+						preLength = currentLength
+						currentLength = 0
+					}
+				}
 			} else {
 				leftNum = 0
 				currentLength = 0
+				preLength = 0
 			}
 		}
 	}
@@ -84,4 +101,16 @@ func TestLongestValidParentheses(t *testing.T) {
 	fmt.Println(longestValidParentheses(")()(())())"))
 	fmt.Println(longestValidParentheses("()())()((()())))"))
 	fmt.Println(longestValidParentheses("()(()"))
+	fmt.Println(longestValidParentheses("(()(((()"))
+
+	/**
+	2
+	4
+	4
+	0
+	6
+	8
+	10
+	2
+	*/
 }
