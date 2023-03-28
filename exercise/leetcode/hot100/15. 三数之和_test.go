@@ -16,6 +16,15 @@ import (
 1、先排序，从小到大
 2、以三元组第二个数为基准，左右两边双指针往中间计算
 3、注意计算结果不重复，需对一些条件跳过当前循环
+
+时间
+64 ms
+击败
+15.49%
+内存
+7.3 MB
+击败
+89.78%
 */
 
 /**
@@ -75,7 +84,25 @@ func threeSum(nums []int) [][]int {
 		left, right := 0, len(nums)-1
 
 		/** 相同的数字，已经计算过 */
-		if i > 1 && nums[i] == nums[i-1] && nums[i-1] == nums[i-2] {
+		if i > 1 && nums[i] == nums[i-1] {
+			if nums[i-1] == nums[i-2] {
+				continue
+			}
+			/** 只移动右边 */
+			left = i - 1
+			right = i + 1
+
+			for right < len(nums) {
+				sum := nums[left] + nums[i] + nums[right]
+				if sum == 0 {
+					result = append(result, []int{nums[left], nums[i], nums[right]})
+					break
+				} else if sum < 0 {
+					right++
+				} else {
+					break
+				}
+			}
 			continue
 		}
 
