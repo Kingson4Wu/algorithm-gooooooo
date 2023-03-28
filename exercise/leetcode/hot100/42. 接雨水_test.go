@@ -5,6 +5,10 @@ import (
 	"testing"
 )
 
+/**
+不会做
+*/
+
 /*
 *
 给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
@@ -27,24 +31,26 @@ n == height.length
 */
 func trap(height []int) int {
 
-	if len(height) <= 1 {
+	if len(height) <= 2 {
 		return 0
 	}
 
-	leftMaxHeightIndex := 0
-	allArea := 0
-
-	for i := 1; i < len(height); i++ {
-		area := 0
-		if height[leftMaxHeightIndex] < height[i] {
-			area = height[leftMaxHeightIndex] * (i - leftMaxHeightIndex)
-			leftMaxHeightIndex = i
+	leftHeight := 0
+	maxArea := 0
+	currentArea := 0
+	for i := 0; i < len(height); i++ {
+		if height[i] < leftHeight {
+			currentArea += leftHeight - height[i]
 		} else {
-			area = height[i] * (i - leftMaxHeightIndex)
+			if currentArea > maxArea {
+				maxArea = currentArea
+			}
+			leftHeight = height[i]
+			currentArea = 0
 		}
-		allArea += area
 	}
-	return allArea
+
+	return currentArea
 }
 
 func TestTrap(t *testing.T) {
