@@ -10,6 +10,15 @@ import (
 自己做的
 1、先按左边排序
 2、在遍历比对区间是否有交集做处理
+
+时间
+20 ms
+击败
+65.50%
+内存
+6.6 MB
+击败
+93.9%
 */
 
 /*
@@ -69,4 +78,6 @@ func merge(intervals [][]int) [][]int {
 func TestMerge(t *testing.T) {
 	fmt.Println(merge([][]int{{1, 3}, {15, 18}, {2, 6}, {8, 10}}))
 	fmt.Println(merge([][]int{{1, 4}, {4, 5}}))
+	fmt.Println(merge([][]int{{1, 1}, {1, 5}}))
+	fmt.Println(merge([][]int{{4, 5}, {6, 8}, {3, 9}}))
 }
