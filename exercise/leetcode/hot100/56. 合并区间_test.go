@@ -1,6 +1,16 @@
 package hot100
 
-import "sort"
+import (
+	"fmt"
+	"sort"
+	"testing"
+)
+
+/**
+自己做的
+1、先按左边排序
+2、在遍历比对区间是否有交集做处理
+*/
 
 /*
 *
@@ -32,7 +42,31 @@ func (a rangeArr) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 
 func merge(intervals [][]int) [][]int {
 
+	if len(intervals) <= 0 {
+		return intervals
+	}
+
 	sort.Sort(rangeArr(intervals))
 
-	return [][]int{}
+	var result [][]int
+	start, end := intervals[0][0], intervals[0][1]
+	for i := 1; i < len(intervals); i++ {
+		if intervals[i][1] <= end {
+			continue
+		}
+		if intervals[i][0] > end {
+			result = append(result, []int{start, end})
+			start, end = intervals[i][0], intervals[i][1]
+			continue
+		}
+		end = intervals[i][1]
+	}
+	result = append(result, []int{start, end})
+
+	return result
+}
+
+func TestMerge(t *testing.T) {
+	fmt.Println(merge([][]int{{1, 3}, {15, 18}, {2, 6}, {8, 10}}))
+	fmt.Println(merge([][]int{{1, 4}, {4, 5}}))
 }
