@@ -5,6 +5,20 @@ import (
 	"testing"
 )
 
+/**
+使用递归解题
+没有考虑到0的情况！
+
+时间
+252 ms
+击败
+34.59%
+内存
+2 MB
+击败
+81.21%
+*/
+
 /*
 *
 
@@ -32,12 +46,17 @@ import (
 */
 func findTargetSumWays(nums []int, target int) int {
 	if len(nums) == 1 {
+		/** 0的情况 */
+		if nums[0] == 0 && target == 0 {
+			return 2
+		}
 		if nums[0] == target {
 			return 1
 		}
 		if nums[0] == -target {
 			return 1
 		}
+
 		return 0
 	}
 	return findTargetSumWays(nums[1:], target-nums[0]) + findTargetSumWays(nums[1:], target+nums[0])
