@@ -31,10 +31,6 @@ import (
 输出：1
 */
 func findTargetSumWays(nums []int, target int) int {
-	return targetEqualsNum(nums, target)
-}
-
-func targetEqualsNum(nums []int, target int) int {
 	if len(nums) == 1 {
 		if nums[0] == target {
 			return 1
@@ -44,7 +40,7 @@ func targetEqualsNum(nums []int, target int) int {
 		}
 		return 0
 	}
-	return targetEqualsNum(nums[1:], target-nums[0]) + targetEqualsNum(nums[1:], target+nums[0])
+	return findTargetSumWays(nums[1:], target-nums[0]) + findTargetSumWays(nums[1:], target+nums[0])
 }
 
 func TestFindTargetSumWays(t *testing.T) {
@@ -52,4 +48,19 @@ func TestFindTargetSumWays(t *testing.T) {
 	fmt.Println(findTargetSumWays([]int{1, 1, 1}, 1))
 	fmt.Println(findTargetSumWays([]int{1, 1, 1, 1, 1}, 3))
 	fmt.Println(findTargetSumWays([]int{1}, 1))
+
+	//todo
+	fmt.Println(findTargetSumWays([]int{1, 0}, 1))
+	/**
+	输入
+	nums =
+	[1,0]
+	target =
+	1
+	添加到测试用例
+	输出
+	1
+	预期结果
+	2
+	*/
 }
