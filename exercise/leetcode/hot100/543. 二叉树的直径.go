@@ -5,6 +5,18 @@ package hot100
 
 等于求左右深度之和
 
+漏了递归，取子树两边左右深度之和的最大值
+（根左右两边之和不一定是子树两边之和的最大）
+
+时间
+16 ms
+击败
+6.14%
+内存
+4.2 MB
+击败
+36.51%
+
 */
 
 /**
@@ -36,7 +48,7 @@ func diameterOfBinaryTree(root *TreeNode) int {
 		return 0
 	}
 
-	return depth(root.Left) + depth(root.Right)
+	return max(max(depth(root.Left)+depth(root.Right), diameterOfBinaryTree(root.Left)), diameterOfBinaryTree(root.Right))
 }
 
 func depth(root *TreeNode) int {
