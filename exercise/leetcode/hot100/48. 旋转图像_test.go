@@ -30,6 +30,10 @@ import (
 34.37%
 */
 
+/**
+还有另外一种方法，先水平翻转，再主对角线翻转
+*/
+
 func rotate(matrix [][]int) {
 
 	if len(matrix) <= 1 {
@@ -43,11 +47,15 @@ func rotate(matrix [][]int) {
 		}
 		x := y
 		for i := 0; i < length-1; i++ {
-			temp := matrix[y][x+i]
+			/*temp := matrix[y][x+i]
 			matrix[y+i][x+length-1], temp = temp, matrix[y+i][x+length-1]
 			matrix[y+length-1][x+length-1-i], temp = temp, matrix[y+length-1][x+length-1-i]
 			matrix[y+length-1-i][x], temp = temp, matrix[y+length-1-i][x]
-			matrix[y][x+i], temp = temp, matrix[y][x+i]
+			matrix[y][x+i], temp = temp, matrix[y][x+i]*/
+
+			//可优化成
+			matrix[y+i][x+length-1], matrix[y+length-1][x+length-1-i], matrix[y+length-1-i][x], matrix[y][x+i] =
+				matrix[y][x+i], matrix[y+i][x+length-1], matrix[y+length-1][x+length-1-i], matrix[y+length-1-i][x]
 		}
 
 	}
