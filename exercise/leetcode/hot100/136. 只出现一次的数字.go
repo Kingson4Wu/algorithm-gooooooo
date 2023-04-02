@@ -2,6 +2,9 @@ package hot100
 
 /**
 简单个毛，完全是数学技巧题。。。。
+
+遍历异或运算最后的结果
+
 */
 /*
 *
@@ -24,7 +27,12 @@ package hot100
 */
 func singleNumber(nums []int) int {
 
-	return 0
+	result := 0
+	for _, num := range nums {
+		result ^= num
+	}
+
+	return result
 }
 
 /**
