@@ -65,3 +65,27 @@ func main() {
 }
 
 ```
+
+
++ 对某一字符串排序
+
+```go
+str := "eat"
+b := []byte(str)
+sort.Slice(b, func(i, j int) bool {
+	return b[i] < b[j]
+})
+str = string(b)
+
+```
+
+或
+
+```go
+func sortString(str string) string {
+	split := strings.Split(str, "")
+	sort.Strings(split)
+	return strings.Join(split, "")
+}
+
+```
