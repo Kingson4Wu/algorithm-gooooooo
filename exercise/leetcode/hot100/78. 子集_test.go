@@ -7,6 +7,15 @@ import (
 
 /**
 自己想的，还是拆分子问题，递归
+
+时间
+4 ms
+击败
+16.7%
+内存
+2.2 MB
+击败
+13.41%
 */
 
 /*
@@ -38,7 +47,14 @@ func subsets(nums []int) [][]int {
 
 	for i := 0; i < len(sub); i++ {
 		result = append(result, sub[i])
-		result = append(result, append(sub[i], nums[len(nums)-1]))
+
+		ss := make([]int, len(sub[i])+1)
+		for j := 0; j < len(sub[i]); j++ {
+			ss[j] = sub[i][j]
+		}
+		ss[len(sub[i])] = nums[len(nums)-1]
+
+		result = append(result, ss)
 	}
 
 	return result
