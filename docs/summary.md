@@ -79,7 +79,30 @@
 
 ## DFS
 + DFS算法可以被认为是回溯算法！！！！！
-+ TODO
++ 递归回溯
++ 三种类型
+    - 子集型
+    - 组合型
+    - 排列型
+
++ 子集型 
+```go
+func subsets(nums []int) (ans [][]int) {
+var set []int
+var dfs func(int)
+dfs = func(cur int) {
+if cur == len(nums) {
+ans = append(ans, append([]int(nil), set...))
+return
+}
+set = append(set, nums[cur])
+dfs(cur + 1)
+set = set[:len(set)-1]
+dfs(cur + 1)
+}
+dfs(0)
+return
+```
 
 ## BFS
 + TODO

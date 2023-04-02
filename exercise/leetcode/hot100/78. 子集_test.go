@@ -48,13 +48,14 @@ func subsets(nums []int) [][]int {
 	for i := 0; i < len(sub); i++ {
 		result = append(result, sub[i])
 
-		ss := make([]int, len(sub[i])+1)
+		/*ss := make([]int, len(sub[i])+1)
 		for j := 0; j < len(sub[i]); j++ {
 			ss[j] = sub[i][j]
 		}
 		ss[len(sub[i])] = nums[len(nums)-1]
+		result = append(result, ss)*/
 
-		result = append(result, ss)
+		result = append(result, append(append([]int(nil), sub[i]...), nums[len(nums)-1]))
 	}
 
 	return result
