@@ -2,6 +2,9 @@ package hot100
 
 /**
 知道是dfs， 但不会写。。
+
+等于求左右深度之和
+
 */
 
 /**
@@ -29,5 +32,28 @@ package hot100
  */
 func diameterOfBinaryTree(root *TreeNode) int {
 
-	return 0
+	if root == nil {
+		return 0
+	}
+
+	return depth(root.Left) + depth(root.Right)
 }
+
+func depth(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+	if root.Left == nil && root.Right == nil {
+		return 1
+	}
+	return 1 + max(depth(root.Left), depth(root.Right))
+}
+
+func max(x, y int) int {
+	if x > y {
+		return x
+	}
+	return y
+}
+
+//[4,-7,-3,null,null,-9,-3,9,-7,-4,null,6,null,-6,-6,null,null,0,6,5,null,9,null,null,-1,-4,null,null,null,-2]
