@@ -32,6 +32,8 @@ runtime.goexit()
 	/usr/local/go/src/runtime/asm_amd64.s:1571 +0x1 fp=0xc00005cfe8 sp=0xc00005cfe0 pc=0x45d841
 
 
+重新思考后修改， 其实可以使用一维数组
+
 */
 
 /*
@@ -52,7 +54,7 @@ runtime.goexit()
 输入: nums = [-1,1,0,-3,3]
 输出: [0,0,9,0,0]
 */
-func productExceptSelf(nums []int) []int {
+/*func productExceptSelf(nums []int) []int {
 
 	if len(nums) == 2 {
 		return []int{nums[1], nums[0]}
@@ -61,7 +63,7 @@ func productExceptSelf(nums []int) []int {
 	dp := make([][]int, len(nums))
 	for i := 0; i < len(nums); i++ {
 		dp[i] = make([]int, len(nums))
-		/** 初始化 */
+		//初始化
 		dp[i][i] = nums[i]
 	}
 	for length := 2; length <= len(nums)-2; length++ {
@@ -86,6 +88,16 @@ func productExceptSelf(nums []int) []int {
 		}
 		result[i] = dp[0][i-1] * dp[i+1][len(nums)-1]
 	}
+	return result
+}*/
+
+func productExceptSelf(nums []int) []int {
+	result := make([]int, len(nums))
+
+	/*for i := 0; i < len(nums); i++ {
+		result[i]=
+	}*/
+
 	return result
 }
 
