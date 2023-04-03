@@ -5,6 +5,15 @@ package hot100
 1、使用hash（太粗暴，符合这个题简单级别的定位）
 2、双指针，同时走，到空了之后分别指向对方的头指针（这样两边的长度就一样了）
 
+时间
+24 ms
+击败
+94.96%
+内存
+6.5 MB
+击败
+98.40%
+
 当链表 headA 和 headB 都不为空时，创建两个指针 pA 和 pB，初始时分别指向两个链表的头节点 headA 和 headB，然后将两个指针依次遍历两个链表的每个节点。具体做法如下：
 
 每步操作需要同时更新指针 pA 和 pB。
@@ -93,5 +102,31 @@ package hot100
 
 func getIntersectionNode(headA, headB *ListNode) *ListNode {
 
+	if headA == nil || headB == nil {
+		return nil
+	}
+
+	pA, pB := headA, headB
+
+	for {
+		if pA == nil && pB == nil {
+			return nil
+		}
+		if pA == pB {
+			return pA
+		}
+
+		if pA == nil {
+			pA = headB
+		} else {
+			pA = pA.Next
+		}
+
+		if pB == nil {
+			pB = headA
+		} else {
+			pB = pB.Next
+		}
+	}
 	return nil
 }
