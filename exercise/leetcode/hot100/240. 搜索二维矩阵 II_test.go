@@ -7,7 +7,21 @@ import (
 
 /**
 个人想法
-先对角线二分查找，再分别行和列二分查找
+先对角线二分查找，再分别行和列二分查找 （错的，这个规律不对，看看用例中的15，不符合这个规律）
+从起始行遍历到最大行，从起始列遍历到最大列
+
+虽然是自己写的，但感觉写得太复杂太乱了
+
+时间
+28 ms
+击败
+7.45%
+内存
+6.6 MB
+击败
+32.2%
+
+
 */
 
 /**
@@ -31,14 +45,14 @@ func searchMatrix(matrix [][]int, target int) bool {
 	startX, startY := 0, 0
 	endX, endY := len(matrix[0])-1, len(matrix)-1
 
-	if matrix[startX][startY] == target {
+	if matrix[startY][startX] == target {
 		return true
 	}
 	if matrix[endY][endX] == target {
 		return true
 	}
 
-	for endX-startX != 1 && endY-startY != 1 {
+	for endX-startX > 1 || endY-startY > 1 {
 
 		midX := (startX + endX) / 2
 		midY := (startY + endY) / 2
@@ -57,59 +71,67 @@ func searchMatrix(matrix [][]int, target int) bool {
 	}
 
 	/** 行和列二分查找 */
-	startYY, endYY := 0, endY
+	x := endX
 
-	for startYY < endYY {
+	for x < len(matrix[0]) {
+		startYY, endYY := 0, endY
+		for startYY < endYY {
 
-		if endYY-startYY <= 2 {
-			if matrix[startYY][endX] == target {
+			if endYY-startYY <= 1 {
+				if matrix[startYY][x] == target {
+					return true
+				}
+				if matrix[endYY][x] == target {
+					return true
+				}
+				break
+			}
+
+			mid := (endYY + startYY) / 2
+			if matrix[mid][x] == target {
 				return true
 			}
-			if matrix[endYY][endX] == target {
-				return true
+			if matrix[mid][x] > target {
+				endYY = mid
+				continue
 			}
-			break
+			if matrix[mid][x] < target {
+				startYY = mid
+				continue
+			}
 		}
-
-		mid := (endYY + startYY) / 2
-		if matrix[mid][endX] == target {
-			return true
-		}
-		if matrix[mid][endX] > target {
-			endYY = mid
-			continue
-		}
-		if matrix[mid][endX] < target {
-			startYY = mid
-			continue
-		}
+		x++
 	}
 
-	startXX, endXX := 0, endX
-	for startXX < endXX {
+	y := endY
+	for y < len(matrix) {
+		startXX, endXX := 0, endX
+		for startXX < endXX {
 
-		if endXX-startXX <= 2 {
-			if matrix[endYY][startXX] == target {
+			if endXX-startXX <= 1 {
+				if matrix[y][startXX] == target {
+					return true
+				}
+				if matrix[y][endXX] == target {
+					return true
+				}
+				break
+			}
+
+			mid := (endXX + startXX) / 2
+			if matrix[y][mid] == target {
 				return true
 			}
-			if matrix[endYY][endXX] == target {
-				return true
+			if matrix[y][mid] > target {
+				endXX = mid
+				continue
 			}
-			break
+			if matrix[y][mid] < target {
+				startXX = mid
+				continue
+			}
 		}
-
-		mid := (endXX + startXX) / 2
-		if matrix[endY][mid] == target {
-			return true
-		}
-		if matrix[endY][mid] > target {
-			endXX = mid
-			continue
-		}
-		if matrix[endY][mid] < target {
-			startXX = mid
-			continue
-		}
+		y++
 	}
 
 	return false
@@ -120,9 +142,25 @@ func TestSearchMatrix(t *testing.T) {
 	//fmt.Println(searchMatrix([][]int{{1, 4, 7, 11, 15}, {2, 5, 8, 12, 19}, {3, 6, 9, 16, 22}, {10, 13, 14, 17, 24}, {18, 21, 23, 26, 30}}, 20))
 	//fmt.Println(searchMatrix([][]int{{1, 4, 7, 11, 15}, {2, 5, 8, 12, 19}, {3, 6, 9, 16, 22}, {10, 13, 14, 17, 24}, {18, 21, 23, 26, 30}}, 4))
 
-	fmt.Println(searchMatrix([][]int{{1, 4, 7, 11, 15}, {2, 5, 8, 12, 19}, {3, 6, 9, 16, 22}, {10, 13, 14, 17, 24}, {18, 21, 23, 26, 30}}, 15))
-
 	matrix := [][]int{{1, 4, 7, 11, 15}, {2, 5, 8, 12, 19}, {3, 6, 9, 16, 22}, {10, 13, 14, 17, 24}, {18, 21, 23, 26, 30}}
+	fmt.Println(searchMatrix(matrix, 4))
+	checkMatrix(matrix, t)
+
+	matrix2 := [][]int{{1, 4, 7}, {2, 5, 8}, {3, 6, 9}, {10, 13, 14}, {18, 21, 23}}
+	fmt.Println(searchMatrix(matrix2, 4))
+	checkMatrix(matrix2, t)
+
+	matrix3 := [][]int{{1}, {2}, {3}, {10}, {18}}
+	fmt.Println(searchMatrix(matrix3, 4))
+	checkMatrix(matrix3, t)
+
+	matrix4 := [][]int{{1}}
+	fmt.Println(searchMatrix(matrix4, 4))
+	checkMatrix(matrix4, t)
+
+}
+
+func checkMatrix(matrix [][]int, t *testing.T) {
 	for i := 0; i < len(matrix); i++ {
 		for j := 0; j < len(matrix[i]); j++ {
 			if !searchMatrix(matrix, matrix[i][j]) {
@@ -130,5 +168,4 @@ func TestSearchMatrix(t *testing.T) {
 			}
 		}
 	}
-
 }
