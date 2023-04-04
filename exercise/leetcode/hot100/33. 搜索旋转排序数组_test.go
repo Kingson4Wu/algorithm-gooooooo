@@ -10,6 +10,15 @@ import (
 看完题解
 二分后加上乱序数组和有序数组的判断，通过对比头尾的数值即可
 
+时间
+4 ms
+击败
+50%
+内存
+2.4 MB
+击败
+100%
+
 */
 
 /**
@@ -64,10 +73,17 @@ func binarySearch(nums []int, start, end, target int) int {
 	mid := (end + start) / 2
 
 	/** 有序 */
-	if nums[start] <= nums[mid] && target >= nums[start] && target <= nums[mid] {
+	if nums[start] <= nums[mid] {
+		if target >= nums[start] && target <= nums[mid] {
+			return binarySearch(nums, start, mid, target)
+		}
+		return binarySearch(nums, mid+1, end, target)
+	} else {
+		if target >= nums[mid+1] && target <= nums[end] {
+			return binarySearch(nums, mid+1, end, target)
+		}
 		return binarySearch(nums, start, mid, target)
 	}
-	return binarySearch(nums, mid+1, end, target)
 }
 
 func TestSearch(t *testing.T) {
@@ -77,5 +93,5 @@ func TestSearch(t *testing.T) {
 	fmt.Println(search([]int{4, 5, 6, 7, 0, 1, 2}, 5))
 	fmt.Println(search([]int{4, 5, 6, 7, 0, 1, 2}, 8))
 	fmt.Println(search([]int{1}, 1))
-
+	fmt.Println(search([]int{5, 1, 3}, 1))
 }
