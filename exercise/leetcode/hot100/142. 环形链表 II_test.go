@@ -18,6 +18,9 @@ a + n (b+c) +b = 2 (a+b)
 
 a = c+ (n-1)(b+c)
 
+快慢指针相遇之后，从head开始重新走，slow继续走，再次相遇的点即入环点
+（方法1使用的是hash，以指针为key）
+
 时间
 0 ms
 击败
@@ -87,3 +90,31 @@ func TestDetectCycle(t *testing.T) {
 	roo3.Next = roo3
 	fmt.Println(detectCycle(roo3).Val)
 }
+
+/**
+官方的答案比较简洁
+func detectCycle(head *ListNode) *ListNode {
+    slow, fast := head, head
+    for fast != nil {
+        slow = slow.Next
+        if fast.Next == nil {
+            return nil
+        }
+        fast = fast.Next.Next
+        if fast == slow {
+            p := head
+            for p != slow {
+                p = p.Next
+                slow = slow.Next
+            }
+            return p
+        }
+    }
+    return nil
+}
+
+作者：力扣官方题解
+链接：https://leetcode.cn/problems/linked-list-cycle-ii/solutions/441131/huan-xing-lian-biao-ii-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+*/
