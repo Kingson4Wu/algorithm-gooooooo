@@ -6,9 +6,17 @@ import (
 )
 
 /**
+
+(错误！！！，不符合规律)
+0 1
+0 1
 个人想法， 做过最大正方形，这道题应该可以按照同样的套路
 动态规划，值是该点是1时作为右下角，最大的长和宽
 注意不符合条件的要设置成[]int{0, 0}
+
+初始化和正方形的不一样了，漏了
+
+
 */
 
 /*
@@ -48,19 +56,32 @@ func maximalRectangle(matrix [][]byte) int {
 	}
 
 	/** 初始化 */
-	for i := 0; i < len(matrix); i++ {
+	if matrix[0][0] == '1' {
+		dp[0][0] = []int{1, 1}
+		maxArea = 1
+	} else {
+		dp[0][0] = []int{0, 0}
+	}
+
+	for i := 1; i < len(matrix); i++ {
 		if matrix[i][0] == '1' {
-			dp[i][0] = []int{1, 1}
-			maxArea = 1
+			y := min(dp[i-1][0][0], 1) + 1
+			dp[i][0] = []int{y, 1}
+			if y > maxArea {
+				maxArea = y
+			}
 		} else {
 			dp[i][0] = []int{0, 0}
 		}
 
 	}
-	for i := 0; i < len(matrix[0]); i++ {
+	for i := 1; i < len(matrix[0]); i++ {
 		if matrix[0][i] == '1' {
-			dp[0][i] = []int{1, 1}
-			maxArea = 1
+			x := min(dp[0][i-1][1], 1) + 1
+			dp[0][i] = []int{1, x}
+			if x > maxArea {
+				maxArea = x
+			}
 		} else {
 			dp[0][i] = []int{0, 0}
 		}
@@ -87,9 +108,11 @@ func maximalRectangle(matrix [][]byte) int {
 }
 
 func TestMaximalRectangle(t *testing.T) {
-	fmt.Println(maximalRectangle([][]byte{{'1', '0', '1', '0', '0'}, {'1', '0', '1', '1', '1'}, {'1', '1', '1', '1', '1'}, {'1', '0', '0', '1', '0'}}))
+	/*fmt.Println(maximalRectangle([][]byte{{'1', '0', '1', '0', '0'}, {'1', '0', '1', '1', '1'}, {'1', '1', '1', '1', '1'}, {'1', '0', '0', '1', '0'}}))
 	fmt.Println(maximalRectangle([][]byte{}))
 	fmt.Println(maximalRectangle([][]byte{{'0'}}))
 	fmt.Println(maximalRectangle([][]byte{{'1'}}))
+	fmt.Println(maximalRectangle([][]byte{{'1', '1'}}))*/
+	fmt.Println(maximalRectangle([][]byte{{'0', '1'}, {'0', '1'}}))
 
 }
