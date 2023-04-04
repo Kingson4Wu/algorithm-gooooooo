@@ -12,6 +12,28 @@ exercise/leetcode/hot100/448. 找到所有数组中消失的数字_test.go
 通过下标负数寻找
 最后再恢复数组
 
+可惜不让修改数组，题目虽然通过，实际是错的
+
+方法一：二分查找
+方法二：二进制
+方法三：快慢指针
+
+func findDuplicate(nums []int) int {
+    slow, fast := 0, 0
+    for slow, fast = nums[slow], nums[nums[fast]]; slow != fast; slow, fast = nums[slow], nums[nums[fast]] { }
+    slow = 0
+    for slow != fast {
+        slow = nums[slow]
+        fast = nums[fast]
+    }
+    return slow
+}
+
+作者：力扣官方题解
+链接：https://leetcode.cn/problems/find-the-duplicate-number/solutions/261119/xun-zhao-zhong-fu-shu-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
 时间
 76 ms
 击败
