@@ -1,7 +1,14 @@
 package hot100
 
+import (
+	"fmt"
+	"testing"
+)
+
 /**
 个人做法，简单二分查找
+看完题解
+二分后加上乱序数组和有序数组的判断，通过对比头尾的数值即可
 
 */
 
@@ -42,5 +49,33 @@ nums 中的每个值都 独一无二
 
 func search(nums []int, target int) int {
 
-	return 0
+	mid := binarySearch(nums, 0, len(nums)-1, target)
+	if nums[mid] == target {
+		return mid
+	}
+	return -1
+}
+
+func binarySearch(nums []int, start, end, target int) int {
+
+	if start >= end {
+		return start
+	}
+	mid := (end + start) / 2
+
+	/** 有序 */
+	if nums[start] <= nums[mid] && target >= nums[start] && target <= nums[mid] {
+		return binarySearch(nums, start, mid, target)
+	}
+	return binarySearch(nums, mid+1, end, target)
+}
+
+func TestSearch(t *testing.T) {
+	fmt.Println(search([]int{4, 5, 6, 7, 0, 1, 2}, 0))
+	fmt.Println(search([]int{4, 5, 6, 7, 0, 1, 2}, 3))
+	fmt.Println(search([]int{1}, 0))
+	fmt.Println(search([]int{4, 5, 6, 7, 0, 1, 2}, 5))
+	fmt.Println(search([]int{4, 5, 6, 7, 0, 1, 2}, 8))
+	fmt.Println(search([]int{1}, 1))
+
 }
