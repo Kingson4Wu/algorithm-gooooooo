@@ -42,7 +42,12 @@ func TestPathSum(t *testing.T) {
 	//[10,5,-3,3,2,null,11,3,-2,null,1]
 	//fmt.Println(BuildTree([]int{10,5,-3,3,2,nil,11,3,-2,nil,1}))
 
+	root2 := &TreeNode{Val: 1, Left: &TreeNode{Val: 2}}
+	fmt.Println(pathSum(root2, 2))
+	//1
+
 	root := &TreeNode{Val: 10, Left: &TreeNode{Val: 5, Left: &TreeNode{Val: 3, Left: &TreeNode{Val: 3}, Right: &TreeNode{Val: -2}}, Right: &TreeNode{Val: 2, Right: &TreeNode{Val: 1}}}, Right: &TreeNode{Val: -3, Right: &TreeNode{Val: 11}}}
 
 	fmt.Println(pathSum(root, 8))
+	//3
 }
