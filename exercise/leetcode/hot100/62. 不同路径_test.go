@@ -17,7 +17,7 @@ m =
 n =
 9
 
-todo 估计要改成栈使用回溯
+改成使用dfs回溯 仍然超出时间限制，。。。。。
 
 
 */
@@ -49,7 +49,7 @@ todo 估计要改成栈使用回溯
 输出：6
 */
 
-func uniquePaths(m int, n int) int {
+/*func uniquePaths(m int, n int) int {
 
 	if m == 0 || n == 0 {
 		return 0
@@ -60,6 +60,36 @@ func uniquePaths(m int, n int) int {
 	}
 
 	return uniquePaths(m-1, n) + uniquePaths(m, n-1)
+}*/
+
+func uniquePaths(m int, n int) int {
+
+	if m == 0 || n == 0 {
+		return 0
+	}
+
+	if m == 1 || n == 1 {
+		return 1
+	}
+
+	ans := 0
+	var dfs func(int, int)
+	dfs = func(mm int, nn int) {
+
+		if mm == m-1 && nn == n-1 {
+			ans++
+			return
+		}
+		if mm+1 < m {
+			dfs(mm+1, nn)
+		}
+		if nn+1 < n {
+			dfs(mm, nn+1)
+		}
+	}
+
+	dfs(0, 0)
+	return ans
 }
 
 func TestUniquePaths(t *testing.T) {
