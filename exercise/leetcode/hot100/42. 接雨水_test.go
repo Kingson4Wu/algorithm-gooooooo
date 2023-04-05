@@ -7,6 +7,22 @@ import (
 
 /**
 不会做
+看题解
+
+三种方法
+1、动态规划，分别两趟算出下标为i的左边和右边的最高点，使用两个list存，最后一趟算出每个i的容量
+2、单调栈（从左到右）
+3、双指针（左右开始往中间）
+
+
+时间
+8 ms
+击败
+91.94%
+内存
+5.9 MB
+击败
+38.61%
 */
 
 /*
@@ -31,29 +47,41 @@ n == height.length
 */
 func trap(height []int) int {
 
-	if len(height) <= 2 {
+	if len(height) < 3 {
 		return 0
 	}
 
-	leftHeight := 0
-	maxArea := 0
-	currentArea := 0
-	for i := 0; i < len(height); i++ {
-		if height[i] < leftHeight {
-			currentArea += leftHeight - height[i]
+	leftMax := make([]int, len(height))
+	rightMax := make([]int, len(height))
+
+	leftMax[0] = height[0]
+	rightMax[len(height)-1] = height[len(height)-1]
+	for i := 1; i < len(height); i++ {
+		if height[i] > leftMax[i-1] {
+			leftMax[i] = height[i]
 		} else {
-			if currentArea > maxArea {
-				maxArea = currentArea
-			}
-			leftHeight = height[i]
-			currentArea = 0
+			leftMax[i] = leftMax[i-1]
+		}
+	}
+	for i := len(height) - 2; i >= 0; i-- {
+		if height[i] > rightMax[i+1] {
+			rightMax[i] = height[i]
+		} else {
+			rightMax[i] = rightMax[i+1]
 		}
 	}
 
-	return currentArea
+	area := 0
+	for i := 1; i < len(height)-1; i++ {
+		area += min(leftMax[i], rightMax[i]) - height[i]
+	}
+
+	return area
 }
 
 func TestTrap(t *testing.T) {
 	fmt.Println(trap([]int{0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1}))
 	fmt.Println(trap([]int{4, 2, 0, 3, 2, 5}))
+	fmt.Println(trap([]int{4, 2, 3}))
+	fmt.Println(trap([]int{4, 2}))
 }
