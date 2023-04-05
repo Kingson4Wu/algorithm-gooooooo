@@ -11,6 +11,19 @@ leetcode/tree/437. 路径总和 III.go
 
 /**
 自己用递归，一直没对
+
+思路没错，重新改对
+
+时间
+24 ms
+击败
+49.75%
+内存
+4.4 MB
+击败
+70.83%
+
+另外可以尝试用回溯来做
 */
 
 /**
@@ -31,10 +44,18 @@ leetcode/tree/437. 路径总和 III.go
  */
 func pathSum(root *TreeNode, targetSum int) int {
 
-	return pathSum2(root, targetSum, targetSum)
+	if root == nil {
+		return 0
+	}
+
+	return paths(root, targetSum) + pathSum(root.Left, targetSum) + pathSum(root.Right, targetSum)
 }
 
-func pathSum2(root *TreeNode, totalSum, targetSum int) int {
+/*
+*
+一定包括root的情况
+*/
+func paths(root *TreeNode, targetSum int) int {
 
 	if root == nil {
 		return 0
@@ -44,7 +65,7 @@ func pathSum2(root *TreeNode, totalSum, targetSum int) int {
 	if root.Val == targetSum {
 		count = 1
 	}
-	return count + pathSum2(root.Left, totalSum, totalSum) + pathSum2(root.Right, totalSum, totalSum) + pathSum2(root.Left, totalSum, targetSum-root.Val) + pathSum2(root.Right, totalSum, targetSum-root.Val)
+	return count + paths(root.Left, targetSum-root.Val) + paths(root.Right, targetSum-root.Val)
 }
 
 func TestPathSum(t *testing.T) {
