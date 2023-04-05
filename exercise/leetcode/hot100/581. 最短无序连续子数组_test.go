@@ -2,11 +2,32 @@ package hot100
 
 import (
 	"fmt"
+	"math"
 	"testing"
 )
 
 /**
+方法1：先排序、在对比
+这里使用方法2：
+找出中间段的左右边界
+先从左到右找中间段的右下标（即遍历过程中最后一个小于左边最大值的）right
+再找出从右到左中间段的左下标（即遍历过程中最后一个大于右边最小值的）left
+right-left +1 即结果
+
+时间
+20 ms
+击败
+87.76%
+内存
+6.3 MB
+击败
+62.15%
+
+*/
+
+/**
 自己总结的过滤好像有点小复杂
+已经不知道在写啥了，也不过。。。
 */
 
 /*
@@ -30,6 +51,30 @@ import (
 输出：0
 */
 func findUnsortedSubarray(nums []int) int {
+
+	left, right := -1, -1
+	leftMin, rightMax := math.MaxInt, math.MinInt
+
+	for i := 0; i < len(nums); i++ {
+		if nums[i] >= rightMax {
+			rightMax = nums[i]
+		} else {
+			right = i
+		}
+		if nums[len(nums)-1-i] <= leftMin {
+			leftMin = nums[len(nums)-1-i]
+		} else {
+			left = len(nums) - 1 - i
+		}
+	}
+
+	if right == -1 {
+		return 0
+	}
+	return right - left + 1
+}
+
+/*func findUnsortedSubarray(nums []int) int {
 
 	if len(nums) <= 1 {
 		return 0
@@ -80,7 +125,7 @@ func findUnsortedSubarray(nums []int) int {
 	}
 
 	return 0
-}
+}*/
 
 func TestFindUnsortedSubarray(t *testing.T) {
 	fmt.Println(findUnsortedSubarray([]int{2, 6, 4, 8, 10, 9, 15}))
