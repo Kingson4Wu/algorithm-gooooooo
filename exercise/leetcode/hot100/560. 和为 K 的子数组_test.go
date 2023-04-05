@@ -6,6 +6,18 @@ import (
 )
 
 /**
+自己一开始用的动态规划，是二维数组，爆内存
+官方题解方法1是暴力破解，双重循环重复计算
+
+方法2是
+使用hash保存前缀和
+即双重循环中可以复用之前的计算结果
+
+垃圾题解没看懂。。。
+
+*/
+
+/**
 dp[i][j] = d[i][j-1] + d[j][j]
 */
 /*
@@ -22,6 +34,38 @@ dp[i][j] = d[i][j-1] + d[j][j]
 输出：2
 */
 func subarraySum(nums []int, k int) int {
+
+	//TODO
+	/** 前缀和保存 */
+	m := make(map[int]int)
+
+	count := 0
+	/** 以i开头j结尾的子序列 */
+	for i := 0; i < len(nums); i++ {
+		for j := i; j < len(nums); j++ {
+
+			sum := 0
+			if i == j {
+				sum = nums[i]
+				m[j] = sum
+			} else {
+				if v, ok := m[j-1]; ok {
+					sum = nums[i] + v
+				} else {
+					sum = nums[i]
+					m[j] = sum
+				}
+			}
+			if sum == k {
+				count++
+			}
+		}
+	}
+
+	return count
+}
+
+/*func subarraySum(nums []int, k int) int {
 
 	if len(nums) == 1 {
 		if nums[0] == k {
@@ -53,9 +97,10 @@ func subarraySum(nums []int, k int) int {
 
 	return result
 }
+*/
 
 func TestSubarraySum(t *testing.T) {
-	fmt.Println(subarraySum([]int{1, 1, 1}, 2))
+	//fmt.Println(subarraySum([]int{1, 1, 1}, 2))
 	fmt.Println(subarraySum([]int{1, 2, 3}, 3))
 }
 
