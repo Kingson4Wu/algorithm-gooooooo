@@ -90,21 +90,23 @@
 + 子集型 
 + exercise/leetcode/hot100/78. 子集_test.go
 ```go
-func subsets(nums []int) (ans [][]int) {
-var set []int
-var dfs func(int)
-dfs = func(cur int) {
-if cur == len(nums) {
-ans = append(ans, append([]int(nil), set...))
-return
+func subsetsDfs(nums []int) (ans [][]int) {
+
+	var set []int
+	var dfs func(int)
+	dfs = func(cur int) {
+		if cur == len(nums) {
+			ans = append(ans, append([]int(nil), set...))
+			return
+		}
+		set = append(set, nums[cur])//选
+		dfs(cur + 1)
+		set = set[:len(set)-1]//不选
+		dfs(cur + 1)
+	}
+	dfs(0)
+	return
 }
-set = append(set, nums[cur])
-dfs(cur + 1)
-set = set[:len(set)-1]
-dfs(cur + 1)
-}
-dfs(0)
-return
 ```
 
 + 排列型
@@ -126,6 +128,33 @@ func permute(nums []int) [][]int {
 			//dfs(cur + 1)
 		}
 	}
+	dfs(0)
+	return ans
+}
+```
+
++ 组合型
++ exercise/leetcode/77. 组合_test.go
++ 注意 if len(set) == k 和 dfs(i + 1)
+```go
+func combine(n int, k int) [][]int {
+
+	var ans [][]int
+	var set []int
+
+	var dfs func(int)
+	dfs = func(cur int) {
+		if len(set) == k {
+			ans = append(ans, append([]int(nil), set...))
+			return
+		}
+		for i := cur; i < n; i++ {
+			set = append(set, i+1)
+			dfs(i + 1)
+			set = set[:len(set)-1]
+		}
+	}
+
 	dfs(0)
 	return ans
 }
