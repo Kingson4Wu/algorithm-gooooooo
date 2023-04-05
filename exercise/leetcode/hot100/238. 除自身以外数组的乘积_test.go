@@ -6,6 +6,23 @@ import (
 )
 
 /**
+方法一：左右乘积列表
+我们不必将所有数字的乘积除以给定索引处的数字得到相应的答案，而是利用索引左侧所有数字的乘积和右侧所有数字的乘积（即前缀与后缀）相乘得到答案。
+
+对于给定索引 i，我们将使用它左边所有数字的乘积乘以右边所有数字的乘积。
+
+方法二：空间复杂度 O(1)的方法
+先把 answer 作为方法一的 L 数组。
+这种方法的唯一变化就是我们没有构造 R 数组。而是用一个遍历来跟踪右边元素的乘积。并更新数组 answer[i]=answer[i]∗R。然后 R 更新为 R=R∗nums[i]，其中变量 R 表示的就是索引右侧数字的乘积。
+
+作者：力扣官方题解
+链接：https://leetcode.cn/problems/product-of-array-except-self/solutions/272369/chu-zi-shen-yi-wai-shu-zu-de-cheng-ji-by-leetcode-/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+*/
+
+/**
 自己做的，动态规划，但是
 
 执行出错
@@ -91,14 +108,35 @@ runtime.goexit()
 	return result
 }*/
 
+/*
+*
+看过题解重做
+
+时间
+32 ms
+击败
+9.84%
+内存
+7.5 MB
+击败
+61.86%
+*/
 func productExceptSelf(nums []int) []int {
-	result := make([]int, len(nums))
+	ans := make([]int, len(nums))
 
-	/*for i := 0; i < len(nums); i++ {
-		result[i]=
-	}*/
+	/** 算出i左边的乘积 */
+	ans[0] = 1
+	for i := 1; i < len(nums); i++ {
+		ans[i] = nums[i-1] * ans[i-1]
+	}
+	/** 和右边相乘 */
+	right := 1
+	for i := len(nums) - 1; i >= 0; i-- {
+		ans[i] = ans[i] * right
+		right *= nums[i]
+	}
 
-	return result
+	return ans
 }
 
 func TestProductExceptSelf(t *testing.T) {
