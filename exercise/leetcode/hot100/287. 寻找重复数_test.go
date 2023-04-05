@@ -71,7 +71,7 @@ nums 中 只有一个整数 出现 两次或多次 ，其余整数均只出现 �
 如何证明 nums 中至少存在一个重复的数字?
 你可以设计一个线性级时间复杂度 O(n) 的解决方案吗？
 */
-func findDuplicate(nums []int) int {
+/*func findDuplicate(nums []int) int {
 
 	result := 0
 	for i := 0; i < len(nums); i++ {
@@ -93,6 +93,38 @@ func findDuplicate(nums []int) int {
 	}
 
 	return result
+}*/
+
+/*
+*
+时间
+92 ms
+击败
+25.91%
+内存
+8.2 MB
+击败
+50.12%
+*/
+func findDuplicate(nums []int) int {
+
+	/**
+	必须初始值一样！！！！
+	*/
+	slow, fast := 0, 0
+	slow, fast = nums[slow], nums[nums[fast]]
+	for slow != fast {
+		slow = nums[slow]
+		fast = nums[nums[fast]]
+	}
+
+	p := 0
+	for slow != p {
+		slow = nums[slow]
+		p = nums[p]
+	}
+
+	return p
 }
 
 func TestFindDuplicate(t *testing.T) {
