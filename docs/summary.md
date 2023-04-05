@@ -88,6 +88,7 @@
     - 排列型
 
 + 子集型 
++ exercise/leetcode/hot100/78. 子集_test.go
 ```go
 func subsets(nums []int) (ans [][]int) {
 var set []int
@@ -104,6 +105,30 @@ dfs(cur + 1)
 }
 dfs(0)
 return
+```
+
++ 排列型
++ exercise/leetcode/hot100/46. 全排列_test.go
+```go
+func permute(nums []int) [][]int {
+
+	var ans [][]int
+	var dfs func(int)
+	dfs = func(cur int) {
+		if cur == len(nums) {
+			ans = append(ans, append([]int(nil), nums...))
+			return
+		}
+		for i := cur; i < len(nums); i++ {
+			nums[cur], nums[i] = nums[i], nums[cur]
+			dfs(cur + 1)
+			nums[cur], nums[i] = nums[i], nums[cur]
+			//dfs(cur + 1)
+		}
+	}
+	dfs(0)
+	return ans
+}
 ```
 
 ## BFS
