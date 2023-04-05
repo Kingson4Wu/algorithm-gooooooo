@@ -6,6 +6,20 @@ import (
 )
 
 /**
+看题解，
+1、动态规划
+2、组合数学
+从左上角到右下角的过程中，我们需要移动 m+n−2 次，其中有 m−1次向下移动，n−1次向右移动。因此路径的总数，就等于从 m+n−2 次移动中选择 m−1 次向下移动的方案数，即组合数
+C (m+n−2,m−1)
+
+作者：力扣官方题解
+链接：https://leetcode.cn/problems/unique-paths/solutions/514311/bu-tong-lu-jing-by-leetcode-solution-hzjf/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+*/
+
+/**
 自己做的，拆分子问题，通过递归可解,但是超时
 
 超出时间限制
@@ -49,6 +63,7 @@ n =
 输出：6
 */
 
+// 递归超时
 /*func uniquePaths(m int, n int) int {
 
 	if m == 0 || n == 0 {
@@ -62,7 +77,8 @@ n =
 	return uniquePaths(m-1, n) + uniquePaths(m, n-1)
 }*/
 
-func uniquePaths(m int, n int) int {
+//回溯也超时
+/*func uniquePaths(m int, n int) int {
 
 	if m == 0 || n == 0 {
 		return 0
@@ -90,6 +106,38 @@ func uniquePaths(m int, n int) int {
 
 	dfs(0, 0)
 	return ans
+}*/
+
+// 要动态规划。。。
+/**
+时间
+0 ms
+击败
+100%
+内存
+1.9 MB
+击败
+17.87%
+*/
+func uniquePaths(m int, n int) int {
+
+	dp := make([][]int, m)
+	for i := 0; i < m; i++ {
+		dp[i] = make([]int, n)
+	}
+	dp[0][0] = 1
+	for i := 1; i < n; i++ {
+		dp[0][i] = 1
+	}
+	for i := 1; i < m; i++ {
+		dp[i][0] = 1
+	}
+	for i := 1; i < m; i++ {
+		for j := 1; j < n; j++ {
+			dp[i][j] = dp[i-1][j] + dp[i][j-1]
+		}
+	}
+	return dp[m-1][n-1]
 }
 
 func TestUniquePaths(t *testing.T) {
@@ -98,4 +146,6 @@ func TestUniquePaths(t *testing.T) {
 	fmt.Println(uniquePaths(7, 3))
 	fmt.Println(uniquePaths(3, 3))
 	fmt.Println(uniquePaths(5, 5))
+	fmt.Println(uniquePaths(1, 1))
+	fmt.Println(uniquePaths(2, 2))
 }
