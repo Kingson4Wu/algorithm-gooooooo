@@ -54,17 +54,28 @@ func findUnsortedSubarray(nums []int) int {
 		if nums[i+1] < max {
 			end = i + 1
 		}
-		if nums[i+1] < leftMax {
+		if nums[i+1] <= leftMax {
 			for start-1 >= 0 {
-				if nums[start-1] < nums[i+1] {
+				if nums[start-1] > nums[i+1] {
 					start--
 					leftMax = nums[start]
+				} else {
+					break
 				}
 			}
 		}
 	}
 
 	if end > start {
+
+		for start-1 >= 0 {
+			if nums[start-1] == nums[start] {
+				start--
+			} else {
+				break
+			}
+		}
+
 		return end - start + 1
 	}
 
@@ -77,6 +88,16 @@ func TestFindUnsortedSubarray(t *testing.T) {
 	fmt.Println(findUnsortedSubarray([]int{1}))
 	fmt.Println(findUnsortedSubarray([]int{1, 3, 2, 3, 3}))
 	fmt.Println(findUnsortedSubarray([]int{2, 3, 3, 2, 4}))
+
+	fmt.Println(findUnsortedSubarray([]int{2, 3, 3, 2, 4, 5, 3}))
+	fmt.Println(findUnsortedSubarray([]int{2, 3, 3, 2, 4, 5, 1}))
+	fmt.Println(findUnsortedSubarray([]int{1, 2, 3, 3, 2, 4, 5, 1}))
+
+	fmt.Println(findUnsortedSubarray([]int{1, 1, 2, 3, 3, 2, 4, 5, 1}))
+
+	fmt.Println(findUnsortedSubarray([]int{1, 1, 2, 3, 3, 2, 4, 5, 1, 0}))
+
+	fmt.Println(findUnsortedSubarray([]int{5, 4, 3, 10, 1, 8, 9, 11, 12, 13}))
 	/**
 	输入
 	nums =
