@@ -19,6 +19,47 @@ import (
 6.9 MB
 击败
 86.67%
+
+答案也是递归，比较简洁
+
+func maxPathSum(root *TreeNode) int {
+    maxSum := math.MinInt32
+    var maxGain func(*TreeNode) int
+    maxGain = func(node *TreeNode) int {
+        if node == nil {
+            return 0
+        }
+
+        // 递归计算左右子节点的最大贡献值
+        // 只有在最大贡献值大于 0 时，才会选取对应子节点
+        leftGain := max(maxGain(node.Left), 0)
+        rightGain := max(maxGain(node.Right), 0)
+
+        // 节点的最大路径和取决于该节点的值与该节点的左右子节点的最大贡献值
+        priceNewPath := node.Val + leftGain + rightGain
+
+        // 更新答案
+        maxSum = max(maxSum, priceNewPath)
+
+        // 返回节点的最大贡献值
+        return node.Val + max(leftGain, rightGain)
+    }
+    maxGain(root)
+    return maxSum
+}
+
+func max(x, y int) int {
+    if x > y {
+        return x
+    }
+    return y
+}
+
+作者：力扣官方题解
+链接：https://leetcode.cn/problems/binary-tree-maximum-path-sum/solutions/297005/er-cha-shu-zhong-de-zui-da-lu-jing-he-by-leetcode-/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
 */
 
 /**
