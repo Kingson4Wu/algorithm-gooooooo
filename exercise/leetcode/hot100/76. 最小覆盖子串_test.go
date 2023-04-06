@@ -7,6 +7,18 @@ import (
 
 /**
 看完题解，使用滑动窗口解决
+check另外使用一个变量判断，避免每次循环所有字符
+
+时间
+24 ms
+击败
+77.13%
+内存
+2.9 MB
+击败
+56.98%
+
+
 */
 
 /*
@@ -45,24 +57,21 @@ func minWindow(s string, t string) string {
 	tm := map[byte]int{}
 	sm := map[byte]int{}
 
+	var lackC byte
+	lack := 0
+
 	check := func() bool {
+		if lack != 0 {
+			return lack == 2
+		}
 		for k, tc := range tm {
-			/*if sc, ok := sm[k]; ok {
-				if sc < tc {
-					return false
-				}
-			}
-			return false
-			*/
 			if sm[k] < tc {
 				return false
 			}
 		}
+		lack = 2
 		return true
 	}
-
-	//lack := ""
-	//to check优化
 
 	for i := 0; i < len(t); i++ {
 		tm[t[i]] += 1
@@ -79,6 +88,14 @@ func minWindow(s string, t string) string {
 				minStart = start
 			}
 			sm[s[start]]--
+
+			if tc, ok := tm[s[start]]; ok {
+				if tc > sm[s[start]] {
+					lackC = s[start]
+					lack = 1
+				}
+			}
+
 			start++
 			continue
 		}
@@ -87,6 +104,15 @@ func minWindow(s string, t string) string {
 			break
 		}
 		sm[s[end]]++
+
+		if s[end] == lackC {
+			if tc, ok := tm[s[end]]; ok {
+				if tc <= sm[s[end]] {
+					lack = 2
+				}
+			}
+		}
+
 	}
 
 	if minLength == 0 {
@@ -99,5 +125,10 @@ func TestMinWindow(t *testing.T) {
 	fmt.Println(minWindow("ADOBECODEBANC", "ABC"))
 	fmt.Println(minWindow("a", "a"))
 	fmt.Println(minWindow("a", "aa"))
+
+	fmt.Println(minWindow("abbaaavvvaaaaavvva", "aa"))
+	fmt.Println(minWindow("abbaaavvvaaaaavvva", "a"))
+	fmt.Println(minWindow("abbaaavvvaaaaavvva", "ab"))
+	fmt.Println(minWindow("abbaaavvvaaaaavvva", "abvaaaaab"))
 
 }
