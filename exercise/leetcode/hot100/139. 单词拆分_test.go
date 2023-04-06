@@ -15,6 +15,15 @@ if dp[j] && wordDictSet[s[j:i]]
 
 leetcode/dp/139. 单词拆分.go
 
+时间
+0 ms
+击败
+100%
+内存
+2 MB
+击败
+79.43%
+
 */
 
 /**
