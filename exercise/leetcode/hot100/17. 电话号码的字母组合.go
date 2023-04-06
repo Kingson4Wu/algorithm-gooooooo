@@ -1,4 +1,4 @@
-package leetcode
+package hot100
 
 /*
  * @lc app=leetcode.cn id=17 lang=golang

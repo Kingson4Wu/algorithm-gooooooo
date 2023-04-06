@@ -1,4 +1,6 @@
-package leetcode
+package linked_list
+
+import "algorithm-gooooooo/leetcode"
 
 /**
  * Definition for singly-linked list.
@@ -10,7 +12,7 @@ package leetcode
 type Solution struct {
 }
 
-func Constructor(head *ListNode) Solution {
+func Constructor(head *leetcode.ListNode) Solution {
 
 	return Solution{}
 }

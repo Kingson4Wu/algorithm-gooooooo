@@ -15,6 +15,8 @@ dp2 以i结尾的成绩最小值
 dp1[i] = max(dp1[i-1] * num[i], dp2[i-1] * num[i], num[i])
 dp2[i] = min(dp2[i-1] * num[i], dp2[i-1] * num[i], num[i])
 
+题解答案更简洁，两个dp其实可以换成两个常数变量即可！！！
+
 时间
 8 ms
 击败
@@ -79,3 +81,37 @@ func TestMaxProduct(t *testing.T) {
 
 	fmt.Println(maxProduct([]int{-4, 2, 1, -1, -1, 2, 4, 1}))
 }
+
+/**
+题解答案
+
+func maxProduct(nums []int) int {
+    maxF, minF, ans := nums[0], nums[0], nums[0]
+    for i := 1; i < len(nums); i++ {
+        mx, mn := maxF, minF
+        maxF = max(mx * nums[i], max(nums[i], mn * nums[i]))
+        minF = min(mn * nums[i], min(nums[i], mx * nums[i]))
+        ans = max(maxF, ans)
+    }
+    return ans
+}
+
+func max(x, y int) int {
+    if x > y {
+        return x
+    }
+    return y
+}
+
+func min(x, y int) int {
+    if x < y {
+        return x
+    }
+    return y
+}
+
+作者：力扣官方题解
+链接：https://leetcode.cn/problems/maximum-product-subarray/solutions/250015/cheng-ji-zui-da-zi-shu-zu-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+*/

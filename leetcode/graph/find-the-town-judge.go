@@ -1,4 +1,4 @@
-package algorithm
+package graph
 
 func findJudge(N int, trust [][]int) int {
 

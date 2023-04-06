@@ -1,6 +1,6 @@
-package algorithm
+package hot100
 
-//MinStack is
+// MinStack is
 type MinStack struct {
 	array  []int
 	minVal int
@@ -10,8 +10,8 @@ type MinStack struct {
 设计一个支持 push ，pop ，top 操作，并能在常数时间内检索到最小元素的栈。
 
 push(x) —— 将元素 x 推入栈中。
-pop() —— 删除栈顶的元素。
-top() —— 获取栈顶元素。
+pop()—— 删除栈顶的元素。
+top()—— 获取栈顶元素。
 getMin() —— 检索栈中的最小元素。
 
 提示：
@@ -23,9 +23,9 @@ pop、top 和 getMin 操作总是在 非空栈 上调用。
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 */
 
-//Constructor ...
+//Constructor1 ...
 /** initialize your data structure here. */
-func Constructor() MinStack {
+func Constructor1() MinStack {
 
 	return MinStack{
 		array:  []int{},
@@ -33,7 +33,7 @@ func Constructor() MinStack {
 	}
 }
 
-//Push ...
+// Push ...
 func (stack *MinStack) Push(x int) {
 
 	if len(stack.array) == 0 {
@@ -46,7 +46,7 @@ func (stack *MinStack) Push(x int) {
 	}
 }
 
-//Pop ...
+// Pop ...
 func (stack *MinStack) Pop() {
 
 	if len(stack.array) == 0 {
@@ -82,7 +82,7 @@ func (stack *MinStack) Top() int {
 	return node
 }
 
-//GetMin ...
+// GetMin ...
 func (stack *MinStack) GetMin() int {
 
 	if len(stack.array) == 0 {
@@ -102,7 +102,7 @@ func (stack *MinStack) GetMin() int {
  */
 
 func test() {
-	obj := Constructor()
+	obj := Constructor1()
 	obj.Push(3)
 	obj.Pop()
 	//param_3 := obj.Top()
