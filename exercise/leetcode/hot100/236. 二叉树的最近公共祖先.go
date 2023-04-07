@@ -5,6 +5,14 @@ package hot100
 使用递归
 尝试重新回忆
 
+时间
+4 ms
+击败
+98.87%
+内存
+6.8 MB
+击败
+98.82%
 */
 
 /**
@@ -39,6 +47,36 @@ nowcoder/BM38 在二叉树中找到两个节点的最近公共祖先.go
  */
 func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
 
-	//TODO
-	return nil
+	if root == nil {
+		return nil
+	}
+
+	if root.Val == p.Val || root.Val == q.Val {
+		return root
+	}
+
+	left := lowestCommonAncestor(root.Left, p, q)
+	right := lowestCommonAncestor(root.Right, p, q)
+
+	if left == nil {
+		return right
+	}
+
+	if right == nil {
+		return left
+	}
+
+	return root
 }
+
+/**
+输入
+[3,5,1,6,2,0,8,null,null,7,4]
+5
+1
+输出
+5
+预期结果
+3
+
+*/
