@@ -14,6 +14,12 @@ s[maxStart:maxLen]
 math.MaxInt32 
 math.MinInt32
 ```
+```go
+	if res > math.MaxInt32 || res <= math.MinInt32 {
+			return 0
+		}
+```
+
 
 + 排序 ： `sort.Ints`
 + 逆序：
