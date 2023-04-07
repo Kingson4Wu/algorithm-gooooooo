@@ -1,4 +1,4 @@
-package tencent
+package tencent50
 
 func grayCode(n int) []int {
 
