@@ -3,6 +3,24 @@ package tencent
 import "testing"
 
 /**
+注意是右移不是左移
+
+个人想法：
+1、遍历一趟，得到逆序列表（hash保存）和长度length
+2、算出k%length
+3、从尾部遍历，找到变更的位置
+
+时间
+0 ms
+击败
+100%
+内存
+2.8 MB
+击败
+5.14%
+*/
+
+/**
  * Definition for singly-linked list.
  * type ListNode struct {
  *     Val int
@@ -12,7 +30,43 @@ import "testing"
 
 func rotateRight(head *ListNode, k int) *ListNode {
 
-	return nil
+	if k == 0 || head == nil {
+		return head
+	}
+
+	m := map[*ListNode]*ListNode{}
+
+	length := 0
+	p := head
+	var tail *ListNode
+	for p != nil {
+		tail = p
+		length++
+		m[p.Next] = p
+		p = p.Next
+	}
+
+	k %= length
+
+	if k == 0 {
+		return head
+	}
+
+	var pre *ListNode
+	cur := tail
+	for i := 0; i < k; i++ {
+		pre = cur
+		cur = m[cur]
+	}
+	cur.Next = nil
+
+	p = pre
+	for p.Next != nil {
+		p = p.Next
+	}
+	p.Next = head
+
+	return pre
 }
 
 /*func rotateRight(head *ListNode, k int) *ListNode {
