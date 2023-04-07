@@ -848,6 +848,9 @@ func wordBreak(s string, wordDict []string) bool {
 + 相交链表
     - 双指针，为空后分别重新赋值指向对方，这样长度相同，遇到相等则相交，都为空则不相交
 
++ 闭合为环的技巧，知道长度可以取模，(n - 1) - (k mod n) ，转化成逆序遍历长度
++ exercise/leetcode/tencent/61. 旋转链表_test.go
+
 
 
 ----
