@@ -56,7 +56,7 @@ nums 中的每个值都 独一无二
 -104 <= target <= 104
 */
 
-func search(nums []int, target int) int {
+func search2(nums []int, target int) int {
 
 	mid := binarySearch(nums, 0, len(nums)-1, target)
 	if nums[mid] == target {
@@ -87,11 +87,11 @@ func binarySearch(nums []int, start, end, target int) int {
 }
 
 func TestSearch(t *testing.T) {
-	fmt.Println(search([]int{4, 5, 6, 7, 0, 1, 2}, 0))
-	fmt.Println(search([]int{4, 5, 6, 7, 0, 1, 2}, 3))
-	fmt.Println(search([]int{1}, 0))
-	fmt.Println(search([]int{4, 5, 6, 7, 0, 1, 2}, 5))
-	fmt.Println(search([]int{4, 5, 6, 7, 0, 1, 2}, 8))
-	fmt.Println(search([]int{1}, 1))
-	fmt.Println(search([]int{5, 1, 3}, 1))
+	fmt.Println(search2([]int{4, 5, 6, 7, 0, 1, 2}, 0))
+	fmt.Println(search2([]int{4, 5, 6, 7, 0, 1, 2}, 3))
+	fmt.Println(search2([]int{1}, 0))
+	fmt.Println(search2([]int{4, 5, 6, 7, 0, 1, 2}, 5))
+	fmt.Println(search2([]int{4, 5, 6, 7, 0, 1, 2}, 8))
+	fmt.Println(search2([]int{1}, 1))
+	fmt.Println(search2([]int{5, 1, 3}, 1))
 }
