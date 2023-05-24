@@ -40,7 +40,14 @@ import (
 为了防止重复遍历相同的位置，需要额外维护一个与 board 等大的 visited 数组，用于标识每个位置是否被访问过。每次遍历相邻位置时，需要跳过已经被访问的位置。
 （记录每一个位置作为起点时，走过的位置，避免重复）
 
-
+时间
+104 ms
+击败
+86.75%
+内存
+1.9 MB
+击败
+80.26%
 */
 
 func exist(board [][]byte, word string) bool {
@@ -61,16 +68,16 @@ func exist(board [][]byte, word string) bool {
 		visited[i][j] = true
 		defer func() {
 			//回溯
-			visited[i][j] = true
+			visited[i][j] = false
 		}()
 		//上下左右
-		if i-1 > 0 && !visited[i-1][j] && check(i-1, j, k+1) {
+		if i-1 >= 0 && !visited[i-1][j] && check(i-1, j, k+1) {
 			return true
 		}
 		if i+1 < len(board) && !visited[i+1][j] && check(i+1, j, k+1) {
 			return true
 		}
-		if j-1 > 0 && !visited[i][j-1] && check(i, j-1, k+1) {
+		if j-1 >= 0 && !visited[i][j-1] && check(i, j-1, k+1) {
 			return true
 		}
 		if j+1 < len(board[0]) && !visited[i][j+1] && check(i, j+1, k+1) {
@@ -93,4 +100,7 @@ func exist(board [][]byte, word string) bool {
 func TestExist(t *testing.T) {
 	fmt.Println(exist([][]byte{{'A', 'B', 'C', 'E'}, {'S', 'F', 'C', 'S'}, {'A', 'D', 'E', 'E'}}, "SEE"))
 	fmt.Println(exist([][]byte{{'A', 'B', 'C', 'E'}, {'S', 'F', 'C', 'S'}, {'A', 'D', 'E', 'E'}}, "ABCB"))
+	//无语，细节上犯了两个低级错误
+	fmt.Println(exist([][]byte{{'a', 'b'}}, "ba"))
+	fmt.Println(exist([][]byte{{'C', 'A', 'A'}, {'A', 'A', 'A'}, {'B', 'C', 'D'}}, "AAB"))
 }
