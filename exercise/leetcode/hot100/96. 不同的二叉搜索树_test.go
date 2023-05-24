@@ -24,6 +24,8 @@ import (
 
 我的思路竟然是递归, 估计会超时（竟然没超时）
 
+答案是动态规划，其实就是递归转自底向上的原理，减少重复计算
+
 时间
 812 ms
 击败
@@ -60,3 +62,23 @@ func TestNumTrees(t *testing.T) {
 	fmt.Println(numTrees(3))
 	fmt.Println(numTrees(4))
 }
+
+/**
+
+答案
+func numTrees(n int) int {
+    G := make([]int, n + 1)
+    G[0], G[1] = 1, 1
+    for i := 2; i <= n; i++ {
+        for j := 1; j <= i; j++ {
+            G[i] += G[j-1] * G[i-j]
+        }
+    }
+    return G[n]
+}
+
+作者：力扣官方题解
+链接：https://leetcode.cn/problems/unique-binary-search-trees/solutions/329807/bu-tong-de-er-cha-sou-suo-shu-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+*/

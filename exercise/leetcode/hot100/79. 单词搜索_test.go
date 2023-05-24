@@ -45,6 +45,48 @@ import (
 
 func exist(board [][]byte, word string) bool {
 
+	visited := make([][]bool, len(board))
+	for i := 0; i < len(board); i++ {
+		visited[i] = make([]bool, len(board[i]))
+	}
+	var check func(i, j, k int) bool
+	check = func(i, j, k int) bool {
+		if board[i][j] != word[k] {
+			return false
+		}
+		if k == len(word)-1 {
+			return true
+		}
+
+		visited[i][j] = true
+		defer func() {
+			//回溯
+			visited[i][j] = true
+		}()
+		//上下左右
+		if i-1 > 0 && !visited[i-1][j] && check(i-1, j, k+1) {
+			return true
+		}
+		if i+1 < len(board) && !visited[i+1][j] && check(i+1, j, k+1) {
+			return true
+		}
+		if j-1 > 0 && !visited[i][j-1] && check(i, j-1, k+1) {
+			return true
+		}
+		if j+1 < len(board[0]) && !visited[i][j+1] && check(i, j+1, k+1) {
+			return true
+		}
+		return false
+	}
+
+	for i := 0; i < len(board); i++ {
+		for j := 0; j < len(board[i]); j++ {
+			if check(i, j, 0) {
+				return true
+			}
+		}
+	}
+
 	return false
 }
 
