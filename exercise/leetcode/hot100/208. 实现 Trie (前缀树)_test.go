@@ -60,43 +60,51 @@ a = 97
 5.5%
 */
 
+/**
+提示：
+
+1 <= word.length, prefix.length <= 2000
+word 和 prefix 仅由小写英文字母组成 !!!!
+insert、search 和 startsWith 调用次数 总计 不超过 3 * 104 次
+*/
+
 type Trie struct {
-	words []*Trie
+	words [26]*Trie
 	isEnd bool
 }
 
 func Constructor() Trie {
 
-	return Trie{
-		words: make([]*Trie, 64),
-		isEnd: false,
-	}
+	return Trie{}
 }
 
 func (t *Trie) Insert(word string) {
 
 	root := t
-	for i, ch := range word {
-		index := ch - 'A'
+	for _, ch := range word {
+		index := ch - 'a'
 		trie := root.words[index]
 		if trie == nil {
-			node := Constructor()
+			/*node := Constructor()
 			trie = &node
-			root.words[index] = trie
+			root.words[index] = trie*/
+			root.words[index] = &Trie{}
 		}
 		/** 最后一个字符标志位结尾 */
-		if i == len(word)-1 {
+		/*if i == len(word)-1 {
 			trie.isEnd = true
-		}
-		root = trie
+		}*/
+		//root = trie
+		root = root.words[index]
 	}
+	root.isEnd = true
 }
 
 func (t *Trie) Search(word string) bool {
 
 	root := t
 	for _, ch := range word {
-		index := ch - 'A'
+		index := ch - 'a'
 		trie := root.words[index]
 		if trie == nil {
 			return false
@@ -110,7 +118,7 @@ func (t *Trie) StartsWith(prefix string) bool {
 
 	root := t
 	for _, ch := range prefix {
-		index := ch - 'A'
+		index := ch - 'a'
 		trie := root.words[index]
 		if trie == nil {
 			return false
