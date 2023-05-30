@@ -36,6 +36,11 @@ import (
 输入：root = [1,2]
 输出：[1,2]
 
+提示：
+
+树中结点数在范围 [0, 104] 内
+-1000 <= Node.val <= 1000
+
 */
 
 /**
@@ -43,6 +48,12 @@ import (
 
 1、将树序列化 先序和中序字符串，数字之间使用-分割，先序和中序之间使用=分割
 2、将字符串反序列化成树，中序的第一个即根节点，可以把先序分成两半，并算出左右子树的长度
+
+没有说 数值都不相等？？
+
+[4,-7,-3,null,null,-9,-3,9,-7,-4,null,6,null,-6,-6,null,null,0,6,5,null,9,null,null,-1,-4,null,null,null,-2]
+
+测试用例就存在相同的数值！！
 */
 
 type Codec struct {
@@ -112,14 +123,30 @@ func (this *Codec) deserialize(data string) *TreeNode {
 			leftLength++
 		}
 
-		root.Left = buildTree(fOrder[:leftLength], mOrder[1:1+leftLength])
-		root.Right = buildTree(fOrder[leftLength+1:], mOrder[1+leftLength:])
+		/**
+		判断是否存在左或右， 边界条件老是忘！！！
+		*/
+		if leftLength > 0 {
+			root.Left = buildTree(fOrder[:leftLength], mOrder[1:leftLength+1])
+		}
+		if len(fOrder)-1-leftLength > 0 {
+			root.Right = buildTree(fOrder[leftLength+1:], mOrder[1+leftLength:])
+		}
 		return root
 	}
 
 	arr := strings.Split(data, "=")
-	fOrder := strings.Split(arr[0], "-")
-	mOrder := strings.Split(arr[1], "-")
+
+	var fOrder []string
+	if len(arr[0]) > 0 {
+		fOrder = strings.Split(arr[0], "-")
+		// 空白字符串Split会出现长度位1的数组，值为"" !!!!!!!
+	}
+	var mOrder []string
+	if len(arr[1]) > 0 {
+		mOrder = strings.Split(arr[1], "-")
+	}
+
 	var fO []int
 	var mO []int
 	for _, v := range fOrder {
@@ -162,4 +189,49 @@ func TestSerialize(t *testing.T) {
 	ans := deser.deserialize(data)
 	fmt.Println(ans)
 
+	data = ser.serialize(nil)
+	fmt.Println(data)
+	ans = deser.deserialize(data)
+	fmt.Println(ans)
+
+	s := "a"
+	fmt.Println(s[1:1])
+
 }
+
+/**
+
+panic: runtime error: slice bounds out of range [2:1]
+main.(*Codec).deserialize.func1({0xc00008c028, 0x1, 0x1b}, {0xc00008c150, 0x1, 0x16})
+solution.go, line 78
+main.(*Codec).deserialize.func1({0xc00008c028, 0x1, 0x1b}, {0xc00008c148, 0x1, 0x17})
+solution.go, line 77
+main.(*Codec).deserialize.func1({0xc00008c028, 0x5, 0x1b}, {0xc00008c140, 0x5, 0x18})
+solution.go, line 77
+main.(*Codec).deserialize.func1({0xc00008c028, 0x5, 0x1b}, {0xc00008c138, 0x5, 0x19})
+solution.go, line 77
+main.(*Codec).deserialize.func1({0xc00008c028, 0x13, 0x1b}, {0xc00008c130, 0x13, 0x1a})
+solution.go, line 77
+main.(*Codec).deserialize.func1({0xc00008c020, 0x14, 0x1c}, {0xc00008c128, 0x14, 0x1b})
+solution.go, line 78
+main.(*Codec).deserialize.func1({0xc00008c020, 0x19, 0x1c}, {0xc00008c120, 0x19, 0x1c})
+solution.go, line 77
+main.(*Codec).deserialize.func1({0xc00008c018, 0x1a, 0x1d}, {0xc00008c118, 0x1a, 0x1d})
+solution.go, line 78
+main.(*Codec).deserialize.func1({0xc00008c000, 0x1d, 0x20}, {0xc00008c100, 0x1d, 0x20})
+solution.go, line 78
+main.(*Codec).deserialize(0x4b2be0?, {0xc000056060?, 0xc00000ca38?})
+solution.go, line 104
+main.__helper__(0xc00003e070?)
+solution.go, line 121
+main.main()
+solution.go, line 148
+最后执行的输入
+添加到测试用例
+[4,-7,-3,null,null,-9,-3,9,-7,-4,null,6,null,-6,-6,null,null,0,6,5,null,9,null,null,-1,-4,null,null,null,-2]
+*/
+
+/**
+panic: runtime error: slice bounds out of range [:2] with capacity 1
+main.(*Codec).deserialize.func1({0xc00008a088, 0x1, 0xf}, {0xc00008a1f8, 0x1, 0x1})
+*/
