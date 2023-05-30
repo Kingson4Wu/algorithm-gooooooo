@@ -1,5 +1,7 @@
 package hot100
 
+import "testing"
+
 /*
 *
 给定一个经过编码的字符串，返回它解码后的字符串。
@@ -37,4 +39,8 @@ s 中所有整数的取值范围为 [1, 300]
 func decodeString(s string) string {
 
 	return ""
+}
+
+func TestDecodeString(t *testing.T) {
+
 }
