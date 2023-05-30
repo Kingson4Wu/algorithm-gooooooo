@@ -41,6 +41,25 @@ trie.search("app");     // 返回 True
 2、利用ch - 'A' < 26 的特性
 */
 
+/**
+A = 65
+a = 97
+
+'a' - 'A' = 32 !!!!
+不是26 ！！！
+*/
+
+/**
+时间
+60 ms
+击败
+20.74%
+内存
+47.4 MB
+击败
+5.5%
+*/
+
 type Trie struct {
 	words []*Trie
 	isEnd bool
@@ -49,7 +68,7 @@ type Trie struct {
 func Constructor() Trie {
 
 	return Trie{
-		words: make([]*Trie, 52),
+		words: make([]*Trie, 64),
 		isEnd: false,
 	}
 }
@@ -103,12 +122,31 @@ func (t *Trie) StartsWith(prefix string) bool {
 
 func TestTrie(t *testing.T) {
 	trie := Constructor()
-	trie.Insert("apple")
+	/*trie.Insert("apple")
 	fmt.Println(trie.Search("apple"))
 	fmt.Println(trie.Search("app"))
 	fmt.Println(trie.StartsWith("app"))
 	trie.Insert("app")
-	fmt.Println(trie.Search("app"))
+	fmt.Println(trie.Search("app"))*/
+
+	trie.Insert("p")
+	fmt.Println(trie.StartsWith("pr"))
+	fmt.Println(trie.Search("p"))
+	trie.Insert("pr")
+	fmt.Println(trie.StartsWith("pre"))
+	fmt.Println(trie.Search("pr"))
+	trie.Insert("pre")
+	fmt.Println(trie.StartsWith("pre"))
+	fmt.Println(trie.Search("pre"))
+	trie.Insert("pref")
+	fmt.Println(trie.StartsWith("pref"))
+	fmt.Println(trie.Search("pref"))
+	trie.Insert("prefi")
+	fmt.Println(trie.StartsWith("pref"))
+	fmt.Println(trie.Search("prefi"))
+	trie.Insert("prefix")
+	fmt.Println(trie.StartsWith("prefi"))
+	fmt.Println(trie.Search("prefix"))
 
 }
 
@@ -119,3 +157,19 @@ func TestTrie(t *testing.T) {
  * param_2 := obj.Search(word);
  * param_3 := obj.StartsWith(prefix);
  */
+
+/**
+panic: runtime error: index out of range [55] with length 52
+main.(*Trie).Insert(...)
+solution.go, line 19
+main.(*DriverSolution).Helper_Select_Method(0x4b6460?, {0xc000014cb6?, 0xa?}, {0xc000011620?, 0x49ecb8?, 0xc00007e100?}, 0xc00005cbe0)
+solution.go, line 66
+main.(*DriverSolution).Helper(0xc0000920d0?, {0xc00007adc0, 0x13, 0x4b2d60?}, {0xc000098000, 0x13, 0xc000014038?})
+solution.go, line 129
+main.main()
+solution.go, line 174
+最后执行的输入
+添加到测试用例
+["Trie","insert","startsWith","search","insert","startsWith","search","insert","startsWith","search","insert","startsWith","search","insert","startsWith","search","insert","startsWith","search"]
+[[],["p"],["pr"],["p"],["pr"],["pre"],["pr"],["pre"],["pre"],["pre"],["pref"],["pref"],["pref"],["prefi"],["pref"],["prefi"],["prefix"],["prefi"],["prefix"]]
+*/

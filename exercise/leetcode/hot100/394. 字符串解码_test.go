@@ -36,7 +36,26 @@ s 由小写英文字母、数字和方括号 '[]' 组成
 s 保证是一个 有效 的输入。
 s 中所有整数的取值范围为 [1, 300]
 */
+
+/**
+自己思考后的想法：
+1、使用栈的思想遍历时，存储左括号的下标
+*/
+
 func decodeString(s string) string {
+
+	/*var leftIndex []int
+	var leftCount []int
+
+	var result []rune
+
+	for i, ch := range s {
+		if ch == '[' {
+			leftIndex = append(leftIndex, i)
+			continue
+		}
+		result = append(result, ch)
+	}*/
 
 	return ""
 }
