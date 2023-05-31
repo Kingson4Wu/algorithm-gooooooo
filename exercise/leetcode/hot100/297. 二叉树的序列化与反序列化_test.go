@@ -44,16 +44,30 @@ import (
 */
 
 /**
+
+没有说 数值都不相等！！！ 不能用先序和中序的方法
 按照之前做题的回忆，树可以通过先序和中序来构造
 
-1、将树序列化 先序和中序字符串，数字之间使用-分割，先序和中序之间使用=分割
-2、将字符串反序列化成树，中序的第一个即根节点，可以把先序分成两半，并算出左右子树的长度
+使用先序和中序的方法的前提是：
+1、数值不相同
+2、数字是连续的，没有null的字符串可以表示空
 
-没有说 数值都不相等？？
+这道题可以使用先序来序列化和反序列化！！！
+1、使用null表示结点为空
+2、使用递归
+3、使用全局变量！！！简化递归的传参问题！！要记住递归运行时也是串行的！！
 
-[4,-7,-3,null,null,-9,-3,9,-7,-4,null,6,null,-6,-6,null,null,0,6,5,null,9,null,null,-1,-4,null,null,null,-2]
 
 测试用例就存在相同的数值！！
+
+时间
+8 ms
+击败
+87.39%
+内存
+6.6 MB
+击败
+53.96%
 */
 
 type Codec struct {
@@ -67,98 +81,53 @@ func Constructor2() Codec {
 // Serializes a tree to a single string.
 func (this *Codec) serialize(root *TreeNode) string {
 
-	var firstOrder []string
-	/** 先序 */
-	var fOrder func(root *TreeNode)
-	fOrder = func(root *TreeNode) {
+	var result []string
+
+	var serialize func(*TreeNode)
+	serialize = func(root *TreeNode) {
 		if root == nil {
+			result = append(result, "null")
 			return
 		}
-		if root.Left != nil {
-			fOrder(root.Left)
-		}
-		firstOrder = append(firstOrder, strconv.Itoa(root.Val))
-		if root.Right != nil {
-			fOrder(root.Right)
-		}
+		result = append(result, strconv.Itoa(root.Val))
+		serialize(root.Left)
+		serialize(root.Right)
 	}
-	fOrder(root)
 
-	var middleOrder []string
-	/** 中序 */
-	var mOrder func(root *TreeNode)
-	mOrder = func(root *TreeNode) {
-		if root == nil {
-			return
-		}
-		middleOrder = append(middleOrder, strconv.Itoa(root.Val))
-		if root.Left != nil {
-			mOrder(root.Left)
-		}
-		if root.Right != nil {
-			mOrder(root.Right)
-		}
-	}
-	mOrder(root)
+	serialize(root)
 
-	return strings.Join(firstOrder, "-") + "=" + strings.Join(middleOrder, "-")
+	return strings.Join(result, ",")
 }
 
 // Deserializes your encoded data to tree.
 func (this *Codec) deserialize(data string) *TreeNode {
 
-	var buildTree func(fOrder, mOrder []int) *TreeNode
-	buildTree = func(fOrder, mOrder []int) *TreeNode {
-		if len(fOrder) == 0 {
+	if data == "null" {
+		return nil
+	}
+	result := strings.Split(data, ",")
+
+	var deserialize func() *TreeNode
+	deserialize = func() *TreeNode {
+		if len(result) == 0 {
 			return nil
 		}
+		if result[0] == "null" {
+			result = result[1:]
+			return nil
+		}
+		v, _ := strconv.Atoi(result[0])
 		root := &TreeNode{
-			Val: mOrder[0],
+			Val: v,
 		}
-		leftLength := 0
-		for _, v := range fOrder {
-			if v == mOrder[0] {
-				break
-			}
-			leftLength++
-		}
+		result = result[1:]
+		root.Left = deserialize()
+		root.Right = deserialize()
 
-		/**
-		判断是否存在左或右， 边界条件老是忘！！！
-		*/
-		if leftLength > 0 {
-			root.Left = buildTree(fOrder[:leftLength], mOrder[1:leftLength+1])
-		}
-		if len(fOrder)-1-leftLength > 0 {
-			root.Right = buildTree(fOrder[leftLength+1:], mOrder[1+leftLength:])
-		}
 		return root
 	}
-
-	arr := strings.Split(data, "=")
-
-	var fOrder []string
-	if len(arr[0]) > 0 {
-		fOrder = strings.Split(arr[0], "-")
-		// 空白字符串Split会出现长度位1的数组，值为"" !!!!!!!
-	}
-	var mOrder []string
-	if len(arr[1]) > 0 {
-		mOrder = strings.Split(arr[1], "-")
-	}
-
-	var fO []int
-	var mO []int
-	for _, v := range fOrder {
-		val, _ := strconv.Atoi(v)
-		fO = append(fO, val)
-	}
-	for _, v := range mOrder {
-		val, _ := strconv.Atoi(v)
-		mO = append(mO, val)
-	}
-
-	return buildTree(fO, mO)
+	root := deserialize()
+	return root
 }
 
 /**
@@ -201,37 +170,5 @@ func TestSerialize(t *testing.T) {
 
 /**
 
-panic: runtime error: slice bounds out of range [2:1]
-main.(*Codec).deserialize.func1({0xc00008c028, 0x1, 0x1b}, {0xc00008c150, 0x1, 0x16})
-solution.go, line 78
-main.(*Codec).deserialize.func1({0xc00008c028, 0x1, 0x1b}, {0xc00008c148, 0x1, 0x17})
-solution.go, line 77
-main.(*Codec).deserialize.func1({0xc00008c028, 0x5, 0x1b}, {0xc00008c140, 0x5, 0x18})
-solution.go, line 77
-main.(*Codec).deserialize.func1({0xc00008c028, 0x5, 0x1b}, {0xc00008c138, 0x5, 0x19})
-solution.go, line 77
-main.(*Codec).deserialize.func1({0xc00008c028, 0x13, 0x1b}, {0xc00008c130, 0x13, 0x1a})
-solution.go, line 77
-main.(*Codec).deserialize.func1({0xc00008c020, 0x14, 0x1c}, {0xc00008c128, 0x14, 0x1b})
-solution.go, line 78
-main.(*Codec).deserialize.func1({0xc00008c020, 0x19, 0x1c}, {0xc00008c120, 0x19, 0x1c})
-solution.go, line 77
-main.(*Codec).deserialize.func1({0xc00008c018, 0x1a, 0x1d}, {0xc00008c118, 0x1a, 0x1d})
-solution.go, line 78
-main.(*Codec).deserialize.func1({0xc00008c000, 0x1d, 0x20}, {0xc00008c100, 0x1d, 0x20})
-solution.go, line 78
-main.(*Codec).deserialize(0x4b2be0?, {0xc000056060?, 0xc00000ca38?})
-solution.go, line 104
-main.__helper__(0xc00003e070?)
-solution.go, line 121
-main.main()
-solution.go, line 148
-最后执行的输入
-添加到测试用例
 [4,-7,-3,null,null,-9,-3,9,-7,-4,null,6,null,-6,-6,null,null,0,6,5,null,9,null,null,-1,-4,null,null,null,-2]
-*/
-
-/**
-panic: runtime error: slice bounds out of range [:2] with capacity 1
-main.(*Codec).deserialize.func1({0xc00008a088, 0x1, 0xf}, {0xc00008a1f8, 0x1, 0x1})
 */
