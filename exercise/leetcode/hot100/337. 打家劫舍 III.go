@@ -14,6 +14,8 @@ package hot100
 *
 看完题解只能背了
 记住递归返回两个值，选和不选的结果
+1、根节点选的情况，左右肯定不选
+2、根节点不选的情况，左右两边可选可不选！！取选和不选的最大值！！
 */
 func rob3(root *TreeNode) int {
 
@@ -25,7 +27,7 @@ func rob3(root *TreeNode) int {
 		ls, ln := dfs(root.Left)
 		rs, rn := dfs(root.Right)
 		selected := root.Val + ln + rn
-		noSelected := ls + rs
+		noSelected := max(ls, ln) + max(rs, rn)
 		return selected, noSelected
 	}
 
