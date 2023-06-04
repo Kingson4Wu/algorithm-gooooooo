@@ -10,15 +10,28 @@ package hot100
 
 */
 
-/**
- * Definition for a binary tree node.
- * type TreeNode struct {
- *     Val int
- *     Left *TreeNode
- *     Right *TreeNode
- * }
- */
+/*
+*
+看完题解只能背了
+记住递归返回两个值，选和不选的结果
+*/
 func rob3(root *TreeNode) int {
 
-	return 0
+	var dfs func(*TreeNode) (int, int)
+	dfs = func(root *TreeNode) (int, int) {
+		if root == nil {
+			return 0, 0
+		}
+		ls, ln := dfs(root.Left)
+		rs, rn := dfs(root.Right)
+		selected := root.Val + ln + rn
+		noSelected := ls + rs
+		return selected, noSelected
+	}
+
+	s, n := dfs(root)
+	if s > n {
+		return s
+	}
+	return n
 }
