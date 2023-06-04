@@ -88,9 +88,11 @@ LOOP:
 		for i := maxCount; i >= 1; i-- {
 			if tasks, ok := countTasks[i]; ok {
 
+				hit := false
 				for task := range tasks {
 					if index := latestTaskIndex[task]; index == 0 || result-latestTaskIndex[task] >= n {
 						result++
+						hit = true
 						delete(countTasks[i], task)
 						if i > 1 {
 
@@ -105,12 +107,22 @@ LOOP:
 						}
 						latestTaskIndex[task] = result
 						total--
-						goto LOOP
+
+						if i != maxCount {
+							goto LOOP
+						}
+
 					}
+				}
+				if hit && len(tasks) > 0 {
+					goto LOOP
 				}
 			}
 		}
-		result++
+		if total > 0 {
+			result++
+		}
+
 		if len(countTasks[maxCount]) == 0 {
 			maxCount--
 		}
@@ -121,8 +133,9 @@ LOOP:
 }
 
 func TestLeastInterval(t *testing.T) {
-	fmt.Println(leastInterval([]byte{'A', 'A', 'A', 'B', 'B', 'B'}, 2))
-	fmt.Println(leastInterval([]byte{'A', 'A', 'A', 'B', 'B', 'B'}, 0))
+	//fmt.Println(leastInterval([]byte{'A', 'A', 'A', 'B', 'B', 'B'}, 2))
+	//fmt.Println(leastInterval([]byte{'A', 'A', 'A', 'B', 'B', 'B'}, 0))
+	fmt.Println(leastInterval([]byte{'A', 'A', 'A', 'A', 'A', 'A', 'B', 'C', 'D', 'E', 'F', 'G'}, 2))
 }
 
 /**
@@ -136,4 +149,14 @@ tasks =
 result.viewAll
 n =
 59
+
+超出时间限制
+53 / 71 个通过的测试用例
+最后执行的输入
+添加到测试用例
+tasks =
+["J","I","A","D","E","B","J","I","H","H","B","H","H","A","E","A","H","B","C","E","B","B","B","D","D","A","F","D","E","B","J","D","C","F","E","I","C","D","E","C","H","A","H","F","E","B","G","I","J","F","H","D","F","H","E","C","I","G","E","A","G","E","J","A","F","G","G","E","H","B","B","E","H","E","H","E","I","E","A","G","E","B","E","G","I","F","B","B","D","B","F","A","F","E","I","B","F","D","J","H","A","C","I","E","E","D","F","C","C","G","A","B","A","H","B","I","H","A","E","C","I","F","E","H","B","I","J","A","A","D","G","I","C","A","A","B","D","D","D","I","I","I","F",...
+result.viewAll
+n =
+63
 */
