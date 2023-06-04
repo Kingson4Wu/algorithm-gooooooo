@@ -1,6 +1,9 @@
 package hot100
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 /**
 给你一个用字符数组 tasks 表示的 CPU 需要执行的任务列表。其中每个字母表示一种不同种类的任务。任务可以以任意顺序执行，并且每个任务都可以在 1 个单位时间内执行完。在任何一个单位时间，CPU 可以完成一个任务，或者处于待命状态。
@@ -53,7 +56,7 @@ n 的取值范围为 [0, 100]
 
 func leastInterval(tasks []byte, n int) int {
 
-	countTasks := map[int][]byte{}
+	countTasks := map[int]map[byte]bool{}
 	maxCount := 0
 	total := len(tasks)
 
@@ -67,29 +70,49 @@ func leastInterval(tasks []byte, n int) int {
 			maxCount = count
 		}
 		if tasks, ok := countTasks[count]; ok {
-			tasks = append(tasks, task)
+			tasks[task] = true
 			countTasks[count] = tasks
 		} else {
-			countTasks[count] = []byte{task}
+			t := map[byte]bool{}
+			t[task] = true
+			countTasks[count] = t
 		}
 	}
 
 	result := 0
 	// Y
 	latestTaskIndex := map[byte]int{}
+LOOP:
 	for total > 0 {
 
 		for i := maxCount; i >= 1; i-- {
 			if tasks, ok := countTasks[i]; ok {
-				for _, task := range tasks {
+
+				for task := range tasks {
 					if index := latestTaskIndex[task]; index == 0 || result-latestTaskIndex[task] >= n {
 						result++
-						//countTasks[i] =
+						delete(countTasks[i], task)
+						if i > 1 {
 
-						//写得太复杂了， 不想写了！！！
+							if t, ok := countTasks[i-1]; ok {
+								t[task] = true
+							} else {
+								t := map[byte]bool{}
+								t[task] = true
+								countTasks[i-1] = t
+							}
+
+						}
+						latestTaskIndex[task] = result
+						total--
+						goto LOOP
 					}
 				}
 			}
+		}
+		result++
+		if len(countTasks[maxCount]) == 0 {
+			maxCount--
 		}
 
 	}
@@ -98,5 +121,19 @@ func leastInterval(tasks []byte, n int) int {
 }
 
 func TestLeastInterval(t *testing.T) {
-	leastInterval([]byte{'A', 'A', 'A', 'B', 'B', 'B'}, 2)
+	fmt.Println(leastInterval([]byte{'A', 'A', 'A', 'B', 'B', 'B'}, 2))
+	fmt.Println(leastInterval([]byte{'A', 'A', 'A', 'B', 'B', 'B'}, 0))
 }
+
+/**
+
+超出时间限制
+38 / 71 个通过的测试用例
+最后执行的输入
+添加到测试用例
+tasks =
+["F","I","B","A","B","I","A","C","G","H","I","F","H","J","J","G","J","C","G","H","D","I","C","J","F","B","J","F","D","D","F","D","D","F","F","H","E","G","C","F","G","E","E","H","G","I","C","D","F","F","J","I","H","A","A","J","H","C","G","B","F","H","A","F","G","B","J","H","I","E","A","E","A","C","A","F","B","I","H","C","G","J","H","F","I","B","A","A","I","C","D","D","J","G","C","E","F","J","C","B","B","D","C","J","C","B","E","B","I","H","A","A","E","D","F","J","D","H","I","E","B","G","I","B","J","G","C","A","D","I","C","H","C","I","F","A","E","H","J","H","H","G","B",...
+result.viewAll
+n =
+59
+*/
