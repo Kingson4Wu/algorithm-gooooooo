@@ -36,6 +36,9 @@ import (
 想了一下，只能穷举，为了避免重复计算，保存计算过的结果，即动态规划
 寻找的过程个人写得好像很复杂. 写了一堆shi, 明明有思路，却写不对
 */
+/**
+涉及图
+*/
 func calcEquation(equations [][]string, values []float64, queries [][]string) []float64 {
 
 	dp := map[string]bool{}
