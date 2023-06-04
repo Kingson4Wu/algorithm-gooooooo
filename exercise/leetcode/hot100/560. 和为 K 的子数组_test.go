@@ -9,6 +9,7 @@ import (
 前缀和+ hash
 1、前缀 - dp[i], 前i个的和， j>i, dp[j]-dp[i] == k 符合条件
 2、hash， 保存前缀和为某个数值的数量
+3、m[0]=1
 */
 
 /**
@@ -52,16 +53,25 @@ func subarraySum(nums []int, k int) int {
 	m := make(map[int]int)
 	count := 0
 	pre := 0
+	m[0] = 1
 	for i := 0; i < len(nums); i++ {
 		pre += nums[i]
-		m[pre]++
-		if pre == k {
-			count++
-		}
 		count += m[pre-k]
+		m[pre]++
 	}
 	return count
 }
+
+/**
+时间
+52 ms
+击败
+34.68%
+内存
+7.8 MB
+击败
+35.30%
+*/
 
 /*func subarraySum(nums []int, k int) int {
 
