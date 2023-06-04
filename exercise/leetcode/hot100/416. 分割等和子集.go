@@ -16,6 +16,20 @@ package hot100
 输出：false
 解释：数组不能分割成两个元素和相等的子集。
 */
+
+/*
+好难想的动态规划
+
+target = sum/2
+
+dp[i][j]表示前i个选中的和是否等于j
+1、nums[i] > j; 不能选； dp[i][j] = dp[i-1][j]
+2、nums[i] <= j; 选或者不选；dp[i][j] = dp[i-1][j-num[i]] ||  dp[i-1][j]
+
+初始化：
+1、dp[i][0] = true 都不选
+2、dp[0][nums[0]] = true
+*/
 func canPartition(nums []int) bool {
 
 	return false
