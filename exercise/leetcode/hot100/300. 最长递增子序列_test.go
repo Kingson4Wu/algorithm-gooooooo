@@ -45,6 +45,18 @@ dp[i]=max(dp[j])+1,其中0≤j<i且num[j]<num[i]
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 */
+
+/*
+*
+时间
+52 ms
+击败
+72.7%
+内存
+3.6 MB
+击败
+29.96%
+*/
 func lengthOfLIS(nums []int) int {
 
 	if len(nums) == 0 {
@@ -57,8 +69,9 @@ func lengthOfLIS(nums []int) int {
 	for i := 1; i < len(nums); i++ {
 		dp[i] = 1
 		for j := 0; j < i; j++ {
-
-			dp[i] = max(dp[i], dp[j]+1)
+			if nums[i] > nums[j] {
+				dp[i] = max(dp[i], dp[j]+1)
+			}
 		}
 		maxNum = max(maxNum, dp[i])
 	}
