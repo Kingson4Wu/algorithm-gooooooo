@@ -34,6 +34,29 @@ import (
 输入：nums = [1], k = 1
 输出：[1]
 */
+
+/*
+*
+方法一：优先队列
+思路与算法
+
+对于「最大值」，我们可以想到一种非常合适的数据结构，那就是优先队列（堆），其中的大根堆可以帮助我们实时维护一系列元素中的最大值。
+
+作者：力扣官方题解
+链接：https://leetcode.cn/problems/sliding-window-maximum/solutions/543426/hua-dong-chuang-kou-zui-da-zhi-by-leetco-ki6m/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+方法二：单调队列
+思路与算法
+
+我们可以顺着方法一的思路继续进行优化。
+
+方法三：分块 + 预处理
+思路与算法
+
+除了基于「随着窗口的移动实时维护最大值」的方法一以及方法二之外，我们还可以考虑其他有趣的做法。
+*/
 func maxSlidingWindow(nums []int, k int) []int {
 
 	dp := make([]int, len(nums))
