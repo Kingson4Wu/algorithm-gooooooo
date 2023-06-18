@@ -1,5 +1,10 @@
 package hot100
 
+import (
+	"fmt"
+	"testing"
+)
+
 /*
 *
 
@@ -32,5 +37,44 @@ dp[i][j]表示前i个选中的和是否等于j
 */
 func canPartition(nums []int) bool {
 
+	sum := 0
+	for _, num := range nums {
+		sum += num
+	}
+	if sum%2 != 0 {
+		return false
+	}
+
+	dp := make([][]bool, len(nums))
+	l := sum / 2
+	for i := 0; i < len(dp); i++ {
+		dp[i] = make([]bool, l+1)
+	}
+	for i := 0; i < len(dp); i++ {
+		dp[i][0] = true
+	}
+	dp[0][nums[0]] = true
+
+	for i := 0; i < len(dp); i++ {
+		for j := 1; j <= l; j++ {
+			if nums[i] > j {
+				dp[i][j] = dp[i-1][j]
+			} else {
+				dp[i][j] = dp[i-1][j-nums[i]] || dp[i-1][j]
+			}
+		}
+	}
+
+	for i := 0; i < len(dp); i++ {
+		if dp[i][l] {
+			return true
+		}
+	}
 	return false
+}
+
+func TestCanPartition(t *testing.T) {
+
+	fmt.Println(canPartition([]int{1, 5, 11, 5}))
+	fmt.Println(canPartition([]int{1, 2, 3, 5}))
 }
