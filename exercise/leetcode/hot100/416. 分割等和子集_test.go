@@ -34,14 +34,37 @@ dp[i][j]表示前i个选中的和是否等于j
 初始化：
 1、dp[i][0] = true 都不选
 2、dp[0][nums[0]] = true
+
+边界条件考虑，提前结束
+*/
+/**
+时间
+28 ms
+击败
+46.27%
+内存
+6.9 MB
+击败
+36.71%
 */
 func canPartition(nums []int) bool {
 
+	if len(nums) < 2 {
+		return false
+	}
+
 	sum := 0
+	maxNum := 0
 	for _, num := range nums {
 		sum += num
+		if maxNum < num {
+			maxNum = num
+		}
 	}
 	if sum%2 != 0 {
+		return false
+	}
+	if maxNum > sum/2 {
 		return false
 	}
 
@@ -55,7 +78,9 @@ func canPartition(nums []int) bool {
 	}
 	dp[0][nums[0]] = true
 
-	for i := 0; i < len(dp); i++ {
+	/** dp[0][nums[i]] 这些可以不用填充  */
+
+	for i := 1; i < len(dp); i++ {
 		for j := 1; j <= l; j++ {
 			if nums[i] > j {
 				dp[i][j] = dp[i-1][j]
