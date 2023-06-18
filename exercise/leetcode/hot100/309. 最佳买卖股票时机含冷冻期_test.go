@@ -1,5 +1,10 @@
 package hot100
 
+import (
+	"fmt"
+	"testing"
+)
+
 /*
 *
 给定一个整数数组prices，其中第  prices[i] 表示第 i 天的股票价格 。
@@ -52,15 +57,44 @@ max(f[n−1][1],f[n−1][2])
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 */
+
+/*
+*
+时间
+0 ms
+击败
+100%
+内存
+2.5 MB
+击败
+28.86%
+*/
 func maxProfit(prices []int) int {
 
 	if len(prices) <= 1 {
 		return 0
 	}
 
-	/*df := make([]int, len(prices)+1)
+	df := make([][]int, len(prices))
+	for i := 0; i < len(df); i++ {
+		df[i] = make([]int, 3)
+	}
 
-	df*/
+	df[0][0] = -prices[0]
+	df[0][1] = 0
+	df[0][2] = 0
 
-	return 0
+	for i := 1; i < len(prices); i++ {
+		df[i][0] = max(df[i-1][0], df[i-1][2]-prices[i])
+		df[i][1] = df[i-1][0] + prices[i]
+		df[i][2] = max(df[i-1][1], df[i-1][2])
+	}
+
+	return max(df[len(prices)-1][1], df[len(prices)-1][2])
+}
+
+func TestMaxProfit(t *testing.T) {
+
+	fmt.Println(maxProfit([]int{1, 2, 3, 0, 2}))
+	fmt.Println(maxProfit([]int{1}))
 }
