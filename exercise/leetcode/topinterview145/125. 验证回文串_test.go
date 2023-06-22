@@ -39,8 +39,17 @@ s 仅由可打印的 ASCII 字符组成
 /*
 *
 自己写的，感觉写得很啰嗦，有更简洁的写法？
-
-
+漏了看题目有个数字。。。。。
+*/
+/**
+时间
+4 ms
+击败
+67.92%
+内存
+2.5 MB
+击败
+93.74%
 */
 func isPalindrome(s string) bool {
 
@@ -77,6 +86,9 @@ func valid(r byte) bool {
 	if r >= 'A' && r <= 'Z' {
 		return true
 	}
+	if r >= '0' && r <= '9' {
+		return true
+	}
 	return false
 }
 func same(a, b byte) bool {
@@ -102,4 +114,39 @@ func TestIsPalindrome(t *testing.T) {
 	fmt.Println(isPalindrome("a-a"))
 	fmt.Println(isPalindrome("a- b-=a"))
 	fmt.Println(isPalindrome("a- g b-=a"))
+	fmt.Println(isPalindrome("0P"))
 }
+
+/**
+题解：（跟自己写的差不多）
+
+func isPalindrome(s string) bool {
+    s = strings.ToLower(s)
+    left, right := 0, len(s) - 1
+    for left < right {
+        for left < right && !isalnum(s[left]) {
+            left++
+        }
+        for left < right && !isalnum(s[right]) {
+            right--
+        }
+        if left < right {
+            if s[left] != s[right] {
+                return false
+            }
+            left++
+            right--
+        }
+    }
+    return true
+}
+
+func isalnum(ch byte) bool {
+    return (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9')
+}
+
+作者：力扣官方题解
+链接：https://leetcode.cn/problems/valid-palindrome/solutions/292148/yan-zheng-hui-wen-chuan-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+*/
