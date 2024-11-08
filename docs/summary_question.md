@@ -1,102 +1,4 @@
 
-+ TODO
-# 图
-
-## 有向图
-+ 入度表 indegrees（key为目标顶点, value为源顶点数值）
-+ 邻接表 adjacency (key为源顶点, value为目标顶点列表）
-+ DFS，递归！
-+ 课程表（拓扑排序：入度表BFS法 / DFS法，清晰图解）: https://leetcode-cn.com/problems/course-schedule/solution/course-schedule-tuo-bu-pai-xu-bfsdfsliang-chong-fa/
-
-## DFS
-+ DFS算法可以被认为是回溯算法！！！！！
-+ 递归回溯
-+ 三种类型
-    - 子集型
-    - 组合型
-    - 排列型
-
-+ 子集型
-+ exercise/leetcode/hot100/78. 子集_test.go
-```go
-func subsetsDfs(nums []int) (ans [][]int) {
-
-	var set []int
-	var dfs func(int)
-	dfs = func(cur int) {
-		if cur == len(nums) {
-			ans = append(ans, append([]int(nil), set...))
-			return
-		}
-		set = append(set, nums[cur])//选
-		dfs(cur + 1)
-		set = set[:len(set)-1]//不选
-		dfs(cur + 1)
-	}
-	dfs(0)
-	return
-}
-```
-
-+ 排列型
-+ exercise/leetcode/hot100/46. 全排列_test.go
-```go
-func permute(nums []int) [][]int {
-
-	var ans [][]int
-	var dfs func(int)
-	dfs = func(cur int) {
-		if cur == len(nums) {
-			ans = append(ans, append([]int(nil), nums...))
-			return
-		}
-		for i := cur; i < len(nums); i++ {
-			nums[cur], nums[i] = nums[i], nums[cur]
-			dfs(cur + 1)
-			nums[cur], nums[i] = nums[i], nums[cur]
-			//dfs(cur + 1)
-		}
-	}
-	dfs(0)
-	return ans
-}
-```
-
-+ 组合型
-+ exercise/leetcode/77. 组合_test.go
-+ 注意 if len(set) == k 和 dfs(i + 1)
-```go
-func combine(n int, k int) [][]int {
-
-	var ans [][]int
-	var set []int
-
-	var dfs func(int)
-	dfs = func(cur int) {
-		if len(set) == k {
-			ans = append(ans, append([]int(nil), set...))
-			return
-		}
-		for i := cur; i < n; i++ {
-			set = append(set, i+1)
-			dfs(i + 1)
-			set = set[:len(set)-1]
-		}
-	}
-
-	dfs(0)
-	return ans
-}
-```
-
-## BFS
-+ TODO
-
-
-
-----
-
-
 # TREE
 
 + 树遍历：先序、中序、后序（打印）；深度遍历，广度遍历（搜索）
@@ -114,9 +16,9 @@ func combine(n int, k int) [][]int {
 
 ## 二叉树
 + 二叉树遍历(先序、中序、后序)
-    - 先序（中左右），中序（左中右），后序（左右中）
-    - 递归遍历和非递归遍历
-    - 二叉树遍历(先序、中序、后序):<https://www.jianshu.com/p/456af5480cee>
+  - 先序（中左右），中序（左中右），后序（左右中）
+  - 递归遍历和非递归遍历
+  - 二叉树遍历(先序、中序、后序):<https://www.jianshu.com/p/456af5480cee>
 
 + 写代码前，先画图整理好思路！！！！
 
@@ -708,6 +610,19 @@ class Solution {
 
 ----
 
+# 链表
++ 链表的问题基本都挺容易想，但是写起来比价麻烦，需要许多中间变量，所以做之前要先画图整理清楚，否则写的时候很容易乱
+
++ 相交链表
+  - 双指针，为空后分别重新赋值指向对方，这样长度相同，遇到相等则相交，都为空则不相交
+
++ 闭合为环的技巧，知道长度可以取模，(n - 1) - (k mod n) ，转化成逆序遍历长度
++ exercise/leetcode/tencent/61. 旋转链表_test.go
+
+## 反转单链表
+
+----
+
 # 动态规划
 
 ## 方法技巧
@@ -791,18 +706,106 @@ func wordBreak(s string, wordDict []string) bool {
 
 ----
 
-# 链表
-+ 链表的问题基本都挺容易想，但是写起来比价麻烦，需要许多中间变量，所以做之前要先画图整理清楚，否则写的时候很容易乱
 
-+ 相交链表
-    - 双指针，为空后分别重新赋值指向对方，这样长度相同，遇到相等则相交，都为空则不相交
 
-+ 闭合为环的技巧，知道长度可以取模，(n - 1) - (k mod n) ，转化成逆序遍历长度
-+ exercise/leetcode/tencent/61. 旋转链表_test.go
 
-## 反转单链表
+# 图
+
+## 有向图
++ 入度表 indegrees（key为目标顶点, value为源顶点数值）
++ 邻接表 adjacency (key为源顶点, value为目标顶点列表）
++ DFS，递归！
++ 课程表（拓扑排序：入度表BFS法 / DFS法，清晰图解）: https://leetcode-cn.com/problems/course-schedule/solution/course-schedule-tuo-bu-pai-xu-bfsdfsliang-chong-fa/
++ algorithm-gooooooo/leetcode/graph/207. 课程表.go
+
+## DFS
++ DFS算法可以被认为是回溯算法！！！！！
++ 递归回溯
++ 三种类型
+    - 子集型
+    - 组合型
+    - 排列型
+
++ 子集型
++ exercise/leetcode/hot100/78. 子集_test.go
+```go
+func subsetsDfs(nums []int) (ans [][]int) {
+
+	var set []int
+	var dfs func(int)
+	dfs = func(cur int) {
+		if cur == len(nums) {
+			ans = append(ans, append([]int(nil), set...))
+			return
+		}
+		set = append(set, nums[cur])//选
+		dfs(cur + 1)
+		set = set[:len(set)-1]//不选
+		dfs(cur + 1)
+	}
+	dfs(0)
+	return
+}
+```
+
++ 排列型
++ exercise/leetcode/hot100/46. 全排列_test.go
+```go
+func permute(nums []int) [][]int {
+
+	var ans [][]int
+	var dfs func(int)
+	dfs = func(cur int) {
+		if cur == len(nums) {
+			ans = append(ans, append([]int(nil), nums...))
+			return
+		}
+		for i := cur; i < len(nums); i++ {
+			nums[cur], nums[i] = nums[i], nums[cur]
+			dfs(cur + 1)
+			nums[cur], nums[i] = nums[i], nums[cur]
+			//dfs(cur + 1)
+		}
+	}
+	dfs(0)
+	return ans
+}
+```
+
++ 组合型
++ exercise/leetcode/77. 组合_test.go
++ 注意 if len(set) == k 和 dfs(i + 1)
+```go
+func combine(n int, k int) [][]int {
+
+	var ans [][]int
+	var set []int
+
+	var dfs func(int)
+	dfs = func(cur int) {
+		if len(set) == k {
+			ans = append(ans, append([]int(nil), set...))
+			return
+		}
+		for i := cur; i < n; i++ {
+			set = append(set, i+1)
+			dfs(i + 1)
+			set = set[:len(set)-1]
+		}
+	}
+
+	dfs(0)
+	return ans
+}
+```
+
+## BFS
++ TODO
+
+
 
 ----
+
 
 # 常见题目系列
 
