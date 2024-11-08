@@ -5,15 +5,20 @@ import (
 	"crypto/sha256"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strconv"
 )
 
 func seek() {
 
-	hashToFile("a.txt", 10)
-	hashToFile("b.txt", 10)
+	fileA := "a.txt"
+	fileB := "b.txt"
+	fileNum := 10
 
-	result := compare("a.txt", "b.txt", 10)
+	hashToFile(fileA, fileNum)
+	hashToFile(fileB, fileNum)
+
+	result := compare(fileA, fileB, fileNum)
 
 	for _, url := range result {
 		fmt.Println(url)
@@ -115,7 +120,7 @@ func createFile(filename string, fileNum int) map[int]*bufio.Writer {
 			panic(err)
 		}
 
-		file, err := os.Create(name)
+		file, err := CreateFileWithDirs(name)
 		if err != nil {
 			panic(err)
 		}
@@ -126,6 +131,24 @@ func createFile(filename string, fileNum int) map[int]*bufio.Writer {
 		files[i] = writer
 	}
 	return files
+}
+
+func CreateFileWithDirs(filePath string) (*os.File, error) {
+	// 获取文件的目录路径
+	dir := filepath.Dir(filePath)
+
+	// 如果目录不存在，递归创建目录
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		return nil, fmt.Errorf("failed to create directories: %w", err)
+	}
+
+	// 创建文件
+	file, err := os.Create(filePath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create file: %w", err)
+	}
+	fmt.Println("File created successfully:", filePath)
+	return file, nil
 }
 
 /**

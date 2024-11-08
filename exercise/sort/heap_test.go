@@ -6,6 +6,7 @@ import (
 	"testing"
 )
 
+// 最大堆调整 （自上往下）
 func adjust(nums []int, root, len int) {
 
 	//left
@@ -32,7 +33,8 @@ func adjust(nums []int, root, len int) {
 
 func heapSort(nums []int) {
 
-	//init
+	//init （自底向上）
+	//即从length/2 到0，每个根结点使用上述调整堆的方法
 	for i := len(nums) / 2; i >= 0; i-- {
 		adjust(nums, i, len(nums))
 	}
@@ -77,6 +79,7 @@ func TestHeapSort(t *testing.T) {
 
 	b := sort.GetArray(100)
 	sort.Shuffle(b)
+	//前K个最大的
 	c := heapSortTopK(b, 10)
 	fmt.Println(c)
 

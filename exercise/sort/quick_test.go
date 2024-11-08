@@ -77,6 +77,7 @@ func TestQuickSort(t *testing.T) {
 
 	b := sort.GetArray(100)
 	sort.Shuffle(b)
+	//前K个最小的
 	quickSortTopK(b, 10)
 	fmt.Println(b)
 
