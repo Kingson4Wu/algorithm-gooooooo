@@ -844,7 +844,7 @@ int knapsack(int W, int N, vector<int>& wt, vector<int>& val) {
 
  ```
 
- ## 2.16 子集背包问题 
+## 2.16 子集背包问题 
 + https://www.cnblogs.com/labuladong/p/13927956.html
 + 416.分割等和子集
 + 给你一个可装载重量为 W 的背包和 N 个物品，每个物品有重量和价值两个属性。其中第 i 个物品的重量为 wt[i]，价值为 val[i]，现在让你用这个背包装物品，最多能装的价值是多少
