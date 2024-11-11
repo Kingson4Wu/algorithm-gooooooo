@@ -1,4 +1,4 @@
-package _024
+package top100liked
 
 type ListNode struct {
 	Val  int
