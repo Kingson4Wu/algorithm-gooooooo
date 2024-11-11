@@ -998,3 +998,68 @@ public class ArithmeticProgressionJudge {
 }
 
 ```
+
+====
+
++ 这些年背过的面试题——实战算法篇
+  https://mp.weixin.qq.com/s/IEzcsHn6SaoS96F1gTKcJQ
+
+1. 1、URL黑名单（布隆过滤器）
+2. 2、词频统计（分文件）
+3. 3、未出现的数（bit数组）
+4. 5、TOPK搜索（小根堆）
+5. 10、热门字符串（前缀树）
+6. 12、手写快排
+7. 13、手写归并
+8. 14、手写堆排
+
+====
+
++ 这些年背过的面试题——LeetCode
+  https://mp.weixin.qq.com/s/jqoOfM_apICqNidYcNin4A
+
++ 【背包模板】
+```python
+
+#0-1背包，不可重复
+for n in ns: 
+    for i in range(T, n-1, -1):
+        dp[i]
+ = max(dp[i], dp[i - n] + ws[i])
+#完全背包，可重复，无序，算重量
+for n in ns: 
+    for i in range(n, T+1):
+        dp[i]
+ = max(dp[i], dp[i - n] + ws[i]) 
+#完全背包，可重复，有序，算次数     
+for i in range(1, T+1):
+    for n in ns:
+        dp[i] +
+= dp[i-n]
+
+```
+
++ 【回溯模板】
+```python
+
+# 回溯算法，复杂度较高2^n或者N！，因为回溯算法就是暴力穷举，可用lru剪枝
+@functools.lru_cache(None)
+def backtrack(路径, 选择列表):
+    if 满足结束条件:
+        结果.append(路径)
+        return
+    for 选择 in 选择列表:    # 核心代码段
+          if vst[i]:   # 辅助数组，减枝
+          continue
+        做出选择
+        递归执行backtrack
+        撤销选择
+```
+
++ 【动态规划模板】
++ 【滑动窗口】
++ 【前缀和】
++ 【双指针】
++ 【深度优先】
++ 【广度优先】
++ 【图论】
