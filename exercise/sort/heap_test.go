@@ -12,6 +12,7 @@ func adjust(nums []int, root, len int) {
 	//left
 	child := root*2 + 1
 
+	// 左右子节点，找个最大的跟根节点交换！！
 	for child < len {
 		if child+1 < len && nums[child+1] > nums[child] {
 			//right
