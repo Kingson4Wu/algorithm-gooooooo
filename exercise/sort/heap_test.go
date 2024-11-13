@@ -84,4 +84,8 @@ func TestHeapSort(t *testing.T) {
 	c := heapSortTopK(b, 10)
 	fmt.Println(c)
 
+	fmt.Println("======")
+	fmt.Println(heapSortTopK([]int{3, 2, 1, 5, 6, 4}, 2))
+	fmt.Println(heapSortTopK([]int{3, 2, 3, 1, 2, 4, 5, 5, 6}, 4))
+
 }
