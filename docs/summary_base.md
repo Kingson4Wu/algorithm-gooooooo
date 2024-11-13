@@ -154,6 +154,7 @@
 
 3. [不稳定]堆排序：
     + algorithm-gooooooo/exercise/sort/heap_test.go
+    + algorithm-gooooooo/exercise/leetcode/2024/top100liked/215. 数组中的第K个最大元素_test.go
     + 时间：最坏-O(nlog2n)、平均-O(nlog2n)、最好-O(nlog2n)； 空间：O(1)
     + 堆的结构可以分为大顶堆和小顶堆，是一个完全二叉树
     + 底层数组结构
@@ -177,8 +178,8 @@
     
 
 + TopK
-    - 不要求有序，使用快排
-    - 要求有序，使用堆；最大堆（前k个最大），最小堆（前k个最小）
+    - 不要求有序，使用快排 !!!
+    - 要求有序，使用堆；最大堆（前k个最大），最小堆（前k个最小）!!!
 
 -----
 
