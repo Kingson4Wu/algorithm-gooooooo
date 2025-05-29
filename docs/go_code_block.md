@@ -20,12 +20,11 @@ math.MinInt32
 		}
 ```
 
-
 + 排序 ： `sort.Ints`
 + 逆序：
 ```go
 sort.Slice(nums, func(i, j int) bool {
-return i < j
+    return i < j
 })
 ```
 
@@ -36,7 +35,7 @@ Less(i, j int) bool 比较索引为 i 和 j 的元素大小，如果第 i 个元
 Swap(i, j int) 交换索引为 i 和 j 的元素。
 下面是一个示例程序，展示如何使用 sort.Interface 接口进行自定义排序：
 
-```
+```go
 package main
 
 import (

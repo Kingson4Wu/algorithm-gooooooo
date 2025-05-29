@@ -6,6 +6,7 @@ import (
 	"testing"
 )
 
+// 升序
 func quickSort(arr []int) {
 
 	var quick func(arr []int, start, end int)
@@ -47,6 +48,7 @@ func partition(arr []int, low, high int) int {
 	return low
 }
 
+// 前K个最小的
 func quickSortTopK(arr []int, k int) {
 
 	var quick func(arr []int, start, end, k int)
@@ -56,8 +58,10 @@ func quickSortTopK(arr []int, k int) {
 		}
 		mid := partition(arr, start, end)
 		if mid > k {
+			//说明左边的超过k个，还需要继续排一下，而且因为左边的都小于mid的
 			quick(arr, start, mid, k)
 		} else if mid < k {
+			//右边已经不可能出现比左边小的了，只需继续排右边的，
 			quick(arr, mid+1, end, k)
 		}
 	}

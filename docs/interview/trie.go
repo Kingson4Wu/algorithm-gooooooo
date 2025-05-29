@@ -1,17 +1,18 @@
 package interview
 
-// 定义前缀树（Trie）的节点
+// TrieNode 定义前缀树（Trie）的节点
 type TrieNode struct {
 	children map[rune]*TrieNode
 	count    int // 记录以该节点为前缀的单词数量
+	endCount int // 记录以该节点为结束的单词数量
 }
 
-// 定义前缀树结构
+// Trie 定义前缀树结构
 type Trie struct {
 	root *TrieNode
 }
 
-// 定义存储结构 WordStore，包含哈希集合和前缀树
+// WordStore 定义存储结构 WordStore，包含哈希集合和前缀树
 type WordStore struct {
 	words map[string]bool // 哈希集合用于快速查找单词是否存在
 	trie  *Trie           // 前缀树用于统计前缀匹配数量
@@ -22,6 +23,7 @@ func NewTrieNode() *TrieNode {
 	return &TrieNode{
 		children: make(map[rune]*TrieNode),
 		count:    0,
+		endCount: 0,
 	}
 }
 
@@ -42,6 +44,7 @@ func (t *Trie) Insert(word string) {
 		node = node.children[char]
 		node.count++
 	}
+	node.endCount++ // 最后一个字符节点，表示有单词以此结尾
 }
 
 // CountWordsWithPrefix 返回 Trie 中指定前缀的单词数量
@@ -54,6 +57,18 @@ func (t *Trie) CountWordsWithPrefix(prefix string) int {
 		node = node.children[char]
 	}
 	return node.count
+}
+
+// CountWordsExactly 获取指定单词出现次数
+func (t *Trie) CountWordsExactly(word string) int {
+	node := t.root
+	for _, char := range word {
+		if _, ok := node.children[char]; !ok {
+			return 0
+		}
+		node = node.children[char]
+	}
+	return node.endCount
 }
 
 // NewWordStore 初始化 WordStore
