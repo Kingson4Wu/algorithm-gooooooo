@@ -5,6 +5,21 @@
 
 # 二分查找
 + 没思路的时候多画图引发思考 153. 寻找旋转排序数组中的最小值_test.go
+```go
+func findMin(nums []int) int {
+    low, high := 0, len(nums) - 1
+    for low < high {
+        pivot := low + (high - low) / 2
+        if nums[pivot] < nums[high] {
+            high = pivot
+        } else {
+            low = pivot + 1
+        }
+    }
+    return nums[low]
+}
+
+```
 
 # TREE
 
@@ -13,10 +28,86 @@
 + 树：left和right都为空才是叶子节点
 + 搜索树倒序，迭代法：右子树要全部入栈，直到右子数为空
   处理完当前结点，再处理左结点，重复左结点的右子树的入栈操作
-  （er-cha-sou-suo-shu-de-di-kda-jie-dian-lcof）
+  （er-cha-sou-suo-shu-de-di-kda-jie-dian-lcof） 
+在二叉搜索树（BST）中查找第 k 大的节点值，采用**反向中序遍历（右-根-左）**实现
+```go
+package main
+
+import "container/list"
+
+type TreeNode struct {
+    Val   int
+    Left  *TreeNode
+    Right *TreeNode
+}
+
+func kthLargest(root *TreeNode, k int) int {
+    stack := list.New()
+    count := 1
+
+    for root != nil || stack.Len() > 0 {
+        for root != nil {
+            stack.PushBack(root)
+            root = root.Right
+        }
+
+        element := stack.Back()
+        stack.Remove(element)
+        node := element.Value.(*TreeNode)
+
+        if count == k {
+            return node.Val
+        }
+        count++
+        root = node.Left
+    }
+
+    return 0
+}
+```
+
 + 完全二叉树--若二叉树的深度为 h，除第 h 层外，其它各层的结点数都达到最大个数，第 h 层所有的叶子结点都连续集中在最左边，这就是完全二叉树。（第 h 层可能包含 [1~2h] 个节点）
   判断是否完全二叉树：广度优先搜索，队列，判断是不是连续两个不存在
   nowcoder/BM35 判断是不是完全二叉树.go
+```go
+func isCompleteTree(root *TreeNode) bool {
+	// write code here
+
+	var queue []*TreeNode
+
+	if root != nil {
+		queue = append(queue, root)
+	}
+
+	previous := true
+
+	for len(queue) > 0 {
+
+		ele := queue[0]
+		queue = queue[1:]
+
+		if ele.Left != nil {
+			if !previous {
+				return false
+			}
+			queue = append(queue, ele.Left)
+		} else {
+			previous = false
+		}
+		if ele.Right != nil {
+			if !previous {
+				return false
+			}
+			queue = append(queue, ele.Right)
+		} else {
+			previous = false
+		}
+
+	}
+
+	return true
+}
+```
 + 平衡二叉树（Balanced Binary Tree），具有以下性质：它是一棵空树或它的左右两个子树的高度差的绝对值不超过1，并且左右两个子树都是一棵平衡二叉树
 + 堆的结构可以分为大顶堆和小顶堆，是一个完全二叉树
 
@@ -61,21 +152,26 @@
 
 + nowcoder/BM31 对称的二叉树.go
   还是用递归！！！
-```java
-public class Solution {
-    boolean recursion(TreeNode root1, TreeNode root2){
-        //可以两个都为空
-        if(root1 == null && root2 == null)
-            return true;
-        //只有一个为空或者节点值不同，必定不对称
-        if(root1 == null || root2 == null || root1.val != root2.val)
-            return false;
-        //每层对应的节点进入递归比较
-        return recursion(root1.left, root2.right) && recursion(root1.right, root2.left);
+  判断二叉树是否对称
+```go
+type TreeNode struct {
+    Val   int
+    Left  *TreeNode
+    Right *TreeNode
+}
+
+func isSymmetrical(pRoot *TreeNode) bool {
+    return recursion(pRoot, pRoot)
+}
+
+func recursion(root1, root2 *TreeNode) bool {
+    if root1 == nil && root2 == nil {
+        return true
     }
-    boolean isSymmetrical(TreeNode pRoot) {
-        return recursion(pRoot, pRoot);
+    if root1 == nil || root2 == nil || root1.Val != root2.Val {
+        return false
     }
+    return recursion(root1.Left, root2.Right) && recursion(root1.Right, root2.Left)
 }
 ```
 
@@ -144,8 +240,39 @@ step 5：继续递归左、右子树，直到遇到step1或者step3的情况。
   （2）找到中序中根节点的位置，分成两组，分治递归构造二叉树
 
 前序和中序的特点：
-前序=【左子树】+【根节点】+【右子树】
-中序=【根节点】+【左子树】+【右子树】
+前序=中左右
+中序=左中右
+
+```go
+func buildTree(preorder []int, inorder []int) *TreeNode {
+
+	if len(preorder) == 0 || len(inorder) == 0 {
+		return nil
+	}
+
+	rootVal := preorder[0]
+	root := &TreeNode{Val: rootVal}
+
+	mid := -1
+	for i := 0; i < len(inorder); i++ {
+		if inorder[i] == rootVal {
+			mid = i
+			break
+		}
+	}
+
+	if mid != -1 {
+		if mid-1 >= 0 {
+			root.Left = buildTree(preorder[1:mid+1], inorder[:mid])
+		}
+		if mid+1 < len(inorder) {
+			root.Right = buildTree(preorder[mid+1:], inorder[mid+1:])
+		}
+	}
+
+	return root
+}
+```
 
 ### 序列化二叉树
 
@@ -165,38 +292,60 @@ for(int i = 0; i < size; i++){
 if(i == size - 1) result.add(temp.val);
 }
 
-```java
- public ArrayList<Integer> right(TreeNode root){
-        ArrayList<Integer> result = new ArrayList<Integer>();
-        if(root == null)
-            return result;
-        // 层次遍历
-        Queue<TreeNode> queue = new LinkedList<TreeNode>();
-        queue.offer(root);
-        while(!queue.isEmpty()){
-            int size = queue.size();
-            for(int i = 0; i < size; i++){
-                TreeNode temp = queue.poll();
-                // 记录每一层的最右边节点
-                if(i == size - 1) result.add(temp.val);
-                if(temp.left != null) queue.offer(temp.left);
-                if(temp.right != null) queue.offer(temp.right);
+```go
+// right 返回二叉树的右视图
+func right(root *TreeNode) []int {
+    var result []int
+    if root == nil {
+        return result
+    }
+
+    queue := []*TreeNode{root}
+
+    for len(queue) > 0 {
+        size := len(queue)
+        for i := 0; i < size; i++ {
+            node := queue[0]
+            queue = queue[1:]
+
+            // 记录每层最右节点
+            if i == size-1 {
+                result = append(result, node.Val)
+            }
+            if node.Left != nil {
+                queue = append(queue, node.Left)
+            }
+            if node.Right != nil {
+                queue = append(queue, node.Right)
             }
         }
-        return result;
     }
-/**
-————————————————
-版权声明：本文为CSDN博主「木水先生」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
-原文链接：https://blog.csdn.net/weixin_39963192/article/details/115119704
-*/
+
+    return result
+}
 
 ```
 
 ### 二叉搜索树中第K小的元素
 + 非递归的中序，使用栈，需要记录状态提前结束遍历的时候，使用栈的方式遍历，代码不会那么丑
   leetcode/tree/230. 二叉搜索树中第K小的元素.go
-
+```go
+func kthSmallest(root *TreeNode, k int) int {
+    stack := []*TreeNode{}
+    for {
+        for root != nil {
+            stack = append(stack, root)
+            root = root.Left
+        }
+        stack, root = stack[:len(stack)-1], stack[len(stack)-1]
+        k--
+        if k == 0 {
+            return root.Val
+        }
+        root = root.Right
+    }
+}
+```
 
 ### 不同的二叉搜索树
 + leetcode/tree/95. 不同的二叉搜索树 II.go
@@ -238,6 +387,73 @@ func helper(start, end int) []*TreeNode {
 
 ### 二叉树的层级遍历
 + algorithm-gooooooo/nowcoder/BM26 求二叉树的层序遍历.go
+
+栈
+```go
+func levelOrder(root *TreeNode) [][]int {
+	// write code here
+
+	var result [][]int
+
+	if root == nil {
+		return result
+	}
+
+	var queue []*TreeNode
+	queue = append(queue, root)
+	result = append(result, []int{root.Val})
+
+	for len(queue) > 0 {
+
+		var line []int
+		var newQueue []*TreeNode
+
+		for _, node := range queue {
+			if node.Left != nil {
+				line = append(line, node.Left.Val)
+				newQueue = append(newQueue, node.Left)
+			}
+			if node.Right != nil {
+				line = append(line, node.Right.Val)
+				newQueue = append(newQueue, node.Right)
+			}
+		}
+		if len(line) > 0 {
+			result = append(result, line)
+		}
+
+		queue = newQueue
+	}
+
+	return result
+}
+```
+
+
+递归
+```go
+func levelOrder(root *TreeNode) [][]int {
+	highMap := make(map[int][]int)
+	var highF func(*TreeNode, int)
+	highF = func(root *TreeNode, high int) {
+		if root == nil {
+			return
+		}
+		highMap[high] = append(highMap[high], root.Val)
+		highF(root.Left, high+1)
+		highF(root.Right, high+1)
+	}
+
+	highF(root, 0)
+
+	var result [][]int
+	for i := 0; i < len(highMap); i++ {
+		result = append(result, highMap[i])
+	}
+
+	return result
+}
+```
 
 ---
 
@@ -420,17 +636,25 @@ void LevelOrderTraversal( BinTree BT)
 所以结果应当返回修剪好的二叉搜索树的新的根节点。注意，根节点可能会根据给定的边界发生改变。
 
 + leetcode/tree/669. 修剪二叉搜索树.go
++ 用于修剪二叉搜索树，使其所有节点值都在 [L, R] 区间内
 ```java
-class Solution {
-    public TreeNode trimBST(TreeNode root, int L, int R) {
-        if (root == null) return root;
-        if (root.val > R) return trimBST(root.left, L, R);
-        if (root.val < L) return trimBST(root.right, L, R);
 
-        root.left = trimBST(root.left, L, R);
-        root.right = trimBST(root.right, L, R);
-        return root;
+func trimBST(root *TreeNode, L int, R int) *TreeNode {
+    if root == nil {
+        return nil
     }
+
+    if root.Val > R {
+        return trimBST(root.Left, L, R)
+    }
+
+    if root.Val < L {
+        return trimBST(root.Right, L, R)
+    }
+
+    root.Left = trimBST(root.Left, L, R)
+    root.Right = trimBST(root.Right, L, R)
+    return root
 }
 
 ```
@@ -485,6 +709,52 @@ func flatten(root *TreeNode)  {
 + leetcode/tree/117. 填充每个节点的下一个右侧节点指针 II.go
   方法二：使用已建立的 next 指针 ！！！！
   空间复杂度：O(1)，不需要存储额外的节点。
+```go
+func connect(root *Node) *Node {
+	if root == nil {
+		return nil
+	}
+
+	//每一层的开始结点，当pre是nil的时候记录，说明是第一个，后续用于找下一层级
+	start := root
+
+	for start != nil {
+		//每一层的下一个结点，用于遍历该层的所有结点，利用已经遍历过的next指针找同层级下一个结点
+		callStart := start
+		start = nil
+
+		var pre *Node
+
+		for callStart != nil {
+
+			if callStart.Left != nil {
+				if pre == nil {
+					pre = callStart.Left
+					start = pre
+				} else {
+					pre.Next = callStart.Left
+					pre = callStart.Left
+				}
+			}
+
+			if callStart.Right != nil {
+				if pre == nil {
+					pre = callStart.Right
+					start = pre
+				} else {
+					pre.Next = callStart.Right
+					pre = callStart.Right
+				}
+			}
+
+			callStart = callStart.Next
+		}
+
+	}
+
+	return root
+}
+```
 
 ### 删除二叉搜索树中的节点 ！！！！
 
@@ -606,6 +876,18 @@ func distanceK(root, target *TreeNode, k int) (ans []int) {
 
 ### 判断是不是平衡二叉树
 + 定义一个函数，返回树的高度，如果不是平衡二叉树，则返回-1 ！！
+
+方法一：自顶向下的递归
+如上 时间复杂度：O(nlogn)
+空间复杂度：O(n)。如果树完全倾斜，递归栈可能包含所有节点。
+
+
+方法二：自底向上的递归
+方法一计算 height 存在大量冗余。每次调用 height 时，要同时计算其子树高度。但是自底向上计算，每个子树的高度只会计算一次。可以递归先计算当前节点的子节点高度，然后再通过子节点高度判断当前节点是否平衡，从而消除冗余。
+
+时间复杂度 O(N)： N为树的节点数；最差情况下，需要递归遍历树的所有节点。
+空间复杂度 O(N)： 最差情况下（树退化为链表时），系统递归需要使用 O(N) 的栈空间。
+
 ```Java
 class Solution {
     public boolean isBalanced(TreeNode root) {
@@ -621,6 +903,7 @@ class Solution {
         return Math.abs(left - right) < 2 ? Math.max(left, right) + 1 : -1;
     }
 }
+//  叶子节点由 if (root == null) return 0; 和 Math.max(left, right) + 1 算的 ＝ 1
 ```
 
 ----
@@ -672,30 +955,282 @@ class Solution {
 
 
 + leetcode/dp/70. 爬楼梯.go
-  climbStairs(n) = climbStairs(n-2) + climbStairs(n-1)
++ 假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
+每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？
+climbStairs(n) = climbStairs(n-2) + climbStairs(n-1)
+
+```go
+func climbStairs(n int) int {
+
+	dp := make([]int, n)
+
+	if n == 0 {
+		return 0
+	}
+	if n == 1 {
+		return 1
+	}
+
+	if n == 2 {
+		return 2
+	}
+
+	dp[0] = 1
+	dp[1] = 2
+
+	for i := 2; i < n; i++ {
+		dp[i] = dp[i-2] + dp[i-1]
+	}
+
+	return dp[n-1]
+}
+```
 
 + leetcode/dp/119. 杨辉三角 II.go
   算好规律
 
 + leetcode/dp/5. 最长回文子串.go  !!!!
+  用 P(i,j) 表示字符串 s 的第 i 到 j 个字母组成的串（下文表示成 s[i:j]）是否为回文串
+  P(i, j) = P(i+1, j-1)  (S_i == S_j)
+  也就是说，只有 s[i+1:j-1] 是回文串，并且 s 的第 i 和 j 个字母相同时，s[i:j] 才会是回文串。
+1. 初始化长度为1的为true
+2. 双重循环，第一个循环是子串的长度，从2开始； 第二个循环是子串开始下标
 
+```go
+func longestPalindrome(s string) string {
+	length := len(s)
+	if length == 0 {
+		return ""
+	}
+
+	dp := make([][]bool, length)
+	for i := 0; i < length; i++ {
+		dp[i] = make([]bool, length)
+	}
+	for i := 0; i < length; i++ {
+		dp[i][i] = true
+	}
+	maxStart := 0
+	maxLen := 1
+	for subLen := 2; subLen <= length; subLen++ {
+		for start := 0; start < length; start++ {
+			end := start + subLen - 1
+			if end >= length {
+				continue
+			}
+			if s[start] != s[end] {
+				dp[start][end] = false
+				continue
+			}
+			if subLen == 2 {
+				dp[start][end] = true
+			} else {
+				dp[start][end] = dp[start+1][end-1]
+			}
+
+			if dp[start][end] {
+				if end-start+1 > maxLen {
+					maxLen = end - start + 1
+					maxStart = start
+				}
+			}
+		}
+	}
+	return s[maxStart : maxStart+maxLen]
+}
+```
 
 + leetcode/dp/64. 最小路径和.go
+  给定一个包含非负整数的 m x n 网格 grid ，请找出一条从左上角到右下角的路径，使得路径上的数字总和为最小。
+说明：每次只能向下或者向右移动一步。
   dp[i,j]=min(dp[i-1,j],dp[i,j-1]) + val(i,j)
 
+```go
+func minPathSum(grid [][]int) int {
+
+	height := len(grid)
+
+	if height == 0 {
+		return 0
+	}
+
+	dp := make([][]int, len(grid))
+
+	width := len(grid[0])
+
+	for i := 0; i < height; i++ {
+		dp[i] = make([]int, width)
+
+		for j := 0; j < width; j++ {
+
+			if i == 0 && j == 0 {
+				dp[i][j] = grid[i][j]
+				continue
+			}
+
+			if i == 0 {
+				dp[i][j] = dp[i][j-1] + grid[i][j]
+				continue
+			}
+
+			if j == 0 {
+				dp[i][j] = dp[i-1][j] + grid[i][j]
+				continue
+			}
+
+			dp[i][j] = min(dp[i][j-1], dp[i-1][j]) + grid[i][j]
+
+		}
+
+	}
+
+	return dp[height-1][width-1]
+}
+
+func min(a, b int) int {
+	if a > b {
+		return b
+	}
+	return a
+
+}
+```
 
 + leetcode/dp/300. 最长递增子序列.go !!!!
+  给你一个整数数组 nums ，找到其中最长严格递增子序列的长度。
+
+子序列 是由数组派生而来的序列，删除（或不删除）数组中的元素而不改变其余元素的顺序。例如，[3,6,2,7] 是数组 [0,3,1,6,2,2,7] 的子序列。
+
+示例 1：
+
+输入：nums = [10,9,2,5,3,7,101,18]
+输出：4
+解释：最长递增子序列是 [2,3,7,101]，因此长度为 4 。
+示例 2：
+
+输入：nums = [0,1,0,3,2,3]
+输出：4
+示例 3：
+
+输入：nums = [7,7,7,7,7,7,7]
+输出：1
+
+进阶：
+
+你能将算法的时间复杂度降低到 O(n log(n)) 吗?
+```go
+func lengthOfLIS(nums []int) int {
+
+	if len(nums) == 0 {
+		return 0
+	}
+	dp := make([]int, len(nums))
+	dp[0] = 1
+	maxNum := 1
+
+	for i := 1; i < len(nums); i++ {
+		dp[i] = 1
+		for j := 0; j < i; j++ {
+			if nums[i] > nums[j] {
+				dp[i] = max(dp[i], dp[j]+1)
+			}
+		}
+		maxNum = max(maxNum, dp[i])
+	}
+
+	return maxNum
+}
+```
 
 + leetcode/dp/55. 跳跃游戏.go !!!
   贪心算法！！ 遍历更新最大可达位置！！！
 
+给定一个非负整数数组 nums ，你最初位于数组的 第一个下标 。
+数组中的每个元素代表你在该位置可以跳跃的最大长度。
+判断你是否能够到达最后一个下标。
+
+```go
+func canJump(nums []int) bool {
+
+	if len(nums) <= 1 {
+		return true
+	}
+
+	dp := make([]bool, len(nums))
+
+	dp[0] = true
+
+	for i := 0; i < len(nums); i++ {
+		if !dp[i] {
+			return false
+		}
+		for j := 1; j <= nums[i] && i+j < len(nums); j++ {
+			if !dp[i+j] {
+				dp[i+j] = true
+			}
+		}
+	}
+	return true
+}
+```
 
 + leetcode/dp/45. 跳跃游戏 II.go
   遍历计算到达每一步的最小步数！
   需考虑数组长度为1 的情况 ！！！！
 
-+ leetcode/dp/139. 单词拆分.go !!!!
+给你一个非负整数数组nums ，你最初位于数组的第一个位置。
+数组中的每个元素代表你在该位置可以跳跃的最大长度。
+你的目标是使用最少的跳跃次数到达数组的最后一个位置。
+假设你总是可以到达数组的最后一个位置。
 
+```go
+func jump(nums []int) int {
+
+	length := len(nums)
+
+	if length == 1 {
+		return 0
+	}
+
+	leastSteps := make([]int, length)
+
+	for i := 0; i < length; i++ {
+		newStep := leastSteps[i] + 1
+		for j := 0; j <= nums[i]; j++ {
+
+			if leastSteps[i+j] == 0 || newStep < leastSteps[i+j] {
+				leastSteps[i+j] = newStep
+			}
+			if leastSteps[length-1] > 0 {
+				return leastSteps[length-1]
+			}
+		}
+	}
+	return 0
+}
+
+```
+
++ leetcode/dp/139. 单词拆分.go !!!!
+  给你一个字符串 s 和一个字符串列表 wordDict 作为字典。请你判断是否可以利用字典中出现的单词拼接出 s 。
+
+注意：不要求字典中出现的单词全部都使用，并且字典中的单词可以重复使用。
+
+示例 1：
+
+输入: s = "leetcode", wordDict = ["leet", "code"]
+输出: true
+解释: 返回 true 因为 "leetcode" 可以由 "leet" 和 "code" 拼接成。
+示例 2：
+
+输入: s = "applepenapple", wordDict = ["apple", "pen"]
+输出: true
+解释: 返回 true 因为 "applepenapple" 可以由 "apple" "pen" "apple" 拼接成。
+注意，你可以重复使用字典中的单词。
+示例 3：
+
+输入: s = "catsandog", wordDict = ["cats", "dog", "sand", "and", "cat"]
+输出: false
 ```go
 func wordBreak(s string, wordDict []string) bool {
     wordDictSet := make(map[string]bool)
@@ -717,7 +1252,72 @@ func wordBreak(s string, wordDict []string) bool {
 ```
 
 + leetcode/dp/221. 最大正方形.go ！！！
+  在一个由 '0' 和 '1' 组成的二维矩阵内，找到只包含 '1' 的最大正方形，并返回其面积。
 
+输入：matrix = [['0','1'],['1','0']]
+输出：1
+示例 3：
+
+输入：matrix = [['0']]
+输出：0
+
+提示：
+
+m == matrix.length
+n == matrix[i].length
+1 <= m, n <= 300
+matrix[i][j] 为 '0' 或 '1'
+
+```go
+
+func maximalSquare(matrix [][]byte) int {
+
+	maxLength := 0
+
+	dp := make([][]int, len(matrix))
+	for i := 0; i < len(matrix); i++ {
+		dp[i] = make([]int, len(matrix[i]))
+	}
+	/** 初始化 */
+	for x := 0; x < len(matrix[0]); x++ {
+		if matrix[0][x] == '1' {
+			dp[0][x] = 1
+		}
+		if dp[0][x] > maxLength {
+			maxLength = dp[0][x]
+		}
+	}
+	for y := 0; y < len(matrix); y++ {
+		if matrix[y][0] == '1' {
+			dp[y][0] = 1
+		}
+		if dp[y][0] > maxLength {
+			maxLength = dp[y][0]
+		}
+	}
+
+	for y := 1; y < len(matrix); y++ {
+		for x := 1; x < len(matrix[y]); x++ {
+			if matrix[y][x] == '1' {
+				dp[y][x] = min(min(dp[y][x-1], dp[y-1][x]), dp[y-1][x-1]) + 1
+			} else {
+				dp[y][x] = 0
+			}
+			if dp[y][x] > maxLength {
+				maxLength = dp[y][x]
+			}
+		}
+	}
+	return maxLength * maxLength
+}
+
+func min(x, y int) int {
+	if x > y {
+		return y
+	}
+	return x
+}
+```
 
 ----
 
@@ -743,6 +1343,18 @@ func wordBreak(s string, wordDict []string) bool {
 
 + 子集型
 + exercise/leetcode/hot100/78. 子集_test.go
+  给你一个整数数组 nums ，数组中的元素 互不相同 。返回该数组所有可能的子集（幂集）。
+
+解集 不能 包含重复的子集。你可以按 任意顺序 返回解集。
+
+示例 1：
+
+输入：nums = [1,2,3]
+输出：[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
+示例 2：
+
+输入：nums = [0]
+输出：[[],[0]]
 ```go
 func subsetsDfs(nums []int) (ans [][]int) {
 
@@ -765,6 +1377,26 @@ func subsetsDfs(nums []int) (ans [][]int) {
 
 + 排列型
 + exercise/leetcode/hot100/46. 全排列_test.go
+  给定一个不含重复数字的数组 nums ，返回其 所有可能的全排列 。你可以 按任意顺序 返回答案。
+
+示例 1：
+
+输入：nums = [1,2,3]
+输出：[[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
+示例 2：
+
+输入：nums = [0,1]
+输出：[[0,1],[1,0]]
+示例 3：
+
+输入：nums = [1]
+输出：[[1]]
+
+提示：
+
+1 <= nums.length <= 6
+-10 <= nums[i] <= 10
+nums 中的所有整数 互不相同
 ```go
 func permute(nums []int) [][]int {
 
@@ -790,6 +1422,10 @@ func permute(nums []int) [][]int {
 + 组合型
 + exercise/leetcode/77. 组合_test.go
 + 注意 if len(set) == k 和 dfs(i + 1)
+
+给定两个整数 n 和 k，返回范围 [1, n] 中所有可能的 k 个数的组合。
+
+你可以按 任何顺序 返回答案。
 ```go
 func combine(n int, k int) [][]int {
 
@@ -928,6 +1564,57 @@ func min(a, b int) int {
 + "滑动窗口"（左右两个指针），hashset判断重复元素，遍历一遍即可。左指针向右移动时删除hashset中的元素，左指针向右移动时增加hashset中的元素。
 + algorithm-gooooooo/exercise/leetcode/hot100/3. 最长不含重复字符的子字符串_test.go
 + algorithm-gooooooo/leetcode/剑指 Offer 48. 最长不含重复字符的子字符串.go （以这个为准！）
+
+请从字符串中找出一个最长的不包含重复字符的子字符串，计算该最长子字符串的长度。
+
+示例1:
+
+输入: "abcabcbb"
+输出: 3
+解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
+示例 2:
+
+输入: "bbbbb"
+输出: 1
+解释: 因为无重复字符的最长子串是 "b"，所以其长度为 1。
+示例 3:
+
+输入: "pwwkew"
+输出: 3
+解释: 因为无重复字符的最长子串是"wke"，所以其长度为 3。
+请注意，你的答案必须是 子串 的长度，"pwke"是一个子序列，不是子串。
+
+```go
+func lengthOfLongestSubstring(s string) int {
+	// 哈希集合，记录每个字符是否出现过
+	m := map[byte]int{}
+	n := len(s)
+	// 右指针，初始值为 -1，相当于我们在字符串的左边界的左侧，还没有开始移动
+	rk, ans := -1, 0
+	for i := 0; i < n; i++ {
+		if i != 0 {
+			// 左指针向右移动一格，移除一个字符
+			delete(m, s[i-1])
+		}
+		for rk+1 < n && m[s[rk+1]] == 0 {
+			// 不断地移动右指针
+			m[s[rk+1]]++
+			rk++
+		}
+		// 第 i 到 rk 个字符是一个极长的无重复字符子串
+		ans = max(ans, rk-i+1)
+	}
+	return ans
+}
+
+func max(x, y int) int {
+	if x < y {
+		return y
+	}
+	return x
+}
+```
+
 
 # 其他
 

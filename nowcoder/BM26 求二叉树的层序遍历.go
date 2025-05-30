@@ -3,20 +3,20 @@ package nowcoder
 func levelOrder(root *TreeNode) [][]int {
 	// write code here
 
-	result := [][]int{}
+	var result [][]int
 
 	if root == nil {
 		return result
 	}
 
-	queue := []*TreeNode{}
+	var queue []*TreeNode
 	queue = append(queue, root)
 	result = append(result, []int{root.Val})
 
 	for len(queue) > 0 {
 
-		line := []int{}
-		newQueue := []*TreeNode{}
+		var line []int
+		var newQueue []*TreeNode
 
 		for _, node := range queue {
 			if node.Left != nil {

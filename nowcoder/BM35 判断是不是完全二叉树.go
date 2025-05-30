@@ -3,7 +3,7 @@ package nowcoder
 func isCompleteTree(root *TreeNode) bool {
 	// write code here
 
-	queue := []*TreeNode{}
+	var queue []*TreeNode
 
 	if root != nil {
 		queue = append(queue, root)
