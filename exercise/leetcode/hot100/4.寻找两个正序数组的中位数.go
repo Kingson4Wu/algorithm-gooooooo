@@ -4,7 +4,7 @@ package hot100
 竟然是困难。。。
 自己做的。。
 基本思路，记录数组的最大最小下标，最小的之间进行对比，最大的之间进行对比，然后开始下标++，对终止下标--
-看了题解，还能优化，因为是中位数，只需要对表开始下标，直到总长度为一半即可，减少一半时间！
+看了题解，还能优化，因为是中位数，只需要对比开始下标，直到总长度为一半即可，减少一半时间！
 */
 /*
  * @lc app=leetcode.cn id=4 lang=golang
@@ -15,6 +15,17 @@ package hot100
 给定两个大小分别为 m 和 n 的正序（从小到大）数组 nums1 和 nums2。请你找出并返回这两个正序数组的 中位数 。
 
 算法的时间复杂度应该为 O(log (m+n)) 。
+
+示例 1：
+
+输入：nums1 = [1,3], nums2 = [2]
+输出：2.00000
+解释：合并数组 = [1,2,3] ，中位数 2
+示例 2：
+
+输入：nums1 = [1,2], nums2 = [3,4]
+输出：2.50000
+解释：合并数组 = [1,2,3,4] ，中位数 (2 + 3) / 2 = 2.5
 
 执行结果：
 通过
@@ -72,7 +83,7 @@ func Exexute(nums1 []int, nums2 []int) float64 {
 }
 
 // @lc code=start
-func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
+/*func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
 
 	nums1_length := len(nums1)
 	nums2_length := len(nums2)
@@ -151,6 +162,87 @@ func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
 	}
 	return float64(nums2[nums2_start_index])
 
-}
+}*/
 
 // @lc code=end
+
+// 20250623
+func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
+	if len(nums1) == 0 && len(nums2) == 0 {
+		return 0
+	}
+	if len(nums1) == 0 {
+		if len(nums2)%2 == 0 {
+			return float64(nums2[len(nums2)/2]+nums2[len(nums2)/2-1]) / 2
+		} else {
+			return float64(nums2[len(nums2)/2])
+		}
+	}
+	if len(nums2) == 0 {
+		if len(nums1)%2 == 0 {
+			return float64(nums1[len(nums1)/2]+nums1[len(nums1)/2-1]) / 2
+		} else {
+			return float64(nums1[len(nums1)/2])
+		}
+	}
+	totalLength := len(nums1) + len(nums2)
+	nums1Index := 0
+	nums2Index := 0
+	endLength := totalLength/2 + 1
+	count := 0
+	num1, num2 := 0, 0
+	for nums1Index < len(nums1) && nums2Index < len(nums2) && count < endLength {
+		count++
+		num1 = num2
+		if nums1[nums1Index] < nums2[nums2Index] {
+			num2 = nums1[nums1Index]
+			nums1Index++
+			continue
+		}
+		num2 = nums2[nums2Index]
+		nums2Index++
+	}
+	if count < endLength {
+		if nums1Index == len(nums1) {
+			index := nums2Index + (endLength - count) - 1
+			num1 = num2
+			num2 = nums2[index]
+			if index-1 >= 0 {
+				if nums2[index-1] > num1 {
+					num1 = nums2[index-1]
+				}
+			}
+		}
+		if nums2Index == len(nums2) {
+			index := nums1Index + (endLength - count) - 1
+			num1 = num2
+			num2 = nums1[index]
+			if index-1 >= 0 {
+				if nums1[index-1] > num1 {
+					num1 = nums1[index-1]
+				}
+			}
+		}
+	}
+
+	if totalLength%2 == 0 {
+		return float64(num1+num2) / 2
+	} else {
+		return float64(num2)
+	}
+}
+
+/**
+执行用时分布
+0
+ms
+击败
+100.00%
+复杂度分析
+消耗内存分布
+6.30
+MB
+击败
+68.13%
+
+*/
