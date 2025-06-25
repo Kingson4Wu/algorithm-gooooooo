@@ -121,6 +121,24 @@ func minWindow(s string, t string) string {
 	return s[minStart : minStart+minLength]
 }
 
+/**
+解答错误
+186 / 268 个通过的测试用例
+
+官方题解
+输入
+s =
+"aab"
+t =
+"aab"
+
+添加到测试用例
+输出
+"ab"
+预期结果
+"aab"
+*/
+
 func TestMinWindow(t *testing.T) {
 	fmt.Println(minWindow("ADOBECODEBANC", "ABC"))
 	fmt.Println(minWindow("a", "a"))
