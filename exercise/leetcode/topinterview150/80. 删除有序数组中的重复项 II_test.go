@@ -21,6 +21,29 @@ MB
 击败
 53.49%
 
+答案是快慢指针！
+
+func removeDuplicates(nums []int) int {
+    n := len(nums)
+    if n <= 2 {
+        return n
+    }
+    slow, fast := 2, 2
+    for fast < n {
+        if nums[slow-2] != nums[fast] {
+            nums[slow] = nums[fast]
+            slow++
+        }
+        fast++
+    }
+    return slow
+}
+
+作者：力扣官方题解
+链接：https://leetcode.cn/problems/remove-duplicates-from-sorted-array-ii/solutions/702644/shan-chu-pai-xu-shu-zu-zhong-de-zhong-fu-yec2/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
 */
 /*
 *
