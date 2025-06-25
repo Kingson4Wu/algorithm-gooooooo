@@ -93,7 +93,7 @@ func getStartIndex(i int) int {
 
 // @lc code=end
 
-var phoneMap map[string]string = map[string]string{
+var phoneMap = map[string]string{
 	"2": "abc",
 	"3": "def",
 	"4": "ghi",

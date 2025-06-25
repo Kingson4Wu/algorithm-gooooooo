@@ -10,7 +10,7 @@ import (
 /**
 自己总结出来的规律
 
-1、找到从后面开始降序的最后一个元素，然后找到比这个元素大的最小元素，进行交换，然后对后面的序列升序排序
+1、从后面开始找，开始降序的最后一个元素，然后找到比这个元素大的最小元素，进行交换，然后对后面的序列升序排序
 2、本来是逆序的，直接一步升序处理
 
 时间
@@ -95,7 +95,7 @@ func nextPermutation(nums []int) {
 }
 
 func TestNextPermutation(t *testing.T) {
-	a := []int{1, 2, 3}
+	/*a := []int{1, 2, 3}
 	nextPermutation(a)
 	fmt.Println(a)
 	b := []int{3, 2, 1}
@@ -109,13 +109,18 @@ func TestNextPermutation(t *testing.T) {
 	for i := 0; i < 20; i++ {
 		nextPermutation(d)
 		fmt.Println(d)
-	}
+	}*/
 
 	fmt.Println("======")
+	aa := []int{1, 3, 4, 2}
+	nextPermutation(aa)
+	fmt.Println(aa)
+
+	/*fmt.Println("======")
 	f := []int{1, 1, 3, 5}
 	for i := 0; i < 20; i++ {
 		nextPermutation(f)
 		fmt.Println(f)
-	}
+	}*/
 
 }

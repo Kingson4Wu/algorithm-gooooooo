@@ -47,7 +47,7 @@ func permute(nums []int) [][]int {
 	var dfs func(int)
 	dfs = func(cur int) {
 		if cur == len(nums) {
-			ans = append(ans, append([]int(nil), nums...))
+			ans = append(ans, append([]int{}, nums...))
 			return
 		}
 		for i := cur; i < len(nums); i++ {
