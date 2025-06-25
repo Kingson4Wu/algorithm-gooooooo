@@ -1,8 +1,9 @@
 package topinterview150
 
 import (
+	"fmt"
 	"math/rand"
-	"time"
+	"testing"
 )
 
 /*
@@ -40,15 +41,26 @@ func (s *RandomizedSet) Remove(val int) bool {
 	if _, ok := s.m[val]; !ok {
 		return false
 	}
-	s.arr = append(s.arr[0:s.m[val]], s.arr[s.m[val]+1:]...)
+	// 这样写第一次删除之后，所有下标的错位了，跟map的对不上了
+	//s.arr = append(s.arr[0:s.m[val]], s.arr[s.m[val]+1:]...)
+
+	// 跟最后一个交换位置！！！
+	last := len(s.arr) - 1
+	s.arr[s.m[val]] = s.arr[last]
+	s.m[s.arr[last]] = s.m[val]
+	s.arr = s.arr[:last]
 	delete(s.m, val)
 	return true
 }
 
 func (s *RandomizedSet) GetRandom() int {
+	/*if len(s.arr) == 0 {
+		return 0
+	}
 	rand.New(rand.NewSource(time.Now().UnixNano()))
 	index := rand.Intn(len(s.arr))
-	return s.arr[index]
+	return s.arr[index]*/
+	return s.arr[rand.Intn(len(s.arr))]
 }
 
 /**
@@ -74,4 +86,30 @@ func (s *RandomizedSet) GetRandom() int {
 [null,true,true,true,true,true,1]
 预期结果
 [null,true,true,true,true,true,2]
+*/
+
+func TestRandomizedSet(t *testing.T) {
+	obj := Constructor()
+	obj.Insert(1)
+	obj.Insert(3)
+	obj.Insert(2)
+	obj.Remove(1)
+	obj.Remove(3)
+	fmt.Println(obj.GetRandom())
+}
+
+/**
+执行用时分布
+56
+ms
+击败
+83.63%
+复杂度分析
+消耗内存分布
+50.07
+MB
+击败
+63.05%
+复杂度分析
+
 */
