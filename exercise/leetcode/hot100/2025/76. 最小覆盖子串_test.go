@@ -60,7 +60,7 @@ func minWindow(s string, t string) string {
 						count--
 					} else {
 						charMap[prefixChar] = num - 1
-						if charMap[prefixChar] < tNum {
+						if charMap[prefixChar] < tMap[prefixChar] {
 							count--
 						}
 					}
@@ -80,6 +80,8 @@ func minWindow(s string, t string) string {
 }
 
 func TestMinWindow(t *testing.T) {
+	fmt.Println(minWindow("aab", "aab"))
+
 	fmt.Println(minWindow("ADOBECODEBANC", "ABC"))
 	fmt.Println(minWindow("a", "a"))
 	fmt.Println(minWindow("a", "aa"))
@@ -99,4 +101,36 @@ aa
 a
 ab
 abbaaavvvaa
+*/
+
+/**
+解答错误
+186 / 268 个通过的测试用例
+
+官方题解
+输入
+s =
+"aab"
+t =
+"aab"
+
+添加到测试用例
+输出
+"ab"
+预期结果
+"aab"
+*/
+
+/**
+执行用时分布
+20
+ms
+击败
+69.90%
+复杂度分析
+消耗内存分布
+8.01
+MB
+击败
+5.00%
 */
