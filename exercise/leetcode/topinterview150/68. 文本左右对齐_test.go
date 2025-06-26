@@ -106,6 +106,7 @@ func fullJustify(words []string, maxWidth int) []string {
 				for i, index := range indexes {
 					result += words[index]
 					if i < len(indexes)-1 {
+						//strings.Repeat(" ", avgSpace) // 这种写法更简洁
 						for j := 0; j < avgSpace; j++ {
 							result += " "
 						}
