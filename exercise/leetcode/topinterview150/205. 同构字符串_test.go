@@ -5,6 +5,23 @@ import (
 	"testing"
 )
 
+/**
+写错了一次，了；漏了逻辑分支
+双hashmap
+
+执行用时分布
+0
+ms
+击败
+100.00%
+复杂度分析
+消耗内存分布
+4.46
+MB
+击败
+20.06%
+复杂度分析
+*/
 /*
 *
 给定两个字符串 s 和 t ，判断它们是否是同构的。
@@ -29,16 +46,21 @@ import (
 func isIsomorphic(s string, t string) bool {
 
 	m := make(map[uint8]uint8)
+	rm := make(map[uint8]struct{})
 	for i := 0; i < len(s); i++ {
 		if ch, ok := m[s[i]]; ok {
 			if t[i] != ch {
 				return false
 			}
 		} else {
+			// 漏了这步！！不能被重复映射
+			if _, ok := rm[t[i]]; ok {
+				return false
+			}
 			m[s[i]] = t[i]
+			rm[t[i]] = struct{}{}
 		}
 	}
-
 	return true
 }
 
@@ -65,4 +87,5 @@ func TestIsIsomorphic(t *testing.T) {
 	fmt.Println(isIsomorphic("foo", "bar"))
 	fmt.Println(isIsomorphic("paper", "title"))
 	fmt.Println(isIsomorphic("paper", "title"))
+	fmt.Println(isIsomorphic("badc", "baba"))
 }
