@@ -8,6 +8,19 @@ import (
 
 /**
 看了提示要用栈
+研究一下规律，分多个场景分支
+
+执行用时分布
+0
+ms
+击败
+100.00%
+复杂度分析
+消耗内存分布
+4.67
+MB
+击败
+95.29%
 
 */
 /*
@@ -98,11 +111,11 @@ func simplifyPath(path string) string {
 			if path[start:start+length] == ".." {
 				if len(stack) > 0 {
 					stack = stack[0 : len(stack)-1]
-					length = 0
-					continue
-				} else {
+				} /*else {
 					return "/"
-				}
+				}*/
+				length = 0
+				continue
 			} else {
 				stack = append(stack, path[start:start+length])
 				length = 0
@@ -120,9 +133,9 @@ func simplifyPath(path string) string {
 		if path[start:start+length] == ".." {
 			if len(stack) > 0 {
 				stack = stack[0 : len(stack)-1]
-			} else {
+			} /*else {
 				return "/"
-			}
+			}*/
 		} else {
 			stack = append(stack, path[start:start+length])
 		}
@@ -152,5 +165,9 @@ func TestSimplifyPath(t *testing.T) {
 	fmt.Println(simplifyPath("/home/user/Documents/../Pictures"))
 	fmt.Println(simplifyPath("/../"))
 	fmt.Println(simplifyPath("/.../a/../b/c/../d/./"))
+
+	fmt.Println(simplifyPath("/a/../../b/../c//.//"))
+
+	fmt.Println(simplifyPath("/home//user/Documents/../Pictures//dddd/wecd/////"))
 
 }
