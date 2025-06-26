@@ -5,6 +5,20 @@ import (
 	"testing"
 )
 
+/**
+执行用时分布
+0
+ms
+击败
+100.00%
+复杂度分析
+消耗内存分布
+3.80
+MB
+击败
+74.64%
+
+*/
 /*
 *
 给定字符串 s 和 t ，判断 s 是否为 t 的子序列。
@@ -16,6 +30,10 @@ import (
 如果有大量输入的 S，称作 S1, S2, ... , Sk 其中 k >= 10亿，你需要依次检查它们是否为 T 的子序列。在这种情况下，你会怎样改变代码？
 */
 func isSubsequence(s string, t string) bool {
+
+	if len(s) == 0 {
+		return true
+	}
 
 	index := 0
 	for i := 0; i < len(t); i++ {
