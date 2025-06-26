@@ -39,6 +39,10 @@ func lengthOfLastWord(s string) int {
 		}
 		count++
 	}
+	// 漏了这个！！！
+	if count > 0 {
+		return count
+	}
 	return 0
 }
 
@@ -58,8 +62,24 @@ s =
 1
 */
 
+/**
+执行用时分布
+0
+ms
+击败
+100.00%
+复杂度分析
+消耗内存分布
+4.02
+MB
+击败
+18.81%
+复杂度分析
+*/
+
 func TestLengthOfLastWord(t *testing.T) {
 	fmt.Println(lengthOfLastWord("Hello World"))
 	fmt.Println(lengthOfLastWord("   fly me   to   the moon  "))
 	fmt.Println(lengthOfLastWord("luffy is still joyboy"))
+	fmt.Println(lengthOfLastWord("a"))
 }

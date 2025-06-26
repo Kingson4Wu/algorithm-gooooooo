@@ -36,8 +36,6 @@ package topinterview150
 题解：
 一句话概括：如果x到达不了y+1，那么x-y之间的点也不可能到达y+1，因为中间任何一点的油都是拥有前面的余量的，所以下次遍历直接从y+1开始
 
-540
-隐藏回复
 
 */
 func canCompleteCircuit(gas []int, cost []int) int {
