@@ -1,5 +1,10 @@
 package topinterview150
 
+import (
+	"fmt"
+	"testing"
+)
+
 /*
 *
 已知一个长度为 n 的数组，预先按照升序排列，经由 1 到 n 次 旋转 后，得到输入数组。例如，原数组 nums = [0,1,2,4,5,6,7] 在变化后可能得到：
@@ -40,7 +45,9 @@ func findMin(nums []int) int {
 		if nums[start] < nums[end] || start == end {
 			return nums[start]
 		} else {
-			mid := (end - start) / 2
+			//mid := (end - start) / 2
+			// 是 end + start ！！！
+			mid := (end + start) / 2
 			a := divide(nums, start, mid)
 			b := divide(nums, mid+1, end)
 			return min(a, b)
@@ -68,4 +75,23 @@ main.findMin({0xc00008a0c0?, 0xb?, 0x10?})
 添加到测试用例
 nums =
 [2,3,4,5,1]
+*/
+
+func TestFindMin(t *testing.T) {
+	fmt.Println(findMin([]int{2, 3, 4, 5, 1}))
+}
+
+/**
+执行用时分布
+0
+ms
+击败
+100.00%
+复杂度分析
+消耗内存分布
+4.23
+MB
+击败
+24.58%
+
 */
