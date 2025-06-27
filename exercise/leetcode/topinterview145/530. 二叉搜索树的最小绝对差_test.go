@@ -1,6 +1,10 @@
 package topinterview145
 
-import "math"
+import (
+	"fmt"
+	"math"
+	"testing"
+)
 
 /**
  * Definition for a binary tree node.
@@ -17,7 +21,7 @@ import "math"
 改用队列，层次遍历来实现
 
 理解错题目，不一定是相邻的就一定最小
-要用中序遍历来计算！！！！
+要用中序遍历来计算！！！！用递归做简单
 
 超出内存限制
 最后执行的输入
@@ -54,7 +58,7 @@ root =
 	return min
 }*/
 
-func getMinimumDifference(root *TreeNode) int {
+/*func getMinimumDifference(root *TreeNode) int {
 
 	min := math.MaxInt32
 	var queue []*TreeNode
@@ -78,7 +82,7 @@ func getMinimumDifference(root *TreeNode) int {
 	}
 
 	return min
-}
+}*/
 
 /**
 解答错误
@@ -103,4 +107,52 @@ root =
 
 236 - 227 = 9 !!!
 
+*/
+
+func getMinimumDifference(root *TreeNode) int {
+
+	min := math.MaxInt32
+	var pre *TreeNode
+
+	var dfs func(node *TreeNode)
+	dfs = func(node *TreeNode) {
+		if node.Left != nil {
+			dfs(node.Left)
+		}
+		if pre != nil {
+			if node.Val-pre.Val < min {
+				min = node.Val - pre.Val
+			}
+		}
+		pre = node
+
+		if node.Right != nil {
+			dfs(node.Right)
+		}
+	}
+	dfs(root)
+
+	return min
+}
+
+func TestGetMinimumDifference(t *testing.T) {
+	fmt.Println(getMinimumDifference(&TreeNode{Val: 4,
+		Right: &TreeNode{Val: 6},
+		Left: &TreeNode{Val: 2,
+			Left:  &TreeNode{Val: 1},
+			Right: &TreeNode{Val: 3}}}))
+}
+
+/**
+执行用时分布
+0
+ms
+击败
+100.00%
+复杂度分析
+消耗内存分布
+8.45
+MB
+击败
+38.81%
 */
