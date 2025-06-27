@@ -1,4 +1,4 @@
-package topinterview145
+package topinterview150
 
 import (
 	"fmt"
@@ -42,7 +42,7 @@ type LinkedNode struct {
 	next *LinkedNode
 }
 
-func Constructor(capacity int) LRUCache {
+func Constructor1(capacity int) LRUCache {
 	return LRUCache{
 		data:     make(map[int]*LinkedNode),
 		capacity: capacity,
@@ -114,7 +114,7 @@ func (lru *LRUCache) Put(key int, value int) {
  */
 
 func TestLRUCache(t *testing.T) {
-	obj := Constructor(2)
+	obj := Constructor1(2)
 	obj.Put(1, 1)
 	obj.Put(2, 2)
 	fmt.Println(obj.Get(1))
