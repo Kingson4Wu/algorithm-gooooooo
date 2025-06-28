@@ -57,6 +57,7 @@ func wordBreak(s string, wordDict []string) bool {
 	}
 
 	dp := make([]bool, len(s)+1)
+	//空串肯定为true
 	dp[0] = true
 
 	//s中以i结尾, 子串是0...j

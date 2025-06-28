@@ -9,6 +9,7 @@ import (
 看了题解做的
 
 使用hash存
+0、遍历第一遍，hashmap存数字是否存在
 1、遍历，从当前数逐步加一，到找不到停止，则为由当前数开始的最长
 2、判断是否存在更小的数，由更小的数来迭代，避免重复计算
 
@@ -65,7 +66,6 @@ func longestConsecutive(nums []int) int {
 			maxCount = count
 		}
 	}
-
 	return maxCount
 }
 
