@@ -8,9 +8,9 @@ import (
 /**
 看过题解做的
 
-两个dp，保存正负的成积
-dp1 以i结尾的成绩最大值
-dp2 以i结尾的成绩最小值
+两个dp，保存正负的乘积
+dp1 以i结尾的乘积最大值
+dp2 以i结尾的乘积最小值
 
 dp1[i] = max(dp1[i-1] * num[i], dp2[i-1] * num[i], num[i])
 dp2[i] = min(dp2[i-1] * num[i], dp2[i-1] * num[i], num[i])
