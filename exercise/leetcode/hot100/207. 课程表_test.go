@@ -46,7 +46,11 @@ func canFinish(numCourses int, prerequisites [][]int) bool {
 			}
 		}
 	}
-	return len(ans) == numCourses
+	if len(ans) < len(inDegree) {
+		return false
+	}
+
+	return numCourses >= len(inDegree)
 }
 
 func TestCanFinish(t *testing.T) {
@@ -56,6 +60,12 @@ func TestCanFinish(t *testing.T) {
 	fmt.Println(canFinish(3, [][]int{{1, 2}, {2, 3}}))
 	fmt.Println(canFinish(5, [][]int{{1, 0}, {0, 2}, {2, 4}, {0, 3}, {3, 4}}))
 	fmt.Println(canFinish(4, [][]int{{1, 2}, {2, 3}, {3, 4}, {4, 1}}))
+
+	/**
+	numCourses = 1
+	prerequisites = []
+	含义是：你有一门课程要上，没有任何先修课要求。
+	*/
 	fmt.Println(canFinish(1, [][]int{}))
 }
 
@@ -71,4 +81,18 @@ prerequisites =
 false
 预期结果
 true
+*/
+
+/**
+执行用时分布
+4
+ms
+击败
+38.05%
+复杂度分析
+消耗内存分布
+8.25
+MB
+击败
+18.75%
 */
