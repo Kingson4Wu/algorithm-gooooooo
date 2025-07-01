@@ -20,6 +20,8 @@ func adjust(nums []int, root, len int) {
 		}
 
 		//这步别忘了 ！！！
+		//它的作用是：
+		//在“最大堆”的结构调整过程中，判断当前根节点是否已经大于等于它的子节点，如果是，就说明已经满足最大堆的性质，可以提前终止调整
 		if nums[child] <= nums[root] {
 			break
 		}
