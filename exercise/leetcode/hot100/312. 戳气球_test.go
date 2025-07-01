@@ -1,6 +1,9 @@
 package hot100
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 /**
 有 n 个气球，编号为0 到 n - 1，每个气球上都标有一个数字，这些数字存在数组 nums 中。
@@ -50,11 +53,60 @@ int[][] dp = new int[n + 2][n + 2];
 
 */
 
+/*
+*
+动态规划
+首尾各添加一个元素1，方便计算，创建n+2的dp
+dp[i][j] = x 表示，戳破气球 i 和气球 j 之间（开区间，不包括 i 和 j）的所有气球，可以获得的最高分数为 x。
+dp[i][j]= max(val[i]×val[k]×val[j] + dp[i][k] + dp[k][j]), （i+1 < k < j-1） (i < j-1)
+dp[i][j]= 0, （i+1 < k < j-1） (i >= j-1)
+最终答案即为 dp[0][n+1]
+
+(n-1, n) 是一个空区间（n-1+1 == n，没有气球可以戳），所以其值一定是 0，即默认值。
+*/
 func maxCoins(nums []int) int {
 
-	return 0
+	n := len(nums)
+	dp := make([][]int, n+2)
+	for i := 0; i < n+2; i++ {
+		dp[i] = make([]int, n+2)
+	}
+
+	// 冗余这份数据，方便后面计算
+	val := make([]int, n+2)
+	val[0], val[n+1] = 1, 1
+	for i := 1; i <= n; i++ {
+		val[i] = nums[i-1]
+	}
+
+	//dp[i][j] j-i<=1 的都等于0，没有气球可以戳
+	for step := 2; step <= n+1; step++ {
+		for i := 0; i <= n-step+1; i++ {
+			j := i + step
+			for k := i + 1; k < j; k++ {
+				dp[i][j] = max(dp[i][j], val[i]*val[k]*val[j]+dp[i][k]+dp[k][j])
+			}
+		}
+	}
+	return dp[0][n+1]
 }
+
+/**
+执行用时分布
+39
+ms
+击败
+60.32%
+复杂度分析
+消耗内存分布
+7.32
+MB
+击败
+57.94%
+*/
 
 func TestMaxCoins(t *testing.T) {
 
+	fmt.Println(maxCoins([]int{3, 1, 5, 8}))
+	fmt.Println(maxCoins([]int{1, 5}))
 }
