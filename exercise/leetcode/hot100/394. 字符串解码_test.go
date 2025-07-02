@@ -1,6 +1,11 @@
 package hot100
 
-import "testing"
+import (
+	"fmt"
+	"strconv"
+	"strings"
+	"testing"
+)
 
 /*
 *
@@ -152,43 +157,84 @@ func getDigits() int {
 
 */
 
+/*
+*
+自己想的，用栈实现
+栈保存重复的次数(数字前缀)
+对应的栈下标的辅助栈保存将要重复的字符串
+遇到'['入栈，遇到']'出栈， 出栈 追加到 栈顶 次数对应的辅助栈 的前缀字符串，如果栈为空，则追加到最终的结果字符串
+*/
 func decodeString(s string) string {
 
-	var leftIndex []int
-	var rightIndex []int
+	//3[a2[c]]
+	//2[abc]3[cd]ef
 
-	var leftCount []int
+	var stack []int
+	var prestr []string
+	var result string
 
-	var result []rune
-
-	index1, index2 := 0, 0
-	count := 0
-
+	var nums []rune
 	for _, ch := range s {
-
-		if ch == '[' {
-			leftCount = append(leftCount, count)
-			leftIndex = append(leftIndex, index1)
-			rightIndex = append(rightIndex, index2)
-			continue
+		if ch >= 'a' && ch <= 'z' {
+			if len(stack) == 0 {
+				result += string(ch)
+			} else {
+				prestr[len(prestr)-1] += string(ch)
+			}
+		} else if ch >= '0' && ch <= '9' {
+			nums = append(nums, ch)
+		} else if ch == '[' {
+			count, _ := strconv.Atoi(string(nums))
+			nums = nums[:0]
+			stack = append(stack, count)
+			prestr = append(prestr, "")
+		} else if ch == ']' {
+			str := strings.Repeat(prestr[len(prestr)-1], stack[len(stack)-1])
+			stack = stack[:len(stack)-1]
+			prestr = prestr[:len(prestr)-1]
+			if len(stack) == 0 {
+				result += str
+			} else {
+				prestr[len(prestr)-1] += str
+			}
 		}
-		if ch == ']' {
-			/*c := leftCount[len(leftCount)-1]
-			leftCount = leftCount[:len(leftCount)-1]
-			l := leftIndex[len(leftIndex)-1]
-			leftIndex = leftIndex[:len(leftIndex)-1]
-			r := rightIndex[len(rightIndex)-1]
-			rightIndex = rightIndex[:len(rightIndex)-1]*/
-
-			//result = s[l:r] + result
-
-		}
-		result = append(result, ch)
 	}
-
-	return ""
+	return result
 }
 
-func TestDecodeString(t *testing.T) {
+/**
+解答错误
+28 / 34 个通过的测试用例
 
+官方题解
+输入
+s =
+"100[leetcode]"
+
+添加到测试用例
+输出
+"leetcode"
+
+else if ch >= '1' && ch <= '9' {
+改成
+else if ch >= '0' && ch <= '9' {
+
+执行用时分布
+0
+ms
+击败
+100.00%
+复杂度分析
+消耗内存分布
+3.92
+MB
+击败
+41.74%
+*/
+
+func TestDecodeString(t *testing.T) {
+	fmt.Println(decodeString("3[a]2[bc]"))
+	fmt.Println(decodeString("3[a2[c]]"))
+	fmt.Println(decodeString("2[abc]3[cd]ef"))
+	fmt.Println(decodeString("abc3[cd]xyz"))
 }
