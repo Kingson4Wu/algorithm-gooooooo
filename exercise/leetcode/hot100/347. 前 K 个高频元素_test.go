@@ -40,14 +40,14 @@ func topKFrequent(nums []int, k int) []int {
 	partition := func(arr [][]int, low, high int) int {
 		temp := arr[low]
 		for low < high {
-			for low < high && arr[high][1] <= arr[low][1] {
+			for low < high && arr[high][1] <= temp[1] {
 				high--
 			}
 			if low < high {
 				arr[low] = arr[high]
 			}
-			for low < high && arr[low][1] > arr[high][1] {
-				low--
+			for low < high && arr[low][1] > temp[1] {
+				low++
 			}
 			if low < high {
 				arr[high] = arr[low]
@@ -64,7 +64,10 @@ func topKFrequent(nums []int, k int) []int {
 		}
 
 		mid := partition(arr, start, end)
-		if mid >= k-1 {
+		if mid == k {
+			return
+		}
+		if mid > k {
 			quickSortTopK(arr, start, mid)
 		} else {
 			quickSortTopK(arr, mid+1, end)
@@ -87,6 +90,26 @@ nums =
 [3,0,1,0]
 k =
 1
+
+比较的temp写错了
+arr[high][1] <= temp[1]
+写成了
+arr[high][1] <= arr[low][1]
+
+执行用时分布
+3
+ms
+击败
+47.80%
+复杂度分析
+消耗内存分布
+7.68
+MB
+击败
+32.54%
+复杂度分析
+
+
 */
 
 /**
