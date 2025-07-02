@@ -51,6 +51,11 @@ import (
 很容易就能实现时间复杂度为 O(n log n) 的解决方案，你可以在线性时间复杂度 O(n) 内用一趟扫描解决此问题吗？
 你能不使用任何内置函数解决此问题吗？（如，C++ 中的 __builtin_popcount ）
 */
+/**
+方法三：动态规划——最低有效位
+dp[i] = dp[i>>1] + i&1
+dp[i] 的值等于 dp[i>>1] 的值加上 i 除以 2 的余数(即i&1)。
+*/
 func countBits(n int) []int {
 
 	dp := make([]int, n+1)
