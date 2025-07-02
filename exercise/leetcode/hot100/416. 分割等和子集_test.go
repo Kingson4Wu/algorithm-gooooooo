@@ -36,6 +36,8 @@ dp[i][j]表示前i个选中的和是否等于j
 2、dp[0][nums[0]] = true
 
 边界条件考虑，提前结束
+1、数组总和sum和为奇数
+2、最大的数字 > sum/2
 */
 /**
 时间
@@ -61,6 +63,7 @@ func canPartition(nums []int) bool {
 			maxNum = num
 		}
 	}
+	//和为奇数
 	if sum%2 != 0 {
 		return false
 	}
@@ -69,9 +72,9 @@ func canPartition(nums []int) bool {
 	}
 
 	dp := make([][]bool, len(nums))
-	l := sum / 2
+	target := sum / 2
 	for i := 0; i < len(dp); i++ {
-		dp[i] = make([]bool, l+1)
+		dp[i] = make([]bool, target+1)
 	}
 	for i := 0; i < len(dp); i++ {
 		dp[i][0] = true
@@ -81,7 +84,7 @@ func canPartition(nums []int) bool {
 	/** dp[0][nums[i]] 这些可以不用填充  */
 
 	for i := 1; i < len(dp); i++ {
-		for j := 1; j <= l; j++ {
+		for j := 1; j <= target; j++ {
 			if nums[i] > j {
 				dp[i][j] = dp[i-1][j]
 			} else {
@@ -91,7 +94,7 @@ func canPartition(nums []int) bool {
 	}
 
 	for i := 0; i < len(dp); i++ {
-		if dp[i][l] {
+		if dp[i][target] {
 			return true
 		}
 	}

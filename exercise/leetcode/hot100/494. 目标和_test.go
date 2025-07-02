@@ -68,7 +68,6 @@ func TestFindTargetSumWays(t *testing.T) {
 	fmt.Println(findTargetSumWays([]int{1, 1, 1, 1, 1}, 3))
 	fmt.Println(findTargetSumWays([]int{1}, 1))
 
-	//todo
 	fmt.Println(findTargetSumWays([]int{1, 0}, 1))
 	/**
 	输入
