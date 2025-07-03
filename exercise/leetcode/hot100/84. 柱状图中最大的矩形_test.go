@@ -70,3 +70,51 @@ func TestLargestRectangleArea(t *testing.T) {
 	fmt.Println(largestRectangleArea([]int{4}))
 	fmt.Println(largestRectangleArea([]int{4, 4, 6, 7, 0, 3, 4, 2, 5, 0, 0, 0, 5, 6, 7, 8, 3, 2, 4, 0}))
 }
+
+/**
+单调栈 + 哨兵法
+时间复杂度：O(n)，空间复杂度：O(n)
+
+func largestRectangleArea(heights []int) int {
+	// 在头尾添加两个哨兵，避免特殊情况处理
+	heights = append([]int{0}, heights...)
+	heights = append(heights, 0)
+	//前哨兵 0	数组头部	保证栈底永不为空，简化边界处理
+	//后哨兵 0	数组尾部	强制触发清空栈，确保计算所有可能的最大矩形
+
+	stack := []int{} // 存的是下标
+	maxArea := 0
+
+	for i := 0; i < len(heights); i++ {
+		for len(stack) > 0 && heights[i] < heights[stack[len(stack)-1]] {
+			h := heights[stack[len(stack)-1]]
+			stack = stack[:len(stack)-1]
+			w := i - stack[len(stack)-1] - 1
+			// stack[len(stack)-1] 是在出栈之后访问的 → 实际上是原来的 stack[len(stack)-2]。
+			maxArea = max(maxArea, h*w)
+		}
+		stack = append(stack, i)
+	}
+	return maxArea
+}
+
+用栈保存递增的柱子下标，当遇到更矮的柱子时，开始出栈并计算以弹出柱子为高的最大面积，直到单调性恢复。
+
+优势总结：
+只用一个栈，空间少；
+不需要每次都遍历整个栈求面积，避免 O(n²)；
+哨兵能统一处理边界；
+只在单调性被破坏时弹栈，利用“前面的高度更高”的性质求面积，符合人类直觉。
+
+执行用时分布
+7
+ms
+击败
+49.96%
+复杂度分析
+消耗内存分布
+9.75
+MB
+击败
+60.67%
+*/
