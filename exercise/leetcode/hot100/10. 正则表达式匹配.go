@@ -1,8 +1,76 @@
 package hot100
 
-func isMatch(s string, p string) bool {
+/**
+. 匹配任意一个字符。
+* 匹配前一个字符出现0次或多次。
 
-	return false
+动态规划
+dp[i][j] 表示：s[0...i-1] 和 p[0...j-1] 是否匹配
+（1）如果 p[j-1] 是普通字符 或 '.'
+if s[i-1] == p[j-1] 或 p[j-1] == '.' then dp[i][j] = dp[i-1][j-1]
+(2) 如果 p[j-1] 是 '*' (前一个字符出现 0 次或多次)
+	- 出现0次：忽略前一个字符和 *
+		- dp[i][j] = dp[i][j-2]
+	- 出现1次或多次 (看前一个字符是否能和 s[i-1] 匹配)
+		- if s[i-1] == p[j-2] || p[j-2] == '.' {
+    		dp[i][j] = dp[i-1][j]
+			// 复用之前已经匹配过的状态，向上延伸（多一个字符的匹配），从而实现 * 的“重复多次”效果
+		}
+(3) 初始化：dp[0][0] = true（空串匹配空串）
+初始化：空串 s 与 p 的前缀是否能匹配（只能通过 x* 组合来匹配空串）
+
+这道题太难。背都不想背，写都不想写，直接让AI给答案
+
+执行用时分布
+1
+ms
+击败
+29.34%
+复杂度分析
+消耗内存分布
+4.20
+MB
+击败
+19.80%
+复杂度分析
+
+
+*/
+
+func isMatch(s string, p string) bool {
+	m, n := len(s), len(p)
+	dp := make([][]bool, m+1)
+	for i := 0; i <= m; i++ {
+		dp[i] = make([]bool, n+1)
+	}
+
+	dp[0][0] = true // 空字符串和空模式匹配
+
+	// 初始化第一行（s 为空）
+	for j := 2; j <= n; j++ {
+		if p[j-1] == '*' {
+			dp[0][j] = dp[0][j-2]
+		}
+	}
+
+	for i := 1; i <= m; i++ {
+		for j := 1; j <= n; j++ {
+			if p[j-1] == '*' {
+				dp[i][j] = dp[i][j-2] // * 匹配0次
+				if match(s[i-1], p[j-2]) {
+					dp[i][j] = dp[i][j] || dp[i-1][j] // * 匹配多次
+				}
+			} else if match(s[i-1], p[j-1]) {
+				dp[i][j] = dp[i-1][j-1]
+			}
+		}
+	}
+
+	return dp[m][n]
+}
+
+func match(a, b byte) bool {
+	return a == b || b == '.'
 }
 
 /**
