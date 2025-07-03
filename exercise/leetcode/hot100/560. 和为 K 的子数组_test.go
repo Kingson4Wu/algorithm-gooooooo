@@ -24,9 +24,8 @@ import (
 
 https://zhuanlan.zhihu.com/p/356373197
 
-定义pre[i]为[0...i]里所有数的和，则pre[i]可以由pre[i-1]递推而来，即：pre[i] = pre[i-1] + nums[i],那么[j...i]这个子数组和为k这个条件可以转化为 pre[i] - pre[j-1] === k,移项之后可的符合条件的下标需要满足pre[j-1]=pre[i]-k.
-
-map存的是前缀和满足改前缀和的次数。count是满足的连续子数组的个数。每次遍历，更新前缀和，如果前缀和减去目标和出现在map中，count则加上满足的次数。
+定义pre[i]为[0...i]里所有数的和，则pre[i]可以由pre[i-1]递推而来，即：pre[i] = pre[i-1] + nums[i],那么[j...i]这个子数组和为k这个条件可以转化为 pre[i] - pre[j-1] == k,移项之后可的符合条件的下标需要满足pre[j-1]=pre[i]-k.
+map存前缀和的次数。count是满足的连续子数组的个数。每次遍历，更新前缀和，如果前缀和减去目标和出现在map中，count则加上满足的次数。
 
 
 */
@@ -50,14 +49,18 @@ dp[i][j] = d[i][j-1] + d[j][j]
 func subarraySum(nums []int, k int) int {
 
 	/** 前缀和数量保存 */
+	// 以0...i的和，从下标0开始
 	m := make(map[int]int)
 	count := 0
+
 	pre := 0
+	//空数组满足条件，和为0
 	m[0] = 1
 	for i := 0; i < len(nums); i++ {
 		pre += nums[i]
-		count += m[pre-k]
 		m[pre]++
+		// pre 是 0...i的和；pre - k 符合条件，说明有m[pre-k] 个 0...j符合条件，对应极有m[pre-k]个 j...i的子数组符合和为k
+		count += m[pre-k]
 	}
 	return count
 }
