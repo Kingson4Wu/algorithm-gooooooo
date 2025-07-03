@@ -7,8 +7,10 @@ import (
 
 /*
 *
-用一个stack保存为处理完的下标
-用结果数组ans直接计数
+用一个stack保存为处理完的下标， stack 的下标对应的数值是单调递减的
+用结果数组ans直接计数(效率太低)- 记录一个总的即可 ， 计数就是两个下标相减呀。。。
+
+超时，不想了，看答案吧
 */
 func dailyTemperatures(temperatures []int) []int {
 
@@ -18,19 +20,33 @@ func dailyTemperatures(temperatures []int) []int {
 	stack = append(stack, 0)
 	for i := 1; i < n; i++ {
 		for k := len(stack) - 1; k >= 0; k-- {
-			ans[stack[k]]++
 			if temperatures[i] > temperatures[stack[k]] {
+				//两个下标相减就是结果
+				ans[stack[k]] = i - stack[k]
 				stack = stack[0 : len(stack)-1]
+			} else {
+				// stack 是单调递减的
+				break
 			}
 		}
 		stack = append(stack, i)
 	}
-	//最终没找到更大的，全部置0
-	for k := len(stack) - 1; k >= 0; k-- {
-		ans[stack[k]] = 0
-	}
 	return ans
 }
+
+/**
+执行用时分布
+5
+ms
+击败
+74.82%
+复杂度分析
+消耗内存分布
+10.57
+MB
+击败
+19.26%
+*/
 
 /**
 超出时间限制
