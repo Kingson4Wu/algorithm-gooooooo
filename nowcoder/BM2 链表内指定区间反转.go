@@ -73,31 +73,33 @@ func reverseBetween(head *ListNode, m int, n int) *ListNode {
 */
 
 /**
-import java.util.*;
-public class Solution {
-    public ListNode reverseBetween (ListNode head, int m, int n) {
-        //加个表头
-        ListNode res = new ListNode(-1);
-        res.next = head;
-        //前序节点
-        ListNode pre = res;
-        //当前节点
-        ListNode cur = head;
-        //找到m
-        for(int i = 1; i < m; i++){
-            pre = cur;
-            cur = cur.next;
-        }
-        //从m反转到n
-        for(int i = m; i < n; i++){
-            ListNode temp = cur.next;
-            cur.next = temp.next;
-            temp.next = pre.next;
-            pre.next = temp;
-        }
-        //返回去掉表头
-        return res.next;
-    }
+func reverseBetween(head *ListNode, m int, n int) *ListNode {
+	if m == n || head == nil {
+		return head
+	}
+
+	//哨兵节点， 避免处理头指针特殊情况
+	dummy := &ListNode{Next: head}
+	pre := dummy
+
+	// 1. 找到第 m-1 个节点
+	for i := 1; i < m; i++ {
+		pre = pre.Next
+	}
+
+	// 2. 反转 m 到 n 之间的节点，头插法
+	start := pre.Next      // 第 m 个节点
+	then := start.Next     // 第 m+1 个节点
+
+	for i := 0; i < n-m; i++ {
+		start.Next = then.Next
+		then.Next = pre.Next
+		pre.Next = then
+		then = start.Next
+	}
+
+	return dummy.Next
 }
+
 
 */
