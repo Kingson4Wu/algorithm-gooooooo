@@ -95,6 +95,20 @@ func combinationSum2(candidates []int, target int) [][]int {
 	return ans
 }
 
+/**
+执行用时分布
+1
+ms
+击败
+26.85%
+复杂度分析
+消耗内存分布
+4.38
+MB
+击败
+47.83%
+*/
+
 func TestCombinationSum2(t *testing.T) {
 	fmt.Println(combinationSum2([]int{10, 1, 2, 7, 6, 1, 5}, 8))
 }

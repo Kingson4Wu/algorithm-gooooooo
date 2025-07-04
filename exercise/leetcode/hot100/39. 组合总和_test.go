@@ -78,3 +78,48 @@ func TestCombinationSum(t *testing.T) {
 	fmt.Println(combinationSum([]int{2, 3, 5}, 8))
 	fmt.Println(combinationSum([]int{2}, 1))
 }
+
+/**
+func combinationSum(candidates []int, target int) [][]int {
+    var res [][]int
+    var path []int
+
+    sort.Ints(candidates) // 先排序，方便剪枝
+
+    var backtrack func(start, sum int)
+    backtrack = func(start, sum int) {
+        if sum == target {
+            temp := make([]int, len(path))
+            copy(temp, path)
+            res = append(res, temp)
+            return
+        }
+
+        for i := start; i < len(candidates); i++ {
+            if sum + candidates[i] > target {
+                break // 剪枝
+            }
+
+            path = append(path, candidates[i])
+            backtrack(i, sum + candidates[i]) // ❗这里传 i 而不是 i+1，允许重复使用当前数
+            path = path[:len(path)-1]
+        }
+    }
+
+    backtrack(0, 0)
+    return res
+}
+
+执行用时分布
+0
+ms
+击败
+100.00%
+复杂度分析
+消耗内存分布
+4.54
+MB
+击败
+93.96%
+
+*/
