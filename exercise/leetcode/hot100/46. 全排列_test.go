@@ -41,7 +41,7 @@ import (
 -10 <= nums[i] <= 10
 nums 中的所有整数 互不相同
 */
-func permute(nums []int) [][]int {
+/*func permute(nums []int) [][]int {
 
 	var ans [][]int
 	var dfs func(int)
@@ -59,6 +59,32 @@ func permute(nums []int) [][]int {
 	}
 	dfs(0)
 	return ans
+}*/
+
+func permute(nums []int) [][]int {
+	var res [][]int
+	var path []int
+	used := make([]bool, len(nums))
+
+	var dfs func()
+	dfs = func() {
+		if len(path) == len(nums) {
+			res = append(res, append([]int(nil), path...))
+			return
+		}
+		for i := 0; i < len(nums); i++ {
+			if used[i] {
+				continue
+			}
+			used[i] = true
+			path = append(path, nums[i])
+			dfs()
+			path = path[:len(path)-1]
+			used[i] = false
+		}
+	}
+	dfs()
+	return res
 }
 
 func TestPermute(t *testing.T) {
