@@ -115,3 +115,39 @@ func subsets(nums []int) (ans [][]int) {
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 */
+
+/**
+统一用这个模版
+
+func subsets(nums []int) [][]int {
+    var res [][]int
+    var path []int
+
+    var dfs func(start int)
+    dfs = func(start int) {
+        res = append(res, append([]int(nil), path...)) // 每一步都加入子集
+        for i := start; i < len(nums); i++ {
+            path = append(path, nums[i])
+            dfs(i + 1)
+            path = path[:len(path)-1]
+        }
+    }
+
+    dfs(0)
+    return res
+}
+
+执行用时分布
+0
+ms
+击败
+100.00%
+复杂度分析
+消耗内存分布
+4.04
+MB
+击败
+75.08%
+复杂度分析
+
+*/
