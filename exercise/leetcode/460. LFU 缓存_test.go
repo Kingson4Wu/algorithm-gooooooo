@@ -1,5 +1,10 @@
 package leetcode
 
+import (
+	"fmt"
+	"testing"
+)
+
 /**
 请你为 最不经常使用（LFU）缓存算法设计并实现数据结构。
 
@@ -54,22 +59,188 @@ lfu.get(4);      // 返回 4
 最多调用 2 * 105 次 get 和 put 方法
 */
 
+/*
+*
+方法二：双哈希 + 双向链表（时间复杂度 O(1)）
+keyToValFreq: map[key] => (value, freq)
+freqToKeys: map[freq] => keys 双向链表(按 LRU 顺序存 key)
+minFreq: 当前所有 key 中的最小 freq
+capacity: 缓存容量
+
+Put:若 key 已存在：- 更新 value !!!
+
+---
+
+### 📦 操作逻辑：
+
+#### 1. `get(key)`
+
+* 如果 key 不存在，返回 -1
+* 否则：
+  - 获取当前 `val, freq`
+  - 从 `freqToKeys[freq]` 中移除该 key
+  - freq += 1，并加入 `freqToKeys[freq+1]`
+  - 如果 freqToKeys\[freq] 为空且 freq 是 minFreq，则 minFreq++
+  - 更新 key 的频率
+
+#### 2. `put(key, value)`
+* 如果 `capacity == 0`，直接返回
+* 若 key 已存在：
+  - 更新 value（同 get 一样更新 freq）!!!!
+
+* 若 key 不存在：
+  - 如果当前缓存已满：
+    *- 从 freqToKeys\[minFreq] 中 **删除最旧的 key**
+    *- 同时从 keyToValFreq 中删掉
+  - 插入新 key，freq = 1，更新 minFreq = 1
+
+---
+
+### 📌 核心思路小结：
+
+| 操作          | 时间复杂度 |
+| ----------- | ----- |
+| get(key)    | O(1)  |
+| put(key, v) | O(1)  |
+
+* 利用双哈希表管理 key 到 value/freq 映射，以及 freq 到 LRU key 列表。
+* 淘汰策略优先考虑频率，再看访问顺序（LRU）。
+*/
 type LFUCache struct {
+	keyToValFreq   map[int]*LFUNode
+	freqToKeysHead map[int]*LFUNode
+	freqToKeysTail map[int]*LFUNode
+	minFreq        int
+	capacity       int
+	size           int
+}
+
+type LFUNode struct {
+	key  int
+	val  int
+	freq int
+	pre  *LFUNode
+	next *LFUNode
 }
 
 func Constructor(capacity int) LFUCache {
 
-	return LFUCache{}
+	return LFUCache{
+		capacity:       capacity,
+		keyToValFreq:   make(map[int]*LFUNode),
+		freqToKeysHead: make(map[int]*LFUNode),
+		freqToKeysTail: make(map[int]*LFUNode),
+	}
 }
 
-func (this *LFUCache) Get(key int) int {
-
-	return 0
+func (l *LFUCache) access(node *LFUNode) {
+	// 删除
+	if node.pre == nil && node.next == nil {
+		l.freqToKeysHead[node.freq] = nil
+		l.freqToKeysTail[node.freq] = nil
+		if node.freq == l.minFreq {
+			l.minFreq = node.freq + 1
+		}
+	} else if node.pre != nil && node.next != nil {
+		node.pre.next = node.next
+		node.next.pre = node.pre
+	} else if node.pre == nil {
+		l.freqToKeysHead[node.freq] = node.next
+		node.next.pre = nil
+	} else {
+		l.freqToKeysTail[node.freq] = node.pre
+		node.pre.next = nil
+	}
+	node.freq++
+	// 新增
+	if l.freqToKeysTail[node.freq] == nil {
+		l.freqToKeysHead[node.freq] = node
+		l.freqToKeysTail[node.freq] = node
+		node.next = nil
+		node.pre = nil
+	} else {
+		node.pre = l.freqToKeysTail[node.freq]
+		l.freqToKeysTail[node.freq].next = node
+		l.freqToKeysTail[node.freq] = node
+		node.next = nil
+	}
 }
 
-func (this *LFUCache) Put(key int, value int) {
+func (l *LFUCache) Get(key int) int {
 
+	if node, ok := l.keyToValFreq[key]; ok {
+		l.access(node)
+		return node.val
+	}
+	return -1
 }
+
+func (l *LFUCache) Put(key int, value int) {
+
+	if l.capacity == 0 {
+		return
+	}
+
+	if node, ok := l.keyToValFreq[key]; ok {
+		// 别漏了更新值
+		if node.val != value {
+			node.val = value
+		}
+		l.access(node)
+	} else {
+
+		if l.size == l.capacity {
+			oldNode := l.freqToKeysHead[l.minFreq]
+			if oldNode == l.freqToKeysTail[l.minFreq] {
+				l.freqToKeysHead[l.minFreq] = nil
+				l.freqToKeysTail[l.minFreq] = nil
+			} else {
+				l.freqToKeysHead[l.minFreq] = oldNode.next
+				oldNode.next.pre = nil
+			}
+			delete(l.keyToValFreq, oldNode.key)
+			l.size--
+		}
+
+		node := &LFUNode{
+			key:  key,
+			freq: 1,
+			val:  value,
+		}
+		l.keyToValFreq[key] = node
+		l.minFreq = 1
+		l.size++
+
+		// 新增
+		if l.freqToKeysTail[node.freq] == nil {
+			l.freqToKeysHead[node.freq] = node
+			l.freqToKeysTail[node.freq] = node
+			node.next = nil
+			node.pre = nil
+		} else {
+			node.pre = l.freqToKeysTail[node.freq]
+			l.freqToKeysTail[node.freq].next = node
+			l.freqToKeysTail[node.freq] = node
+			node.next = nil
+		}
+	}
+}
+
+/**
+解答错误
+13 / 25 个通过的测试用例
+
+官方题解
+输入
+["LFUCache","put","put","put","put","get"]
+[[2],[3,1],[2,1],[2,2],[4,4],[2]]
+
+添加到测试用例
+输出
+[null,null,null,null,null,1]
+预期结果
+[null,null,null,null,null,2]
+*/
 
 /**
  * Your LFUCache object will be instantiated and called as such:
@@ -77,3 +248,27 @@ func (this *LFUCache) Put(key int, value int) {
  * param_1 := obj.Get(key);
  * obj.Put(key,value);
  */
+
+/**
+执行用时分布
+120
+ms
+击败
+28.87%
+复杂度分析
+消耗内存分布
+74.89
+MB
+击败
+65.27%
+
+*/
+
+func TestLFUCache(t *testing.T) {
+	obj := Constructor(2)
+	obj.Put(3, 1)
+	obj.Put(2, 1)
+	obj.Put(2, 2)
+	obj.Put(4, 4)
+	fmt.Println(obj.Get(2))
+}
