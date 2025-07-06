@@ -1,5 +1,10 @@
 package topinterview150
 
+import (
+	"fmt"
+	"testing"
+)
+
 /*
 *
 在一条环路上有 n 个加油站，其中第 i 个加油站有汽油 gas[i] 升。
@@ -35,10 +40,42 @@ package topinterview150
 /**
 题解：
 一句话概括：如果x到达不了y+1，那么x-y之间的点也不可能到达y+1，因为中间任何一点的油都是拥有前面的余量的，所以下次遍历直接从y+1开始
-
+全部都遍历完，
 
 */
 func canCompleteCircuit(gas []int, cost []int) int {
+	n := len(gas)
+	start := 0
+	for start < n {
+		remain := 0
+		for i := 0; i < n; i++ {
+			r := (start + i) % n
+			remain += gas[r]
+			remain -= cost[r]
+			if remain < 0 {
+				start++
+				break
+			}
+		}
+		if remain >= 0 {
+			return start
+		}
+	}
+	return -1
+}
 
-	return 0
+/**
+超出时间限制
+34 / 39 个通过的测试用例
+最后执行的输入
+添加到测试用例
+gas =
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+*/
+
+func TestCanCompleteCircuit(t *testing.T) {
+	fmt.Println(canCompleteCircuit([]int{1}, []int{3}))
+	fmt.Println(canCompleteCircuit([]int{1, 2}, []int{3, 4}))
+	fmt.Println(canCompleteCircuit([]int{1, 2, 3, 4, 5}, []int{3, 4, 5, 1, 2}))
+	fmt.Println(canCompleteCircuit([]int{2, 3, 4}, []int{3, 4, 3}))
 }
