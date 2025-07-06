@@ -47,9 +47,10 @@ words[i] 和 s 由小写英文字母组成
 
 自己想的
 hashmap + 滑动窗口
-hashmap 记录单词库， 记录当前窗口的单词是否存在
+hashmap 记录单词库以及个数， 记录当前窗口的单词是否存在
 单词出现超过1次时，将左窗口右移到第一次出现的位置的下一个单词，同时窗口对应的hash做调整
 单词不存在时，清空窗口的hashmap
+注意单词库的单词可以出现多次！
 
 按单词长度分组， 比如 单词长度为2，总共5个单词，则总长度为10， 而s的长度为23
 则分组成：
@@ -69,36 +70,67 @@ func findSubstring(s string, words []string) []int {
 		return ans
 	}
 	//单词库
-	wordsLib := make(map[string]bool, wordCount)
-	// 子串的单词下标，判断是否存在
-	strWordsIndex := make(map[string]int, wordCount)
+	wordsLib := make(map[string]int, wordCount)
+	// 子串的单词下标, 可以有多个，判断是否存在
+	strWordsIndex := make(map[string][]int, wordCount)
 	strWordsCount := 0
 	for i := 0; i < wordCount; i++ {
-		wordsLib[words[i]] = true
+		wordsLib[words[i]]++
 	}
 
 	for i := 0; i < wordLength; i++ {
+		if len(s)-i < strLength {
+			break
+		}
+		//清空
+		strWordsCount = 0
+		for k := range strWordsIndex {
+			delete(strWordsIndex, k)
+		}
 		for j := i; j <= len(s)-wordLength; j += wordLength {
 			w := s[j : j+wordLength]
-			if wordsLib[w] {
-				if index, ok := strWordsIndex[w]; !ok {
-					strWordsIndex[w] = j
+			count := wordsLib[w]
+			if count > 0 {
+				if indexes, ok := strWordsIndex[w]; !ok || len(indexes) < count {
+					if arr, ok := strWordsIndex[w]; !ok {
+						strWordsIndex[w] = []int{j}
+					} else {
+						strWordsIndex[w] = append(arr, j)
+					}
 					strWordsCount++
 					if strWordsCount == wordCount {
 						firstIndex := j + wordLength - strLength
 						ans = append(ans, firstIndex)
-						delete(strWordsIndex, s[firstIndex:firstIndex+wordLength])
+						firstWord := s[firstIndex : firstIndex+wordLength]
+						strWordsIndex[firstWord] = strWordsIndex[firstWord][1:]
 						strWordsCount--
 					}
 				} else {
 					//左窗口右移到当前
-					for k, v := range strWordsIndex {
-						if v <= index {
+					index := indexes[0]
+					for k, wi := range strWordsIndex {
+						newWi := wi[:0] // 复用底层数组，避免频繁分配
+						//这个 range 会在循环开始时 复制 wi 整个切片结构（包括指向底层数组的指针 + len + cap）。
+						//也就是说，就算你在循环里改 wi[:0]，不会影响到 range 所用的 wi 的副本，因为底层数组还在、长度已复制。
+						for _, ix := range wi {
+							if ix > index {
+								newWi = append(newWi, ix)
+							} else {
+								strWordsCount--
+							}
+						}
+						if len(newWi) == 0 {
 							delete(strWordsIndex, k)
-							strWordsCount--
+						} else {
+							strWordsIndex[k] = newWi
 						}
 					}
-					strWordsIndex[w] = j
+
+					if arr, ok := strWordsIndex[w]; !ok {
+						strWordsIndex[w] = []int{j}
+					} else {
+						strWordsIndex[w] = append(arr, j)
+					}
 					strWordsCount++
 				}
 			} else {
@@ -129,10 +161,27 @@ words =
 []
 预期结果
 [8]
+
+执行用时分布
+17
+ms
+击败
+46.07%
+复杂度分析
+消耗内存分布
+7.41
+MB
+击败
+92.50%
+复杂度分析
+
 */
 
 func TestFindSubstring(t *testing.T) {
+	fmt.Println(findSubstring("bcabbcaabbccacacbabccacaababcbb", []string{"c", "b", "a", "c", "a", "a", "a", "b", "c"}))
+	fmt.Println(findSubstring("ababababab", []string{"ababa", "babab"}))
 	fmt.Println(findSubstring("barfoothefoobarman", []string{"foo", "bar"}))
 	fmt.Println(findSubstring("wordgoodgoodgoodbestword", []string{"word", "good", "best", "word"}))
 	fmt.Println(findSubstring("barfoofoobarthefoobarman", []string{"bar", "foo", "the"}))
+	fmt.Println(findSubstring("wordgoodgoodgoodbestword", []string{"word", "good", "best", "good"}))
 }
