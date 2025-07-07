@@ -1,5 +1,7 @@
 package topinterview150
 
+import "sort"
+
 /*
 *
 有一些球形气球贴在一堵用 XY 平面表示的墙面上。墙面上的气球记录在整数数组 points ，其中points[i] = [xstart, xend] 表示水平直径在 xstart 和 xend之间的气球。你不知道气球的确切 y 坐标。
@@ -43,5 +45,35 @@ package topinterview150
 */
 func findMinArrowShots(points [][]int) int {
 
-	return 0
+	if len(points) == 0 {
+		return 0
+	}
+	sort.Slice(points, func(i, j int) bool {
+		return points[i][1] < points[j][1]
+	})
+	count := 1
+	maxRight := points[0][1]
+	//先完第一个区间的最右端射第一箭
+	for i := 1; i < len(points); i++ {
+		//上一个箭打不中了，得新增一箭
+		if points[i][0] > maxRight {
+			count++
+			maxRight = points[i][1]
+		}
+	}
+	return count
 }
+
+/**
+执行用时分布
+61
+ms
+击败
+51.62%
+复杂度分析
+消耗内存分布
+18.37
+MB
+击败
+39.22%
+*/
