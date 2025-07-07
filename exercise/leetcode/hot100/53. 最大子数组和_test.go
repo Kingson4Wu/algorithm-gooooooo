@@ -8,7 +8,8 @@ import (
 /**
 看了题解的再做的
 
-1、动态规划，d[i]=max(d[i], d[j]+i)； d[0]=i
+d[i] 以第 i 个数结尾的「连续子数组的最大和」
+1、动态规划，d[i]=max(nums[i], d[i-1]+nums[i])； d[0]=nums[i]
 2、状态压缩, 因为已经遍历过的不需要重复用，直接复用原来的数组改即可
 
 时间
@@ -55,7 +56,9 @@ func maxSubArray(nums []int) int {
 	max := nums[0]
 
 	for i := 1; i < len(nums); i++ {
-		if nums[i]+nums[i-1] > nums[i] {
+		//如果前一个子数组是正贡献，就接上；否则舍弃，从当前数重新开始。
+		if nums[i-1] > 0 {
+			//if nums[i]+nums[i-1] > nums[i] {
 			nums[i] += nums[i-1]
 		}
 		if nums[i] > max {
