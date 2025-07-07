@@ -32,17 +32,55 @@ s 表示一个有效的表达式
 每个数字和运行的计算将适合于一个有符号的 32位 整数
 */
 
+/*
+*
+栈
+太难写，太乱
+
+题解：
+用一个取值为 {−1,+1} 的整数 sign 代表「当前」的符号
+如果当前位置处于一系列括号之内，则也与这些括号前面的运算符有关：每当遇到一个以 − 号开头的括号，则意味着此后的符号都要被「翻转」
+
+用一个栈 ops 保存当前“嵌套括号环境下”的符号影响，每遇到一个括号，就压入当前的 sign，遇到右括号就弹出。
+
+初始化一开始ops有一个元素，为正即1
+遇到+，- 根据ops栈顶，设置后后续计算的sign
+计算 int(s[i]-'0')
+
+---
+
+举个例子
+表达式：1 + (2 - (3 + 4))
+
+我们来一步步处理：
+遇到 1：当前 sign 是 +1 → res += 1
+遇到 +：下一个数字用 +ops.top() → sign = +1
+遇到 (：把当前 sign = +1 压入栈
+遇到 2：sign = +1 → res += 2
+遇到 -：下一个数字的 sign 是 -ops.top() = -1
+遇到 (：把当前 sign = -1 压入栈
+遇到 3：sign = -1 → res += -3
+遇到 +：下一个数字的 sign = +ops.top() = -1
+遇到 4：sign = -1 → res += -4
+遇到 )：弹出 -1
+遇到 )：再弹出 +1
+*/
 func calculate(s string) int {
 
-	/*var stack []string
-	var prefix string
+	/*var stack []byte
+	var preResult int
 	for i := 0; i < len(s); i++ {
-		if prefix == "" {
-			prefix = string(s[i])
+		if len(stack) == 0 {
+			stack = append(stack, s[i])
 			continue
 		}
-		stack = append()
+		if s[i] == '+' || s[i] == '-' {
+			stack = append(stack, s[i])
+			continue
+		}
+		if s[i] >= '0' && s[i] <= '9' {
 
+		}
 	}*/
 
 	return 0
