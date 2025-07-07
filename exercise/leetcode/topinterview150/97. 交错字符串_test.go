@@ -44,31 +44,63 @@ s1、s2、和 s3 都由小写英文字母组成
 "aabcc", "dbbca", "aadbbcbcac"
 最后会剩下ca 和 ac 无法匹配
 
+----
+
+动态规划
+ dp(i,j) 表示 s1的前 i 个元素和 s2 的前 j 个元素是否能交错组成 s3的前 i+j 个元素
+ dp(i,j) = (dp[i-1,j] && s1[i-1] == s3[i+j-1]) ||  (dp[i,j-1] && s2[j-1] == s3[i+j-1])
+ s1的第i个下标为i-1
+ dp[0][0] =true
+
 */
 func isInterleave(s1 string, s2 string, s3 string) bool {
 
-	if len(s1)+len(s2) != len(s3) {
+	m, n := len(s1), len(s2)
+	if m+n != len(s3) {
 		return false
 	}
-
-	i, j := 0, 0
-	for k := 0; k < len(s3); k++ {
-		if i < len(s1) && s1[i] == s3[k] {
-			i++
-			continue
-		}
-		if j < len(s2) && s2[j] == s3[k] {
-			j++
-			continue
+	dp := make([][]bool, m+1)
+	for i := 0; i <= m; i++ {
+		dp[i] = make([]bool, n+1)
+	}
+	dp[0][0] = true
+	for i := 1; i <= m; i++ {
+		dp[i][0] = dp[i-1][0] && s1[i-1] == s3[i-1]
+		if !dp[i][0] {
+			break
 		}
 	}
-	if i == len(s1) && j == len(s2) {
-		return true
+	for j := 1; j <= n; j++ {
+		dp[0][j] = dp[0][j-1] && s2[j-1] == s3[j-1]
+		if !dp[0][j] {
+			break
+		}
 	}
-
-	return false
+	for i := 1; i <= m; i++ {
+		for j := 1; j <= n; j++ {
+			dp[i][j] = (dp[i-1][j] && s1[i-1] == s3[i+j-1]) || (dp[i][j-1] && s2[j-1] == s3[i+j-1])
+		}
+	}
+	return dp[m][n]
 }
+
+/**
+执行用时分布
+0
+ms
+击败
+100.00%
+复杂度分析
+消耗内存分布
+4.01
+MB
+击败
+51.31%
+
+*/
 
 func TestIsInterleave(t *testing.T) {
 	fmt.Println(isInterleave("aabcc", "dbbca", "aadbbcbcac"))
+	fmt.Println(isInterleave("aabcc", "dbbca", "aadbbbaccc"))
+	fmt.Println(isInterleave("", "", ""))
 }
