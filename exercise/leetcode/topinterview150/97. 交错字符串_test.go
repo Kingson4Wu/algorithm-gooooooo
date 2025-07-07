@@ -52,7 +52,40 @@ s1、s2、和 s3 都由小写英文字母组成
  s1的第i个下标为i-1
  dp[0][0] =true
 
+可滚动数组优化空间复杂度， 空间降为 O(min(m, n))
+dp 的第 i 行只和第 i−1 行相关
+
 */
+/*func isInterleave(s1 string, s2 string, s3 string) bool {
+
+	m, n := len(s1), len(s2)
+	if m+n != len(s3) {
+		return false
+	}
+	dp := make([][]bool, m+1)
+	for i := 0; i <= m; i++ {
+		dp[i] = make([]bool, n+1)
+	}
+	dp[0][0] = true
+	for i := 1; i <= m; i++ {
+		dp[i][0] = dp[i-1][0] && s1[i-1] == s3[i-1]
+		if !dp[i][0] {
+			break
+		}
+	}
+	for j := 1; j <= n; j++ {
+		dp[0][j] = dp[0][j-1] && s2[j-1] == s3[j-1]
+		if !dp[0][j] {
+			break
+		}
+	}
+	for i := 1; i <= m; i++ {
+		for j := 1; j <= n; j++ {
+			dp[i][j] = (dp[i-1][j] && s1[i-1] == s3[i+j-1]) || (dp[i][j-1] && s2[j-1] == s3[i+j-1])
+		}
+	}
+	return dp[m][n]
+}*/
 func isInterleave(s1 string, s2 string, s3 string) bool {
 
 	m, n := len(s1), len(s2)
@@ -104,3 +137,63 @@ func TestIsInterleave(t *testing.T) {
 	fmt.Println(isInterleave("aabcc", "dbbca", "aadbbbaccc"))
 	fmt.Println(isInterleave("", "", ""))
 }
+
+/**
+官方答案：
+func isInterleave(s1 string, s2 string, s3 string) bool {
+    n, m, t := len(s1), len(s2), len(s3)
+    if (n + m) != t {
+        return false
+    }
+    f := make([][]bool, n + 1)
+    for i := 0; i <= n; i++ {
+        f[i] = make([]bool, m + 1)
+    }
+    f[0][0] = true
+    for i := 0; i <= n; i++ {
+        for j := 0; j <= m; j++ {
+            p := i + j - 1
+            if i > 0 {
+                f[i][j] = f[i][j] || (f[i-1][j] && s1[i-1] == s3[p])
+            }
+            if j > 0 {
+                f[i][j] = f[i][j] || (f[i][j-1] && s2[j-1] == s3[p])
+            }
+        }
+    }
+    return f[n][m]
+}
+
+作者：力扣官方题解
+链接：https://leetcode.cn/problems/interleaving-string/solutions/335373/jiao-cuo-zi-fu-chuan-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+一维
+
+func isInterleave(s1 string, s2 string, s3 string) bool {
+    n, m, t := len(s1), len(s2), len(s3)
+    if (n + m) != t {
+        return false
+    }
+    f := make([]bool, m + 1)
+    f[0] = true
+    for i := 0; i <= n; i++ {
+        for j := 0; j <= m; j++ {
+            p := i + j - 1
+            if i > 0 {
+                f[j] = f[j] && s1[i-1] == s3[p]
+            }
+            if j > 0 {
+                f[j] = f[j] || f[j-1] && s2[j-1] == s3[p]
+            }
+        }
+    }
+    return f[m]
+}
+
+作者：力扣官方题解
+链接：https://leetcode.cn/problems/interleaving-string/solutions/335373/jiao-cuo-zi-fu-chuan-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+*/
