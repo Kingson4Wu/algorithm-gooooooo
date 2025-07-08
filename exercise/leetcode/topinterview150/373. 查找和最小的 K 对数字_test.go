@@ -105,7 +105,7 @@ func (h *PairHeap) Pop() []int {
 	return v
 }
 func (h *PairHeap) Len() int {
-	return 0
+	return len(h.arr)
 }
 
 func kSmallestPairs(nums1 []int, nums2 []int, k int) [][]int {

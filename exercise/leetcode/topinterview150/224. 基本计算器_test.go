@@ -44,8 +44,14 @@ s 表示一个有效的表达式
 用一个栈 ops 保存当前“嵌套括号环境下”的符号影响，每遇到一个括号，就压入当前的 sign，遇到右括号就弹出。
 
 初始化一开始ops有一个元素，为正即1
-遇到+，- 根据ops栈顶，设置后后续计算的sign
-计算 int(s[i]-'0')
+遇到 ( 入栈sign，遇到 ) 出栈
+遇到+，- 根据ops栈顶设置后后续计算的sign
++ ： sign = ops[len(ops)-1]； -：sign = -ops[len(ops)-1]
+遇到连续数字，计算 int(s[i]-'0')
+
+	 for ; i < n && '0' <= s[i] && s[i] <= '9'; i++ {
+		num = num*10 + int(s[i]-'0')
+	}
 
 ---
 
@@ -64,24 +70,32 @@ s 表示一个有效的表达式
 遇到 4：sign = -1 → res += -4
 遇到 )：弹出 -1
 遇到 )：再弹出 +1
+
+知道答案还是不怎么会写
 */
 func calculate(s string) int {
 
-	/*var stack []byte
-	var preResult int
-	for i := 0; i < len(s); i++ {
-		if len(stack) == 0 {
-			stack = append(stack, s[i])
-			continue
-		}
-		if s[i] == '+' || s[i] == '-' {
-			stack = append(stack, s[i])
-			continue
-		}
-		if s[i] >= '0' && s[i] <= '9' {
+	var stack []int
+	sign := 1
+	ans := 0
+	for _, ch := range s {
+		switch ch {
+		case '(':
+			stack = append(stack, sign)
+		case ')':
+			sign = stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+		case '+':
+			sign = 1
+		case '-':
+			sign = -sign
+		default:
+			if sign > 0 {
+
+			}
 
 		}
-	}*/
+	}
 
-	return 0
+	return ans
 }
