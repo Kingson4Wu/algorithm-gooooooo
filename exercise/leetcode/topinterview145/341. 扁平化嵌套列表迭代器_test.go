@@ -81,7 +81,8 @@ func (n NestedInteger) GetList() []*NestedInteger {
 
 //------
 
-/**
+/*
+*
 执行用时分布
 16
 ms
@@ -94,7 +95,6 @@ MB
 击败
 6.06%
 复杂度分析
-
 
 竟然自己完成了
 不断递归展开
