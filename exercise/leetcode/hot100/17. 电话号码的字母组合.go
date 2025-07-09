@@ -122,6 +122,7 @@ func backtrack(digits string, index int, combination string) {
 		digit := string(digits[index])
 		letters := phoneMap[digit]
 		lettersCount := len(letters)
+		//这里不是枚举位置，而是枚举当前一个位置的合法字符选项。
 		for i := 0; i < lettersCount; i++ {
 			backtrack(digits, index+1, combination+string(letters[i]))
 		}

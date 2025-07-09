@@ -5,22 +5,6 @@ import (
 	"testing"
 )
 
-/*
-*
-执行用时分布
-0
-ms
-击败
-100.00%
-复杂度分析
-消耗内存分布
-4.57
-MB
-击败
-66.03%
-
-自己做的，调试中改了一次
-*/
 func combinationSum(candidates []int, target int) [][]int {
 
 	var ans [][]int
@@ -34,17 +18,14 @@ func combinationSum(candidates []int, target int) [][]int {
 			ans = append(ans, temp)
 			return
 		}
-		//for i := start; i < len(candidates); i++ {
-		if start < len(candidates) {
-			if target >= candidates[start] {
-				path = append(path, candidates[start])
-				dfs(start, target-candidates[start])
+		for i := start; i < len(candidates); i++ {
+			if target >= candidates[i] {
+				path = append(path, candidates[i])
+				dfs(i, target-candidates[i])
 				path = path[:len(path)-1]
 			}
-			dfs(start+1, target)
+			dfs(i+1, target)
 		}
-
-		//}
 	}
 	dfs(0, target)
 

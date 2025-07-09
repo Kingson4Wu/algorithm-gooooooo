@@ -38,14 +38,13 @@ func letterCombinations(digits string) []string {
 	}
 
 	var results []string
-	//var path []rune
 	var dfs func(start int, str string)
 	dfs = func(start int, str string) {
-
 		if start == len(digits) {
 			results = append(results, str)
 			return
 		}
+		//这里不是枚举位置，而是枚举当前一个位置的合法字符选项。
 		for _, ch := range phoneMap[rune(digits[start])] {
 			dfs(start+1, str+string(ch))
 		}
