@@ -89,9 +89,10 @@ func superEggDrop(k int, n int) int {
 	for i <= n {
 		for j := 1; j <= k; j++ {
 			dp[i][j] = 1 + dp[i-1][j-1] + dp[i-1][j]
-			if dp[i][j] >= n && i < ans {
-				ans = i
-			}
+		}
+		if dp[i][k] >= n && i < ans {
+			ans = i
+			break
 		}
 		i++
 	}
@@ -114,16 +115,17 @@ n =
 */
 /**
 执行用时分布
-34
+12
 ms
 击败
-29.73%
+47.30%
 复杂度分析
 消耗内存分布
-14.18
+12.01
 MB
 击败
-5.40%
+21.62%
+复杂度分析
 */
 func TestSuperEggDrop(t *testing.T) {
 	fmt.Println(superEggDrop(1, 1))
