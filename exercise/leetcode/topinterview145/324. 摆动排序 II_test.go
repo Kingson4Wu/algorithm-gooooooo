@@ -49,6 +49,14 @@ import (
 2. 从后半部分末尾向前拿 → 填到 奇数位（1,3,5,...）
 这样可以保证小的和大的交错，且重复值分开，避免相邻相等。
 
+正着插反例：4, 5, 5, 6
+
+倒着 5 6 4 5 （最大的6可以处在偶数位，并且紧挨着下一个小的）
+正着 4 5 5 6 （最大的6可以处在偶数位，但被排在了最后一位了
+
+一句话本质解释：
+倒着插的核心，是优先让最大的数占据“该大的地方”（奇数位），把小的数塞进该小的位置（偶数位），自然就交替有序。）
+
 */
 func wiggleSort(nums []int) {
 
@@ -59,6 +67,7 @@ func wiggleSort(nums []int) {
 	})
 
 	left, right := (len(ans)-1)/2, len(ans)-1
+	//left, right := 0, (len(ans)+1)/2
 	for i := 0; i < len(nums); i++ {
 		if i%2 == 0 {
 			nums[i] = ans[left]
@@ -74,6 +83,7 @@ func TestWiggleSort(t *testing.T) {
 	wiggleSort([]int{1, 5, 1, 1, 6, 4})
 	wiggleSort([]int{1, 3, 2, 2, 3, 1})
 	wiggleSort([]int{1, 3, 2, 2, 3, 1})
+	wiggleSort([]int{4, 5, 5, 6})
 }
 
 /**
