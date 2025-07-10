@@ -52,12 +52,20 @@ import (
 
 func exist(board [][]byte, word string) bool {
 
-	visited := make([][]bool, len(board))
+	m := len(board)
+	n := len(board[0])
+	visited := make([][]bool, m)
 	for i := 0; i < len(board); i++ {
-		visited[i] = make([]bool, len(board[i]))
+		visited[i] = make([]bool, n)
 	}
 	var check func(i, j, k int) bool
 	check = func(i, j, k int) bool {
+		if i < 0 || j < 0 || i >= m || j >= n {
+			return false
+		}
+		if visited[i][j] {
+			return false
+		}
 		if board[i][j] != word[k] {
 			return false
 		}
@@ -71,16 +79,16 @@ func exist(board [][]byte, word string) bool {
 			visited[i][j] = false
 		}()
 		//上下左右
-		if i-1 >= 0 && !visited[i-1][j] && check(i-1, j, k+1) {
+		if check(i-1, j, k+1) {
 			return true
 		}
-		if i+1 < len(board) && !visited[i+1][j] && check(i+1, j, k+1) {
+		if check(i+1, j, k+1) {
 			return true
 		}
-		if j-1 >= 0 && !visited[i][j-1] && check(i, j-1, k+1) {
+		if check(i, j-1, k+1) {
 			return true
 		}
-		if j+1 < len(board[0]) && !visited[i][j+1] && check(i, j+1, k+1) {
+		if check(i, j+1, k+1) {
 			return true
 		}
 		return false

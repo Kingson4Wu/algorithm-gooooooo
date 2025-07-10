@@ -63,12 +63,11 @@ starti 的所有值 互不相同
 
 当会议室处于未占用状态时，将会优先提供给原 开始 时间更早的会议。 (不需要提前开！！！)
 
-先按开始时间排序
-以结束时间最小(结束时间一样，按id最小)构建n大的最小堆
-每次pop之后，当endTime < 将进行会议的 startTime， 则 endTime = startTime，重新push进去
-重新pop，知道 endTime >= 将进行会议的 startTime
-那么新的endTime = endTime + (会议endTime - 会议startTime)， 重新push
-遍历过程中计算count最大对应的最小的id
+    - 所有会议先按开始时间排序
+    - 以结束时间最小(结束时间一样，按id最小)构建n大的最小堆（n个会议室）（将第一个会议的开始时间作为全部会议室的结束时间）
+    - 每次pop之后，当endTime < 将进行会议的 startTime， 则 endTime = startTime，重新push进去；重新pop，知道 endTime >= 将进行会议的 startTime（全部会议室都按此操作一遍）
+    - 那么新的endTime = endTime + (会议endTime - 会议startTime)， 重新push
+    - 遍历过程中计算count最大对应的最小的id
 
 
 自己独立做的

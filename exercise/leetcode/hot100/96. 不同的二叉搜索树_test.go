@@ -36,23 +36,22 @@ import (
 56.78%
 */
 func numTrees(n int) int {
-
 	if n == 1 {
 		return 1
 	}
 	if n == 2 {
 		return 2
 	}
-
 	num := 0
 	for i := 0; i < n; i++ {
 		if i == 0 || i == n-1 {
+			//最左或最右作为根结点
 			num += numTrees(n - 1)
 			continue
 		}
+		//中间结点作为根结点，左右剩余的元素
 		num += numTrees(i) * numTrees(n-i-1)
 	}
-
 	return num
 }
 

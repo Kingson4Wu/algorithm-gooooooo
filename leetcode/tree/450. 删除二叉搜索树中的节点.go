@@ -2,11 +2,32 @@ package tree
 
 func deleteNode(root *TreeNode, key int) *TreeNode {
 
+	var findNode func(root *TreeNode, key int) *TreeNode
+	findNode = func(root *TreeNode, key int) *TreeNode {
+		if root == nil {
+			return nil
+		}
+		if root.Val == key {
+			return root
+		}
+		if key < root.Val {
+			return findNode(root.Left, key)
+		}
+		return findNode(root.Right, key)
+	}
+	node := findNode(root, key)
+	if node != nil {
+		if node.Left == nil && node.Right == nil {
+
+		}
+
+	}
+
 	return nil
 }
 
 /**
-给定一个二叉搜索树的根节点 root 和一个值 key，删除二叉搜索树中的 key 对应的节点，并保证二叉搜索树的性质不变。返回二叉搜索树（有可能被更新）的根节点的引用。
+给定一个二叉搜索树的根节点 root 和一个值 key，删除二叉搜索树中的key对应的节点，并保证二叉搜索树的性质不变。返回二叉搜索树（有可能被更新）的根节点的引用。
 
 一般来说，删除节点可分为两个步骤：
 
