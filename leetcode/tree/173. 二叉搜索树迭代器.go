@@ -27,7 +27,6 @@ func (this *BSTIterator) Next() int {
 			this.stack = append(this.stack, this.root)
 			this.root = this.root.Left
 		} else {
-			//TODO
 			this.root = this.stack[len(this.stack)-1]
 			this.stack = this.stack[0 : len(this.stack)-1]
 
@@ -42,25 +41,6 @@ func (this *BSTIterator) Next() int {
 func (this *BSTIterator) HasNext() bool {
 
 	return this.root != nil || len(this.stack) > 0
-}
-
-func call(root *TreeNode) {
-
-	stack := []*TreeNode{}
-
-	for root != nil || len(stack) > 0 {
-		if root != nil {
-			stack = append(stack, root)
-			root = root.Left
-		} else {
-			//TODO
-			root = stack[len(stack)-1]
-			stack = stack[0 : len(stack)-1]
-			root = root.Right
-		}
-
-	}
-
 }
 
 /**

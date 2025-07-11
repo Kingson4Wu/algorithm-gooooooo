@@ -42,8 +42,8 @@ MB
 输出：1
 */
 func hIndex(citations []int) int {
-
 	h := 0
+	// stat[i]表示引用次数超过或等于i的有多少篇
 	stat := make([]int, len(citations)+1)
 	for i := 0; i < len(citations); i++ {
 		if citations[i] > len(citations) {
@@ -52,28 +52,17 @@ func hIndex(citations []int) int {
 		if citations[i] == 0 {
 			continue
 		}
-		/*if stat[citations[i]] < 0 {
-			stat[citations[i]] = -stat[citations[i]]
-		}*/
 		stat[citations[i]]++
 		for j := 1; j < citations[i]; j++ {
 			stat[j]++
-			/*if stat[j] > 0 {
-				stat[j]++
-			} else {
-				stat[j]--
-			}*/
-
 		}
-
 	}
-
+	//统计
 	for i := 1; i < len(stat); i++ {
 		if stat[i] >= i && i > h {
 			h = i
 		}
 	}
-
 	return h
 }
 

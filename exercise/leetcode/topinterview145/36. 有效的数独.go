@@ -19,6 +19,12 @@ package topinterview145
 只需要根据以上规则，验证已经填入的数字是否有效即可。
 空白格用 '.' 表示。
 
+提示：
+
+board.length == 9
+board[i].length == 9
+board[i][j] 是一位数字（1-9）或者 '.'
+
 */
 
 /*
@@ -28,6 +34,7 @@ package topinterview145
 */
 func isValidSudoku(board [][]byte) bool {
 
+	//9个（3x3）单元格
 	m := make([][]map[byte]bool, 3)
 	for i := 0; i < 3; i++ {
 		m[i] = make([]map[byte]bool, 3)
@@ -38,10 +45,12 @@ func isValidSudoku(board [][]byte) bool {
 		}
 	}
 
+	//9行
 	x := make([]map[byte]bool, 9)
 	for i := 0; i < 9; i++ {
 		x[i] = map[byte]bool{}
 	}
+	//9列
 	y := make([]map[byte]bool, 9)
 	for i := 0; i < 9; i++ {
 		y[i] = map[byte]bool{}
@@ -52,10 +61,12 @@ func isValidSudoku(board [][]byte) bool {
 			if board[i][j] == '.' {
 				continue
 			}
+			//当前行是否已存在改字符
 			if x[i][board[i][j]] {
 				return false
 			}
 			x[i][board[i][j]] = true
+			//当前列是否已存在改字符
 			if y[j][board[i][j]] {
 				return false
 			}

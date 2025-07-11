@@ -63,7 +63,7 @@ func longestCommonPrefix(strs []string) string {
 
 数据范围： 0 \le n \le 50000≤n≤5000， 0 \le len(strs_i) \le 50000≤len(strs
 i
-​
+
  )≤5000
 进阶：空间复杂度 O(n)O(n)，时间复杂度 O(n)O(n)
 示例1

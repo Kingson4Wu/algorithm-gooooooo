@@ -35,7 +35,7 @@ func spiralOrder(matrix [][]int) []int {
 	leftIndex := 0
 	rightIndex := width - 1
 	topIndex := 0
-	buttomIndex := length - 1
+	bottomIndex := length - 1
 
 	for {
 
@@ -45,11 +45,11 @@ func spiralOrder(matrix [][]int) []int {
 			index++
 		}
 		topIndex++
-		if topIndex > buttomIndex {
+		if topIndex > bottomIndex {
 			break
 		}
 		/** 右 */
-		for i := topIndex; i <= buttomIndex; i++ {
+		for i := topIndex; i <= bottomIndex; i++ {
 			result[index] = matrix[i][rightIndex]
 			index++
 		}
@@ -59,16 +59,16 @@ func spiralOrder(matrix [][]int) []int {
 		}
 		/** 下 */
 		for i := rightIndex; i >= leftIndex; i-- {
-			result[index] = matrix[buttomIndex][i]
+			result[index] = matrix[bottomIndex][i]
 			index++
 		}
-		buttomIndex--
-		if buttomIndex < topIndex {
+		bottomIndex--
+		if bottomIndex < topIndex {
 			break
 		}
 
 		/** 左 */
-		for i := buttomIndex; i >= topIndex; i-- {
+		for i := bottomIndex; i >= topIndex; i-- {
 			result[index] = matrix[i][leftIndex]
 			index++
 		}
