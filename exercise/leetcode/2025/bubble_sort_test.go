@@ -7,6 +7,7 @@ import (
 
 // 20250729 - 回忆写
 // 双重循环 - 两两交换
+// 增加提前退出机制（当某轮没有发生交换时，说明已经排好序）！！！
 func bubble(arr []int) []int {
 	for i := len(arr) - 1; i > 0; i-- {
 		for j := 0; j < i; j++ {
