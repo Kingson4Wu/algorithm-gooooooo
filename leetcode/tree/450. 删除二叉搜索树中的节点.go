@@ -1,30 +1,48 @@
 package tree
 
 func deleteNode(root *TreeNode, key int) *TreeNode {
-
-	var findNode func(root *TreeNode, key int) *TreeNode
-	findNode = func(root *TreeNode, key int) *TreeNode {
-		if root == nil {
-			return nil
-		}
-		if root.Val == key {
-			return root
-		}
-		if key < root.Val {
-			return findNode(root.Left, key)
-		}
-		return findNode(root.Right, key)
+	if root == nil {
+		return nil
 	}
-	node := findNode(root, key)
-	if node != nil {
-		if node.Left == nil && node.Right == nil {
-
-		}
-
+	if key < root.Val {
+		root.Left = deleteNode(root.Left, key)
+		return root
+	} else if key > root.Val {
+		root.Right = deleteNode(root.Right, key)
+		return root
 	}
-
-	return nil
+	//找到要删除的结点
+	if root.Left == nil {
+		return root.Right
+	}
+	if root.Right == nil {
+		return root.Left
+	}
+	// 情况4：左右子树都有
+	//需要找右子树的最小值的结点, 最小的一定在最左边
+	successor := root.Right
+	for successor.Left != nil {
+		successor = successor.Left
+	}
+	successor.Right = deleteNode(root.Right, successor.Val)
+	successor.Left = root.Left
+	return successor
 }
+
+/**
+执行用时分布
+0
+ms
+击败
+100.00%
+复杂度分析
+消耗内存分布
+8.91
+MB
+击败
+54.96%
+
+*/
 
 /**
 给定一个二叉搜索树的根节点 root 和一个值 key，删除二叉搜索树中的key对应的节点，并保证二叉搜索树的性质不变。返回二叉搜索树（有可能被更新）的根节点的引用。
@@ -40,16 +58,6 @@ func deleteNode(root *TreeNode, key int) *TreeNode {
 */
 
 /**
-中序查找
-前序遍历存数组
-重建二叉树？
-
-
-
-root 有左右子树，这时可以将 \textit{root}root 的后继节点（比 \textit{root}root 大的最小节点，即它的右子树中的最小节点，记为 \textit{successor}successor）作为新的根节点替代 \textit{root}root，并将 \textit{successor}successor 从 \textit{root}root 的右子树中删除，使得在保持有序性的情况下合并左右子树。
-简单证明，\textit{successor}successor 位于 \textit{root}root 的右子树中，因此大于 \textit{root}root 的所有左子节点；\textit{successor}successor 是 \textit{root}root 的右子树中的最小节点，因此小于 \textit{root}root 的右子树中的其他节点。以上两点保持了新子树的有序性。
-在代码实现上，我们可以先寻找 \textit{successor}successor，再删除它。\textit{successor}successor 是 \textit{root}root 的右子树中的最小节点，可以先找到 \textit{root}root 的右子节点，再不停地往左子节点寻找，直到找到一个不存在左子节点的节点，这个节点即为 \textit{successor}successor。然后递归地在 \textit{root.right}root.right 调用 \textit{deleteNode}deleteNode 来删除 \textit{successor}successor。因为 \textit{successor}successor 没有左子节点，因此这一步递归调用不会再次步入这一种情况。然后将 \textit{successor}successor 更新为新的 \textit{root}root 并返回。
-
 作者：LeetCode-Solution
 链接：https://leetcode.cn/problems/delete-node-in-a-bst/solution/shan-chu-er-cha-sou-suo-shu-zhong-de-jie-n6vo/
 来源：力扣（LeetCode）
