@@ -65,6 +65,7 @@ func permuteUnique(nums []int) [][]int {
             if i > 0 && nums[i] == nums[i-1] && !used[i-1] {
 				//只能先用同一组重复数字的“第一个”，不能先用后面的。
 				//如果现在选择了后一个重复元素，就会导致重复排列。
+				//!used[i-1]表明前一个相同的还没用，所以你这边就别先用了
                 continue
             }
             used[i] = true
