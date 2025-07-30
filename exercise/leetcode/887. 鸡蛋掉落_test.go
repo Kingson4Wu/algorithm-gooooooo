@@ -2,7 +2,6 @@ package leetcode
 
 import (
 	"fmt"
-	"math"
 	"testing"
 )
 
@@ -70,7 +69,6 @@ t<=n, 就算你鸡蛋再多，最多是n次就行
 	}
 */
 func superEggDrop(k int, n int) int {
-	ans := math.MaxInt32
 	dp := make([][]int, n+1)
 	for i := 1; i <= n; i++ {
 		dp[i] = make([]int, k+1)
@@ -85,18 +83,17 @@ func superEggDrop(k int, n int) int {
 	if n == 1 {
 		return 1
 	}
-	i := 2
-	for i <= n {
+	t := 2
+	for t <= n {
 		for j := 1; j <= k; j++ {
-			dp[i][j] = 1 + dp[i-1][j-1] + dp[i-1][j]
+			dp[t][j] = 1 + dp[t-1][j-1] + dp[t-1][j]
 		}
-		if dp[i][k] >= n && i < ans {
-			ans = i
+		if dp[t][k] >= n {
 			break
 		}
-		i++
+		t++
 	}
-	return ans
+	return t
 }
 
 /*

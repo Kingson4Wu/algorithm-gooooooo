@@ -105,6 +105,7 @@ MB
 func TestMinCapability(t *testing.T) {
 	//fmt.Println(minCapability([]int{2, 3, 5, 9}, 2))
 	fmt.Println(minCapability([]int{2, 7, 9, 3, 1}, 2))
+	fmt.Println(minCapability([]int{3, 6, 8, 10}, 2))
 }
 
 /**
