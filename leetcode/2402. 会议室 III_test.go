@@ -186,6 +186,8 @@ func mostBooked(n int, meetings [][]int) int {
 	for i := 0; i < len(meetings); i++ {
 		room := heap.Pop()
 		// 会议室空闲了，但会议室时间没到
+		// 将它们的 endTime 统一更新为当前会议的开始时间。
+		// 防止出现会议室0的endTime大于会议室1的endTime；实际会议都已经结束，本应使用会议室0而去使用会议室1
 		for room.endTime < meetings[i][0] {
 			room.endTime = meetings[i][0]
 			heap.Push(room)
