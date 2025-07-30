@@ -1,4 +1,4 @@
-package _025
+package tree
 
 import "algorithm-gooooooo/leetcode"
 

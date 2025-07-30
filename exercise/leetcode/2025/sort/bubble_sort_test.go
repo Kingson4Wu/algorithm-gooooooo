@@ -1,4 +1,4 @@
-package _025
+package sort
 
 import (
 	"fmt"
