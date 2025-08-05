@@ -72,7 +72,7 @@ func binarySearch(nums []int, start, end, target int) int {
 	}
 	mid := (end + start) / 2
 
-	/** 有序 */
+	/** 前半段有序 */
 	if nums[start] <= nums[mid] {
 		if target >= nums[start] && target <= nums[mid] {
 			return binarySearch(nums, start, mid, target)
