@@ -1,8 +1,39 @@
 package dp
 
-func wordBreak(s string, wordDict []string) bool {
+/*
+*
+执行用时分布
+0
+ms
+击败
+100.00%
+复杂度分析
+消耗内存分布
+3.93
+MB
+击败
+80.24%
 
-	return false
+看完题解写的
+*/
+func wordBreak(s string, wordDict []string) bool {
+	wordMap := make(map[string]bool, len(wordDict))
+	for _, w := range wordDict {
+		wordMap[w] = true
+	}
+	dp := make([]bool, len(s)+1)
+	dp[0] = true
+	for i := 1; i <= len(s); i++ {
+		for j := 0; j <= i; j++ {
+			if dp[i] {
+				break
+			}
+			if dp[j] && wordMap[s[j:i]] {
+				dp[i] = true
+			}
+		}
+	}
+	return dp[len(s)]
 }
 
 /**
