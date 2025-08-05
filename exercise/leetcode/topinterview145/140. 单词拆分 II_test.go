@@ -69,17 +69,15 @@ func wordBreak(s string, wordDict []string) []string {
 			ans = append(ans, strings.Join(path, " "))
 			return
 		}
-		if start < len(s) {
-			step := 0
-			for start+step < len(s) {
-				end := start + step
-				if words[s[start:end+1]] {
-					path = append(path, s[start:end+1])
-					dfs(end + 1)
-					path = path[:len(path)-1]
-				}
-				step++
+		step := 0
+		for start+step < len(s) {
+			end := start + step
+			if words[s[start:end+1]] {
+				path = append(path, s[start:end+1])
+				dfs(end + 1)
+				path = path[:len(path)-1]
 			}
+			step++
 		}
 	}
 	dfs(0)
