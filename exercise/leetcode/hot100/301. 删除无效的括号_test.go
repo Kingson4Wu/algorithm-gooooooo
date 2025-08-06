@@ -137,4 +137,6 @@ func removeInvalidParentheses(s string) []string {
 
 func TestRemoveInvalidParentheses(t *testing.T) {
 	fmt.Println(removeInvalidParentheses("()())()"))
+	fmt.Println(removeInvalidParentheses("(a)())()"))
+	fmt.Println(removeInvalidParentheses(")("))
 }

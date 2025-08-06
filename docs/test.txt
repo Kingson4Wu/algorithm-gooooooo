@@ -431,3 +431,14 @@ func numSquares(n int) int {
 序列化的全局变量： var result []string； 内部递归方法：var serialize func(*TreeNode)
 反序列化的全局变量： result := strings.Split(data, ",") ；内部递归方法：var deserialize func() *TreeNode
 
+300. 最长递增子序列 !!!
+输入：nums = [10,9,2,5,3,7,101,18]
+输出：4
+解释：最长递增子序列是 [2,3,7,101]，因此长度为 4 。
+输入：nums = [7,7,7,7,7,7,7]
+输出：1
+
+动态规划
+定义 dp[i] 为考虑前 i 个元素，以第 i 个数字结尾的最长上升子序列的长度，注意 nums[i] 必须被选取。
+dp[i]=max(dp[j])+1,其中0≤j<i 且 num[j]<num[i]
+
