@@ -41,7 +41,7 @@ MB
 输入：citations = [1,3,1]
 输出：1
 */
-func hIndex(citations []int) int {
+/*func hIndex(citations []int) int {
 	h := 0
 	// stat[i]表示引用次数超过或等于i的有多少篇
 	stat := make([]int, len(citations)+1)
@@ -64,7 +64,7 @@ func hIndex(citations []int) int {
 		}
 	}
 	return h
-}
+}*/
 
 func TestHIndex(t *testing.T) {
 	fmt.Println(hIndex([]int{3, 0, 6, 1, 5}))
@@ -85,3 +85,44 @@ func TestHIndex(t *testing.T) {
 3
 4
 */
+
+// 202508优化 自己去外面骑车时顿悟的
+/**
+执行用时分布
+0
+ms
+击败
+100.00%
+复杂度分析
+消耗内存分布
+4.05
+MB
+击败
+38.24%
+复杂度分析
+
+*/
+func hIndex(citations []int) int {
+	h := 0
+	// stat[i]表示引用次数超过或等于i的有多少篇
+	stat := make([]int, len(citations)+1)
+	for i := 0; i < len(citations); i++ {
+		if citations[i] > len(citations) {
+			citations[i] = len(citations)
+		}
+		if citations[i] == 0 {
+			continue
+		}
+		stat[citations[i]]++
+	}
+	//统计
+	for i := len(stat) - 1; i > 0; i-- {
+		if stat[i] >= i {
+			h = i
+			break
+		} else {
+			stat[i-1] += stat[i]
+		}
+	}
+	return h
+}
