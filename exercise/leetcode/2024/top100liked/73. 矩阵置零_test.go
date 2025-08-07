@@ -53,4 +53,62 @@ n == matrix[0].length
 */
 func setZeroes(matrix [][]int) {
 
+	//两个变量
+	clo0, row0 := false, false
+	for _, r := range matrix {
+		if r[0] == 0 {
+			clo0 = true
+			break
+		}
+	}
+	for _, c := range matrix[0] {
+		if c == 0 {
+			row0 = true
+			break
+		}
+	}
+
+	for i := 1; i < len(matrix); i++ {
+		for j := 1; j < len(matrix[i]); j++ {
+			if matrix[i][j] == 0 {
+				matrix[i][0] = 0
+				matrix[0][j] = 0
+			}
+		}
+	}
+	for i := 1; i < len(matrix); i++ {
+		for j := 1; j < len(matrix[i]); j++ {
+			if matrix[0][j] == 0 || matrix[i][0] == 0 {
+				matrix[i][j] = 0
+			}
+		}
+	}
+	if clo0 {
+		//for i := 1; i < len(matrix); i++ {
+		for i := 0; i < len(matrix); i++ {
+			matrix[i][0] = 0
+		}
+	}
+	if row0 {
+		//for j := 1; j < len(matrix[0]); j++ {
+		for j := 0; j < len(matrix[0]); j++ {
+			matrix[0][j] = 0
+		}
+	}
 }
+
+/**
+解答错误
+104 / 202 个通过的测试用例
+
+官方题解
+输入
+matrix =
+[[1,0]]
+
+添加到测试用例
+输出
+[[1,0]]
+预期结果
+[[0,0]]
+*/
