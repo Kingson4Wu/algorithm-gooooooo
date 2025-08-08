@@ -37,10 +37,8 @@ func NthUglyNumber3(n int, a int, b int, c int) int {
 }
 
 func nthUglyNumber3(n int, a int, b int, c int) int {
-
 	var dp int
 	pa, pb, pc := 0, 0, 0
-
 	for i := 1; i <= n; i++ {
 		ppa, ppb, ppc := pa+a, pb+b, pc+c
 		dp = min(min(ppa, ppb), ppc)
@@ -55,7 +53,6 @@ func nthUglyNumber3(n int, a int, b int, c int) int {
 		}
 	}
 	return dp
-
 }
 
 func min(a, b int) int {

@@ -57,17 +57,15 @@ func partition(s string) [][]string {
 			ans = append(ans, temp)
 			return
 		}
-		if start < len(s) {
-			step := 0
-			for start+step < len(s) {
-				end := start + step
-				if dp[start][end] {
-					path = append(path, s[start:end+1])
-					dfs(end + 1)
-					path = path[:len(path)-1]
-				}
-				step++
+		step := 0
+		for start+step < len(s) {
+			end := start + step
+			if dp[start][end] {
+				path = append(path, s[start:end+1])
+				dfs(end + 1)
+				path = path[:len(path)-1]
 			}
+			step++
 		}
 	}
 	dfs(0)

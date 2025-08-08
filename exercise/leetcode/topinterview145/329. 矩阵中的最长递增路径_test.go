@@ -57,6 +57,7 @@ func longestIncreasingPath(matrix [][]int) int {
 	for i := 0; i < m; i++ {
 		pathCount[i] = make([]int, n)
 	}
+	//是否还能继续走，有更大的值
 	check := func(i, j int) bool {
 		if i-1 >= 0 && matrix[i-1][j] > matrix[i][j] {
 			return true
