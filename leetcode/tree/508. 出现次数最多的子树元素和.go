@@ -1,47 +1,48 @@
 package tree
 
+import "testing"
+
+/*
+*
+按回忆写的
+全局变量，递归过程中保存计算结果
+*/
 func findFrequentTreeSum(root *TreeNode) []int {
-
-	if root == nil {
-		return []int{}
-	}
-
-	sumArr := []int{}
-
-	var leftSum []int
-	var rightSum []int
-	if root.Left != nil {
-
-		leftSum = findFrequentTreeSum(root.Left)
-
-		for _, sum := range leftSum {
-			sumArr = append(sumArr, sum+root.Val)
+	cntMap := map[int]int{}
+	sumMap := map[*TreeNode]int{}
+	maxCount := 0
+	var maxSums []int
+	var treeSum func(root *TreeNode) int
+	treeSum = func(root *TreeNode) int {
+		if root == nil {
+			return 0
 		}
-
-	}
-
-	if root.Right != nil {
-
-		rightSum = findFrequentTreeSum(root.Right)
-
-		for _, sum := range rightSum {
-			sumArr = append(sumArr, sum+root.Val)
+		if sum, ok := sumMap[root]; ok {
+			return sum
 		}
-
+		sum := root.Val + treeSum(root.Left) + treeSum(root.Right)
+		cntMap[sum]++
+		if cntMap[sum] > maxCount {
+			maxCount = cntMap[sum]
+			maxSums = []int{sum}
+		} else if cntMap[sum] == maxCount {
+			maxSums = append(maxSums, sum)
+		}
+		return sum
 	}
+	treeSum(root)
+	return maxSums
+}
 
-	if len(leftSum) > 0 && len(rightSum) > 0 {
+func TestFindFrequentTreeSum(t *testing.T) {
 
-	}
-
-	return []int{}
 }
 
 /**
 
-给你一个二叉树的根结点 root ，请返回出现次数最多的子树元素和。如果有多个元素出现的次数相同，返回所有出现次数最多的子树元素和（不限顺序）。
+给你一个二叉树的根结点root，请返回出现次数最多的子树元素和。如果有多个元素出现的次数相同，返回所有出现次数最多的子树元素和（不限顺序）。
 
-一个结点的 「子树元素和」 定义为以该结点为根的二叉树上所有结点的元素之和（包括结点本身）。
+一个结点的「子树元素和」定义为以该结点为根的二叉树上所有结点的元素之和（包括结点本身）。
 
 
 输入: root = [5,2,-3]
