@@ -1,9 +1,52 @@
 package nowcoder
 
-func IsBalanced_Solution(pRoot *TreeNode) bool {
-	// write code here
+import "math"
 
-	return false
+/*
+*
+根据回忆写的
+递归中如果发现子树不平衡，直接返回-1，上层全部结束继续递归
+
+执行用时分布
+0
+ms
+击败
+100.00%
+复杂度分析
+消耗内存分布
+7.17
+MB
+击败
+18.03%
+复杂度分析
+*/
+func isBalanced(root *TreeNode) bool {
+
+	max := func(x, y int) int {
+		if x > y {
+			return x
+		}
+		return y
+	}
+	var height func(root *TreeNode) int
+	height = func(root *TreeNode) int {
+		if root == nil {
+			return 0
+		}
+		left := height(root.Left)
+		if left == -1 {
+			return -1
+		}
+		right := height(root.Right)
+		if right == -1 {
+			return -1
+		}
+		if math.Abs(float64(left-right)) > 1 {
+			return -1
+		}
+		return 1 + max(left, right)
+	}
+	return height(root) != -1
 }
 
 /**
