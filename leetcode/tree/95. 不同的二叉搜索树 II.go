@@ -6,8 +6,45 @@ package tree
 */
 func generateTrees(n int) []*TreeNode {
 
-	return nil
+	var helper func(start, end int) []*TreeNode
+	helper = func(start, end int) []*TreeNode {
+		if start > end {
+			//返回nil是方便后续处理，不用单独处理空的情况
+			return []*TreeNode{nil}
+		}
+		var allTrees []*TreeNode
+		for i := start; i <= end; i++ {
+
+			leftTrees := helper(start, i-1)
+			rightTrees := helper(i+1, end)
+
+			for _, left := range leftTrees {
+				for _, right := range rightTrees {
+					root := &TreeNode{Val: i, Left: left, Right: right}
+					allTrees = append(allTrees, root)
+				}
+			}
+		}
+		return allTrees
+	}
+	return helper(1, n)
 }
+
+/**
+执行用时分布
+0
+ms
+击败
+100.00%
+复杂度分析
+消耗内存分布
+6.11
+MB
+击败
+23.84%
+复杂度分析
+
+*/
 
 /* func buildTree(n int, k int) []*TreeNode {
 
