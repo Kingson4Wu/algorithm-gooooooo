@@ -8,45 +8,52 @@ package tree
  *     Right *TreeNode
  * }
  */
+/**
+根据回忆写的
+1、构造parents
+2、递归函数，增加前置pre来判断
+*/
 func distanceK(root *TreeNode, target *TreeNode, k int) []int {
-
-	if root == nil {
-		return []int{}
+	var ans []int
+	parents := map[*TreeNode]*TreeNode{}
+	var seekParents func(node, parent *TreeNode)
+	seekParents = func(node, parent *TreeNode) {
+		if node == nil {
+			return
+		}
+		parents[node] = parent
+		seekParents(node.Left, node)
+		seekParents(node.Right, node)
 	}
+	seekParents(root, nil)
+	var dfs func(target, pre *TreeNode, k int)
+	dfs = func(target, pre *TreeNode, k int) {
 
-	//path := []*TreeNode{}
+		if k == 0 {
+			ans = append(ans, target.Val)
+			return
+		}
+		if parents[target] != nil && parents[target] != pre {
+			dfs(parents[target], target, k-1)
+		}
+		if target.Left != nil && target.Left != pre {
+			dfs(target.Left, target, k-1)
+		}
+		if target.Right != nil && target.Right != pre {
+			dfs(target.Right, target, k-1)
+		}
 
-	result := []int{}
-
-	return result
-}
-
-func seekPath(path *[]*TreeNode, root *TreeNode, target *TreeNode) {
-
-}
-
-func calculateDepth(root *TreeNode, depth int, result *[]int) {
-
-	if root == nil {
-		return
 	}
-
-	if depth == 0 {
-		return
-	}
-	if depth == 1 {
-		*result = append(*result, root.Val)
-		return
-	}
-	calculateDepth(root.Left, depth-1, result)
-	calculateDepth(root.Right, depth-1, result)
-
+	dfs(target, nil, k)
+	return ans
 }
 
 /**
-给定一个二叉树（具有根结点 root）， 一个目标结点 target ，和一个整数值 k 。
+给定一个二叉树（具有根结点root），一个目标结点target，和一个整数值 k 。
 
 返回到目标结点 target 距离为 k 的所有结点的值的列表。 答案可以以 任何顺序 返回。
+
+Node.val 中所有值 不同
 
 来源：力扣（LeetCode）
 链接：https://leetcode.cn/problems/all-nodes-distance-k-in-binary-tree
