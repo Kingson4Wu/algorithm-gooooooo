@@ -12,6 +12,18 @@ package tree
 根据回忆写的
 1、构造parents
 2、递归函数，增加前置pre来判断
+
+执行用时分布
+0
+ms
+击败
+100.00%
+复杂度分析
+消耗内存分布
+4.86
+MB
+击败
+89.29%
 */
 func distanceK(root *TreeNode, target *TreeNode, k int) []int {
 	var ans []int

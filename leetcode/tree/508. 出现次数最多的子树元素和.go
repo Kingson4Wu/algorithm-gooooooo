@@ -6,6 +6,19 @@ import "testing"
 *
 按回忆写的
 全局变量，递归过程中保存计算结果
+
+执行用时分布
+0
+ms
+击败
+100.00%
+复杂度分析
+消耗内存分布
+8.19
+MB
+击败
+17.53%
+复杂度分析
 */
 func findFrequentTreeSum(root *TreeNode) []int {
 	cntMap := map[int]int{}

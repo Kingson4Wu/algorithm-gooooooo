@@ -1,5 +1,11 @@
 package ugly
 
+import (
+	"fmt"
+	"math"
+	"testing"
+)
+
 /*
 *
 超级丑数 是一个正整数，并满足其所有质因数都出现在质数数组 primes 中。
@@ -29,7 +35,27 @@ primes 中的所有值都 互不相同 ，且按 递增顺序 排列
 */
 func nthSuperUglyNumber(n int, primes []int) int {
 
-	return 0
+	result := make([]int, n)
+	result[0] = 1
+	indexes := make([]int, n)
+	for i := 1; i < n; i++ {
+		min := math.MaxInt32
+		minJ := 0
+		for j, prime := range primes {
+			val := result[indexes[j]] * prime
+			if val < min {
+				min = val
+				minJ = j
+			}
+		}
+		result[i] = min
+		indexes[minJ] = i
+	}
+	return result[n-1]
+}
+
+func TestNthSuperUglyNumber(t *testing.T) {
+	fmt.Println(nthSuperUglyNumber(12, []int{2, 7, 13, 19}))
 }
 
 /**
