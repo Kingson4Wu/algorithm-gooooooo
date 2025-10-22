@@ -66,19 +66,38 @@ func (h *minHeap) adjustTopToBottom(root int) {
 
 func (h *minHeap) adjustBottomToTop(index int) {
 
-	root := (index - 1) / 2
+	//root := (index - 1) / 2
+	root := (index+1)/2 - 1
 
-	for root > 0 {
+	for root >= 0 {
 		if !h.compare(h.arr[root], h.arr[index]) {
 			h.arr[index], h.arr[root] = h.arr[root], h.arr[index]
 		} else {
 			break
 		}
 		index = root
-		root = (index - 1) / 2
+		root = (index+1)/2 - 1
 	}
 }
 
+/*
+*
+根据回忆写的。
+1、漏掉 busyHeap.Top().endTime <= meetings[i][0] 相等的判断，写成 <
+2、adjustBottomToTop, root=0时会死循环，应该写成root := (index+1)/2 - 1
+
+执行用时分布
+48
+ms
+击败
+85.71%
+复杂度分析
+消耗内存分布
+18.44
+MB
+击败
+85.71%
+*/
 func mostBooked(n int, meetings [][]int) int {
 
 	arr := make([]*heapNode, n)
@@ -102,7 +121,7 @@ func mostBooked(n int, meetings [][]int) int {
 
 	mostId, mostCnt := 0, 0
 	for i := 0; i < len(meetings); i++ {
-		for busyHeap.Len() > 0 && busyHeap.Top().endTime < meetings[i][0] {
+		for busyHeap.Len() > 0 && busyHeap.Top().endTime <= meetings[i][0] {
 			idleHeap.Push(busyHeap.Pop())
 		}
 		var node *heapNode
