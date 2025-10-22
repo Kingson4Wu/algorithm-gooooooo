@@ -33,6 +33,11 @@ import (
 题目数据 保证 primes[i] 是一个质数
 primes 中的所有值都 互不相同 ，且按 递增顺序 排列
 */
+/**
+根据回忆写，注意：
+1、是indexes[mJ]++
+2、结果都是min的，都要++
+*/
 func nthSuperUglyNumber(n int, primes []int) int {
 
 	result := make([]int, n)
@@ -40,22 +45,39 @@ func nthSuperUglyNumber(n int, primes []int) int {
 	indexes := make([]int, n)
 	for i := 1; i < n; i++ {
 		min := math.MaxInt32
-		minJ := 0
+		var minJ []int
 		for j, prime := range primes {
 			val := result[indexes[j]] * prime
 			if val < min {
 				min = val
-				minJ = j
+				minJ = []int{j}
+			} else if val == min {
+				minJ = append(minJ, j)
 			}
 		}
 		result[i] = min
-		indexes[minJ] = i
+		//indexes[minJ] = i
+		for _, mJ := range minJ {
+			indexes[mJ]++
+		}
 	}
 	return result[n-1]
 }
 
+/*
+*
+panic: runtime error: index out of range [2] with length 2
+main.nthSuperUglyNumber(0x2, {0xc000088040, 0x3, 0x4cd580?})
+solution.go, line 10
+main.__helper__(...)
+solution.go, line 30
+main.main()
+solution.go, line 71
+*/
 func TestNthSuperUglyNumber(t *testing.T) {
 	fmt.Println(nthSuperUglyNumber(12, []int{2, 7, 13, 19}))
+
+	fmt.Println(nthSuperUglyNumber(2, []int{2, 3, 5}))
 }
 
 /**
