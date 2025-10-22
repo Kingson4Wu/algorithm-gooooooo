@@ -38,11 +38,24 @@ primes 中的所有值都 互不相同 ，且按 递增顺序 排列
 1、是indexes[mJ]++
 2、结果都是min的，都要++
 */
+/**
+执行用时分布
+43
+ms
+击败
+41.10%
+复杂度分析
+消耗内存分布
+8.41
+MB
+击败
+36.99%
+*/
 func nthSuperUglyNumber(n int, primes []int) int {
 
 	result := make([]int, n)
 	result[0] = 1
-	indexes := make([]int, n)
+	indexes := make([]int, len(primes))
 	for i := 1; i < n; i++ {
 		min := math.MaxInt32
 		var minJ []int
