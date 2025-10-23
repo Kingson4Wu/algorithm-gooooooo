@@ -14,8 +14,10 @@ import "math"
 /*
 *
 根据回忆写
-定义一个辅助递归函数，一定要经过root
-定一个全局变量计算最终要的结果
+定义一个辅助递归函数，一定要经过root, 这个函数记得是只计算左边或右边的，不能包含两边！！！！sum := max(root.Val, max(root.Val+left, root.Val+right))
+定一个全局变量计算最终要的结果： maxSum = max(sum, max(maxSum, root.Val+left+right))
+
+忘了辅助递归函数只能包含单边的！！！不然就不是一条路径了，会有多个分叉！！！
 */
 func maxPathSum(root *TreeNode) int {
 	max := func(x, y int) int {
@@ -32,13 +34,28 @@ func maxPathSum(root *TreeNode) int {
 		}
 		left := maxPathSumWithRoot(root.Left)
 		right := maxPathSumWithRoot(root.Right)
-		sum := max(root.Val, max(root.Val+left, max(root.Val+right, root.Val+left+right)))
-		maxSum = max(sum, maxSum)
+		sum := max(root.Val, max(root.Val+left, root.Val+right))
+		maxSum = max(sum, max(maxSum, root.Val+left+right))
 		return sum
 	}
 	maxPathSumWithRoot(root)
 	return maxSum
 }
+
+/**
+执行用时分布
+1
+ms
+击败
+18.12%
+复杂度分析
+消耗内存分布
+10.14
+MB
+击败
+85.00%
+
+*/
 
 /**
 
