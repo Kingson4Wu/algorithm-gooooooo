@@ -17,6 +17,7 @@ import (
 
 时隔两年，没做出来！！！。。
 
+以下写法是错的
 */
 func pathSum(root *TreeNode, targetSum int) int {
 	count := 0
