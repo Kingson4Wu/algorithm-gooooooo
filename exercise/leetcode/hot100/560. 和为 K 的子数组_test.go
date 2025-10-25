@@ -58,9 +58,10 @@ func subarraySum(nums []int, k int) int {
 	m[0] = 1
 	for i := 0; i < len(nums); i++ {
 		pre += nums[i]
-		m[pre]++
 		// pre 是 0...i的和；pre - k 符合条件，说明有m[pre-k] 个 0...j符合条件，对应极有m[pre-k]个 j...i的子数组符合和为k
 		count += m[pre-k]
+		//计算 count 时，只能用“过去的前缀和”，所以要先 count += m[pre-k]，再 m[pre]++
+		m[pre]++
 	}
 	return count
 }
