@@ -74,6 +74,10 @@ func largestRectangleArea(heights []int) int {
 			stack = stack[:len(stack)-1]
 			w := i - stack[len(stack)-1] - 1
 			// stack[len(stack)-1] 是在出栈之后访问的 → 实际上是原来的 stack[len(stack)-2]。
+			//其实算的是上一个的面积
+			//确定宽度的边界：
+			//1.右边界：右边第一个比它小的柱子就是当前的 i，所以右边界是 i - 1
+			//2.左边界：弹出后，新的栈顶 stack[len(stack)-1] 就是左边第一个比它小的柱子，即stack[len(stack)-2]
 			maxArea = max(maxArea, h*w)
 		}
 		stack = append(stack, i)
