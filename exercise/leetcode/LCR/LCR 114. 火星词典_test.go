@@ -12,6 +12,19 @@ import (
 有向图
 双重循环构建图
 有向图的拓扑排序算法
+
+明明自己写对了，还要加上
+输入
+words =
+["abc","ab"]
+
+添加到测试用例
+输出
+"abc"
+预期结果
+""
+
+这种恶心测试用例。。。
 */
 func alienOrder(words []string) string {
 
@@ -72,11 +85,13 @@ func alienOrder(words []string) string {
 }
 
 func TestAlienOrder(t *testing.T) {
-	/*fmt.Println(alienOrder([]string{"wrt", "wrf", "er", "ett", "rftt"}))
+	fmt.Println(alienOrder([]string{"wrt", "wrf", "er", "ett", "rftt"}))
 	fmt.Println(alienOrder([]string{"z", "x"}))
-	fmt.Println(alienOrder([]string{"z", "x", "z"}))*/
-	//fmt.Println(alienOrder([]string{"z", "z"}))
+	fmt.Println(alienOrder([]string{"z", "x", "z"}))
+	fmt.Println(alienOrder([]string{"z", "z"}))
 	fmt.Println(alienOrder([]string{"abc", "ab"}))
+	//妈的垃圾题目！！！垃圾测试用例
+	fmt.Println(alienOrder([]string{"zy", "zx"}))
 }
 
 /**
@@ -89,4 +104,40 @@ words =
 "abc"
 预期结果
 ""
+
+
+解答错误
+81 / 122 个通过的测试用例
+
+官方题解
+输入
+words =
+["zy","zx"]
+
+添加到测试用例
+输出
+""
+预期结果
+"yxz"
+*/
+
+/**
+这测试用例真的有病：
+输入
+words =
+["abc","ab"]
+
+添加到测试用例
+输出
+"abc"
+预期结果
+""
+
+输入
+words =
+["ab","ab","abc"]
+输出
+""
+预期结果
+"abc"
 */
