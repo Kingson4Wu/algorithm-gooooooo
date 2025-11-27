@@ -14,7 +14,7 @@ import "testing"
 /**
 自己想的
 递归，传root，返回偷和不偷当前结点的最大值
-维护一个全局变量计算最大值
+最后算递归函数dfs返回值中偷和不偷计算最大值
 */
 
 func rob3(root *TreeNode) int {
