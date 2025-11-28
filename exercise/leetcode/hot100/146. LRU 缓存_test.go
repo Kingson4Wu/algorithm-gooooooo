@@ -1,5 +1,10 @@
 package hot100
 
+import (
+	"fmt"
+	"testing"
+)
+
 /**
 请你设计并实现一个满足  LRU (最近最少使用) 缓存 约束的数据结构。
 实现 LRUCache 类：
@@ -39,21 +44,113 @@ lRUCache.get(4);    // 返回 4
 最多调用 2 * 105 次 get 和 put
 */
 
+/*
+*
+执行用时分布
+441
+ms
+击败
+53.26%
+复杂度分析
+消耗内存分布
+74.29
+MB
+击败
+84.78%
+
+凭回忆能做出来，不过要debug才能全部把细节调好
+*/
+type LruNode struct {
+	k    int
+	v    int
+	pre  *LruNode
+	next *LruNode
+}
+
 type LRUCache struct {
+	m        map[int]*LruNode
+	head     *LruNode
+	tail     *LruNode
+	capacity int
+	size     int
 }
 
 func Constructor4(capacity int) LRUCache {
 
-	return LRUCache{}
+	return LRUCache{
+		capacity: capacity,
+		m:        map[int]*LruNode{},
+	}
+}
+
+func (this *LRUCache) moveToHead(node *LruNode) {
+	//新节点
+	if node.next == nil && node.pre == nil {
+		if this.size == 0 {
+			this.head = node
+			this.tail = node
+			return
+		}
+		this.head.pre = node
+		node.next = this.head
+		this.head = node
+		return
+	}
+	//队首
+	if node == this.head {
+		return
+	}
+	//队尾
+	if node == this.tail {
+		this.tail = this.tail.pre
+		this.tail.next = nil
+		node.pre = nil
+		node.next = this.head
+		this.head.pre = node
+		this.head = node
+		return
+	}
+	node.pre.next = node.next
+	node.next.pre = node.pre
+	node.next = this.head
+	this.head.pre = node
+	this.head = node
+}
+
+func (this *LRUCache) removeTail() {
+	delete(this.m, this.tail.k)
+	if this.tail.pre != nil {
+		this.tail.pre.next = nil
+	}
+	this.tail = this.tail.pre
 }
 
 func (this *LRUCache) Get(key int) int {
-
-	return 0
+	if node, ok := this.m[key]; ok {
+		this.moveToHead(node)
+		return node.v
+	}
+	return -1
 }
 
 func (this *LRUCache) Put(key int, value int) {
 
+	if node, ok := this.m[key]; ok {
+		node.v = value // //这句忘记了！！！！
+		this.moveToHead(node)
+		return
+	}
+	this.m[key] = &LruNode{
+		k: key,
+		v: value,
+	}
+	this.moveToHead(this.m[key])
+
+	if this.size == this.capacity {
+		this.removeTail()
+	} else {
+		this.size++
+	}
 }
 
 /**
@@ -62,3 +159,17 @@ func (this *LRUCache) Put(key int, value int) {
  * param_1 := obj.Get(key);
  * obj.Put(key,value);
  */
+
+func TestLRUCache(t *testing.T) {
+	obj := Constructor4(2)
+	obj.Put(1, 1)
+	obj.Put(2, 2)
+	fmt.Println(obj.Get(1))
+	obj.Put(3, 3)
+	fmt.Println(obj.Get(2))
+	obj.Put(4, 4)
+	fmt.Println(obj.Get(1))
+	fmt.Println(obj.Get(3))
+	fmt.Println(obj.Get(4))
+
+}
